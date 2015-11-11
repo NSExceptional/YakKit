@@ -1,0 +1,6 @@
+framework module YakKit {
+  umbrella header "YakKit-umbrella.h"
+
+  export *
+  module * { export * }
+}

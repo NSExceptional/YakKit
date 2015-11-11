@@ -1,0 +1,19 @@
+PODS:
+  - Mantle (2.0.5):
+    - Mantle/extobjc (= 2.0.5)
+  - Mantle/extobjc (2.0.5)
+  - YakKit (0.1.0):
+    - Mantle (~> 2.0)
+
+DEPENDENCIES:
+  - YakKit (from `../`)
+
+EXTERNAL SOURCES:
+  YakKit:
+    :path: ../
+
+SPEC CHECKSUMS:
+  Mantle: 1912395033f601de5adc8ee91e48f46e4c7051ad
+  YakKit: 3ab90a84960b841f54e797ca70d395eceabc2b16
+
+COCOAPODS: 0.38.2
