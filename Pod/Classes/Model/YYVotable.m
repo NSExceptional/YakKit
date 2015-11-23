@@ -31,7 +31,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedFormatter = [NSDateFormatter new];
-        sharedFormatter.dateFormat = @"y-mm-ddTHH:mm:S";
+        sharedFormatter.dateFormat = @"y-mm-dd HH:mm:ss";
     });
     
     return sharedFormatter;

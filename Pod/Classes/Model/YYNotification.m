@@ -27,6 +27,25 @@
              @"identifier": @"_id"};
 }
 
++ (NSDateFormatter *)dateFormatter {
+    static NSDateFormatter *sharedFormatter = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedFormatter = [NSDateFormatter new];
+        sharedFormatter.dateFormat = @"y-mm-ddTHH:mm:SZ";
+    });
+    
+    return sharedFormatter;
+}
+
++ (NSValueTransformer *)updatedTransformer {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *dateString, BOOL *success, NSError *__autoreleasing *error) {
+        return [[self dateFormatter] dateFromString:dateString];
+    } reverseBlock:^id(NSDate *date, BOOL *success, NSError *__autoreleasing *error) {
+        return [[self dateFormatter] stringFromDate:date];
+    }];
+}
+
 + (NSValueTransformer *)unreadTransformer {
     return [NSValueTransformer mtl_valueMappingTransformerWithDictionary:@{@"unread": @YES, @"read": @NO} defaultValue:@NO reverseDefaultValue:@"unread"];
 }

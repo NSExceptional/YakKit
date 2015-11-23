@@ -21,8 +21,8 @@
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
-		9370C0F70C99A7A14267B924 /* Pods_YakKit_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F78C5AAC65AA6ECF43BB71F /* Pods_YakKit_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		FA6AE9FA44F25605D6609F46 /* Pods_YakKit_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D2B7FFBF5F6FF22FC3C2F27E /* Pods_YakKit_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		D94669B7D4723CB5E5ED0055 /* libPods-YakKit_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E2BD1670FBB9A9599DCA20E /* libPods-YakKit_Tests.a */; };
+		DA3D138E9F31928AACA837EE /* libPods-YakKit_Example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ED8761CC921B7D60590B7DE6 /* libPods-YakKit_Example.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +37,6 @@
 
 /* Begin PBXFileReference section */
 		000AA8EAE86FFB1CBE49DCDB /* YakKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = YakKit.podspec; path = ../YakKit.podspec; sourceTree = "<group>"; };
-		2F78C5AAC65AA6ECF43BB71F /* Pods_YakKit_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YakKit_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58A195388D20070C39A /* YakKit_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YakKit_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -57,12 +56,14 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
+		6E2BD1670FBB9A9599DCA20E /* libPods-YakKit_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YakKit_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		70C9BE7A0200D7FA56A8B13D /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		7B9C5C7483A7EDC3330EAFA3 /* Pods-YakKit_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YakKit_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-YakKit_Example/Pods-YakKit_Example.release.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A1DADA8C122E3665A5A26AAA /* Pods-YakKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YakKit_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YakKit_Example/Pods-YakKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		B478ADA51BF44B3000092EF5 /* Login.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Login.h; path = ../../../../../Login.h; sourceTree = "<group>"; };
 		BA2024DA7EF4605FAC9BE669 /* Pods-YakKit_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YakKit_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YakKit_Tests/Pods-YakKit_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		D2B7FFBF5F6FF22FC3C2F27E /* Pods_YakKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YakKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED8761CC921B7D60590B7DE6 /* libPods-YakKit_Example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YakKit_Example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EE5D9F975DA4B8BC37952AEC /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		FAF6A6666CC8CC4443CC1B29 /* Pods-YakKit_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YakKit_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-YakKit_Tests/Pods-YakKit_Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -75,7 +76,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				9370C0F70C99A7A14267B924 /* Pods_YakKit_Example.framework in Frameworks */,
+				DA3D138E9F31928AACA837EE /* libPods-YakKit_Example.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,7 +87,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				FA6AE9FA44F25605D6609F46 /* Pods_YakKit_Tests.framework in Frameworks */,
+				D94669B7D4723CB5E5ED0055 /* libPods-YakKit_Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -121,8 +122,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				2F78C5AAC65AA6ECF43BB71F /* Pods_YakKit_Example.framework */,
-				D2B7FFBF5F6FF22FC3C2F27E /* Pods_YakKit_Tests.framework */,
+				ED8761CC921B7D60590B7DE6 /* libPods-YakKit_Example.a */,
+				6E2BD1670FBB9A9599DCA20E /* libPods-YakKit_Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -130,6 +131,7 @@
 		6003F593195388D20070C39A /* Example for YakKit */ = {
 			isa = PBXGroup;
 			children = (
+				B478ADA51BF44B3000092EF5 /* Login.h */,
 				6003F59C195388D20070C39A /* YYAppDelegate.h */,
 				6003F59D195388D20070C39A /* YYAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
@@ -204,7 +206,6 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				D6C005548C929A2F3D48533B /* Embed Pods Frameworks */,
 				86B3875CAA74AAC23001F765 /* Copy Pods Resources */,
 			);
 			buildRules = (
@@ -224,7 +225,6 @@
 				6003F5AA195388D20070C39A /* Sources */,
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
-				A799187E1C7CF6D6569D9954 /* Embed Pods Frameworks */,
 				D06F901D07B93ACA24872BE2 /* Copy Pods Resources */,
 			);
 			buildRules = (
@@ -244,7 +244,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = YY;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = ThePantsThief;
 				TargetAttributes = {
 					6003F5AD195388D20070C39A = {
@@ -338,21 +338,6 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YakKit_Example/Pods-YakKit_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		A799187E1C7CF6D6569D9954 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YakKit_Tests/Pods-YakKit_Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		D06F901D07B93ACA24872BE2 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -366,21 +351,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YakKit_Tests/Pods-YakKit_Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		D6C005548C929A2F3D48533B /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-YakKit_Example/Pods-YakKit_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -452,6 +422,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -516,6 +487,7 @@
 				GCC_PREFIX_HEADER = "YakKit/YakKit-Prefix.pch";
 				INFOPLIST_FILE = "YakKit/YakKit-Info.plist";
 				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -531,6 +503,7 @@
 				GCC_PREFIX_HEADER = "YakKit/YakKit-Prefix.pch";
 				INFOPLIST_FILE = "YakKit/YakKit-Info.plist";
 				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -553,6 +526,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/YakKit_Example.app/YakKit_Example";
 				WRAPPER_EXTENSION = xctest;
@@ -572,6 +546,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/YakKit_Example.app/YakKit_Example";
 				WRAPPER_EXTENSION = xctest;

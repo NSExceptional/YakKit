@@ -1,15 +1,15 @@
 //
-//  YYSession.m
+//  YYConfiguration.m
 //  Pods
 //
 //  Created by Tanner on 11/10/15.
 //
 //
 
-#import "YYSession.h"
+#import "YYConfiguration.h"
 #import "YYThreatCheck.h"
 
-@implementation YYSession
+@implementation YYConfiguration
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{@"configHash": @"hash",

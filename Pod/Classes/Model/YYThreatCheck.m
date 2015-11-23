@@ -11,7 +11,9 @@
 @implementation YYThreatCheck
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
-    return @{};
+    return @{@"allowContinue": @"allowContinue",
+             @"expressions": @"expressions",
+             @"message": @"message"};
 }
 
 @end

@@ -1,6 +1,0 @@
-framework module Pods_YakKit_Tests {
-  umbrella header "Pods-YakKit_Tests-umbrella.h"
-
-  export *
-  module * { export * }
-}

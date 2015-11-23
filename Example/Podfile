@@ -1,5 +1,4 @@
 source 'https://github.com/CocoaPods/Specs.git'
-use_frameworks!
 
 target 'YakKit_Example', :exclusive => true do
   pod "YakKit", :path => "../"
@@ -7,6 +6,4 @@ end
 
 target 'YakKit_Tests', :exclusive => true do
   pod "YakKit", :path => "../"
-
-  
 end
