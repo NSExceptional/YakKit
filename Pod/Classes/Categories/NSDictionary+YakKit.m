@@ -65,34 +65,3 @@
 }
 
 @end
-
-
-@implementation NSDictionary (RequestSigning)
-
-- (void)signRequest:(NSString *)url hash:(NSString *__autoreleasing *)hash salt:(NSString *__autoreleasing *)salt {
-    *salt = [NSString timestamp];
-    
-    // Trim string "htps://foo.bar/api/crap" to "/api/crap"
-    NSMutableString *string = url.mutableCopy;
-    NSRange r = [url rangeOfString:@"/api/"];
-    r.length = r.location;
-    r.location = 0;
-    [string deleteCharactersInRange:r];
-    
-    if (self.allKeys.count) {
-        [string appendString:@"?"];
-        [string appendString:[NSString queryStringWithParams:self]];
-    }
-    
-    [string appendString:*salt];
-    NSString *hmac = [NSString hashHMacSHA1:string key:kSignGETKey].stringValueBase64;
-    *hash = hmac;
-}
-
-- (NSDictionary *)dictionaryAfterSigningRequest:(NSString *)endpoint {
-    NSString *hash, *salt;
-    [self signRequest:endpoint hash:&hash salt:&salt];
-    return [self dictionaryByReplacingKeysWithNewKeys:@{@"hash": hash, @"salt": salt}];
-}
-
-@end

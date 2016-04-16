@@ -6,7 +6,7 @@
 //
 //
 
-#import "YYConfiguration.h"
+#import "YYSession.h"
 #import "YYThreatCheck.h"
 
 @implementation YYConfiguration

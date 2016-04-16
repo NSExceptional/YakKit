@@ -47,6 +47,7 @@ BOOL YYHasActiveConnection() {
 }
 
 - (void)setRegion:(NSString *)region {
+    NSParameterAssert(region);
     _region = region;
     _baseURLForRegion = [NSString stringWithFormat:@"https://%@.yikyakapi.net/api/", region];
 }
@@ -55,7 +56,7 @@ BOOL YYHasActiveConnection() {
 
 - (void)updateConfiguration:(ErrorBlock)completion {
     NSURL *url = [NSURL URLWithString:[kBaseContent stringByAppendingString:kepUpdateConfiguration]];
-    [self]
+    url = url;
 }
 
 #pragma mark Requests / error handling
@@ -64,26 +65,26 @@ static NSMutableArray *requestCache;
 
 - (NSMutableURLRequest *)request:(NSURL *)url post:(BOOL)post body:(nullable NSDictionary *)params headers:(nullable NSDictionary *)headers {
     NSParameterAssert(url); NSAssert(self.cookie, @"Cannot make any requests without the cookie");
+    // Init request cache
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         requestCache = [NSMutableArray array];
     });
     
+    // Get NSMutableURLRequest instance
     NSMutableURLRequest *request;
-    
-    
     if (requestCache.count) {
-        NSMutableURLRequest *req = requestCache.lastObject;
+        request = requestCache.lastObject;
         [requestCache removeLastObject];
-        return req;
     } else {
         request = [[NSMutableURLRequest alloc] initWithURL:url];//[NSURL URLWithString:url]];
     }
     
-    if (!headers)
+    if (!headers) {
         headers = @{@"Cookie": self.cookie, @"User-Agent": kUserAgent};
-    else
+    } else {
         headers = [headers dictionaryByReplacingValuesForKeys:@{@"Cookie": self.cookie, @"User-Agent": kUserAgent}];
+    }
     
     [headers enumerateKeysAndObjectsUsingBlock:^(NSString *key, id value, BOOL *stop) {
         [request setValue:value forHTTPHeaderField:key];
@@ -91,12 +92,30 @@ static NSMutableArray *requestCache;
     
     request.URL = url;//[NSURL URLWithString:url];
     request.HTTPBody   = [[NSString queryStringWithParams:params] dataUsingEncoding:NSUTF8StringEncoding];
-    request.HTTPMethod = post ? @"POST" : @"GET";;
+    request.HTTPMethod = post ? @"POST" : @"GET";
+    
     return request;
 }
 
 - (void)returnRequest:(NSMutableURLRequest *)request {
     [requestCache addObject:request];
+}
+
+- (NSString *)signRequest:(NSString *)endpoint params:(NSDictionary *)params {
+    NSMutableString *message = [NSMutableString stringWithString:endpoint];
+    NSString *salt = [NSString timestamp];
+//    NSArray *keys = [params.allKeys sortedArrayUsingSelector:@selector(compare:)];
+    
+    // Append parameters and salt to message before hashing
+    if (params.count) {
+        [message appendFormat:@"?%@", [NSString queryStringWithParams:params]];
+    }
+    
+    // Hash that bitch
+    NSString *hash = [[NSString hashHMacSHA1:[message stringByAppendingString:salt] key:kRequestSignKey] base64EncodedStringWithOptions:0];
+    
+    [message appendFormat:@"&salt=%@&hash=%@", salt, hash];
+    return message; //[params dictionaryByReplacingValuesForKeys:@{@"salt": salt, @"hash": hash}];
 }
 
 + (NSError *)unknownError {
@@ -115,36 +134,31 @@ static NSMutableArray *requestCache;
     
     if (error) {
         completion(nil, error);
-    } else if (data.length) {
+    }
+    else if (data.length) {
         NSError *jsonError;
         NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
         
-        // Could not parse JSON (it's probably HTML)
-//        if (jsonError) {
-//            NSString *html = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-//            if ([html containsString:@"<html><head>"]) {
-//                // Invalid request
-//                callback(nil, [YYClient errorWithMessage:html.textFromHTML code:code], response);
-//            } else {
-//                // ???
-//                callback(nil, jsonError, response);
-//            }
-//        }
-        
-        if (json) {
-            if ((code > 199 && code < 300) || code == 304) {
-                // Suceeded with a response
-                completion(json, nil);
+        // Could not parse JSON (it's probably raw text)
+        if (jsonError) {
+            NSString *text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            if ([text hasPrefix:@"http"]) {
+                completion(text, nil);
             } else {
-                // Failed with a message
-                error = [YYClient errorWithMessage:json[@"message"] code:code];
-                completion(nil, error);
+                NSString *message = [NSString stringWithFormat:@"Unknown error:\n%@", text];
+                completion(nil, [YYClient errorWithMessage:message code:1]);
             }
         }
-        else {
-            completion(nil, [YYClient unknownError]);
+        assert(json);
+        if ((code > 199 && code < 300) || code == 304) {
+            // Suceeded with a response
+            completion(json, nil);
+        } else {
+            // Failed with a message
+            error = [YYClient errorWithMessage:json[@"message"] code:code];
+            completion(nil, error);
         }
-    } else if (code > 199 && code < 300) {
+    } else if ((code > 199 && code < 300) || code == 304) {
         // Succeeded with no response
         completion(nil, nil);
     } else {
@@ -185,24 +199,20 @@ static NSMutableArray *requestCache;
 - (void)postTo:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams headers:(NSDictionary *)headers callback:(ResponseBlock)callback {
     NSParameterAssert(endpoint);
     
-    params = [params dictionaryAfterSigningRequest:endpoint];
-    
-    NSURL *url = [endpoint URLByAppendingQueryStringWithParams:params];
+    NSURL *url = [NSURL URLWithString:[endpoint stringByAppendingString:[self signRequest:endpoint params:params]]];
     NSMutableURLRequest *request = [self request:url post:YES body:bodyParams headers:headers];
-    [self requeset:request callback:callback];
+    [self request:request callback:callback];
 }
 
 - (void)get:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams headers:(NSDictionary *)headers callback:(ResponseBlock)callback {
     NSParameterAssert(endpoint);
     
-    params = [params dictionaryAfterSigningRequest:endpoint];
-    
-    NSURL *url = [endpoint URLByAppendingQueryStringWithParams:params];
+    NSURL *url = [NSURL URLWithString:[endpoint stringByAppendingString:[self signRequest:endpoint params:params]]];
     NSMutableURLRequest *request = [self request:url post:NO body:bodyParams headers:headers];
-    [self requeset:request callback:callback];
+    [self request:request callback:callback];
 }
 
-- (void)requeset:(NSMutableURLRequest *)request callback:(ResponseBlock)callback {
+- (void)request:(NSMutableURLRequest *)request callback:(ResponseBlock)callback {
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{

@@ -12,9 +12,9 @@
 
 #pragma mark Getting yak feeds
 
-- (void)updateConfiguration:(ErrorBlock)completion {
-//    [self updateConfiguration:NO completion:completion];
-}
+//- (void)updateConfiguration:(ErrorBlock)completion {
+////    [self updateConfiguration:NO completion:completion];
+//}
 
 - (void)updateConfiguration:(BOOL)getYaks completion:(ArrayBlock)completion {
     

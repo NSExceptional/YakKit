@@ -7,7 +7,7 @@
 //
 
 #import "YYAppDelegate.h"
-#import "NSDictionary+YakKit.h"
+#import "YYClient.h"
 
 @implementation YYAppDelegate
 

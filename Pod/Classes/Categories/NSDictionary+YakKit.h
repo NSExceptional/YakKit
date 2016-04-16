@@ -23,11 +23,3 @@
 - (NSDictionary *)dictionaryByReplacingKeysWithNewKeys:(NSDictionary *)oldKeysToNewKeys;
 
 @end
-
-@interface NSDictionary (RequestSigning)
-
-/// To sign a POST request, call this method on an empty dictionary, as they have no parameters.
-- (void)signRequest:(NSString *)url hash:(NSString **)hash salt:(NSString **)salt;
-- (NSDictionary *)dictionaryAfterSigningRequest:(NSString *)endpoint;
-
-@end

@@ -24,8 +24,7 @@ typedef void (^VoidBlock)();
 extern NSString * const kUserAgent;
 extern NSString * const kYikYakVersion;
 
-extern NSString * const kSignGETKey;
-extern NSString * const kSignPOSTKey;
+extern NSString * const kRequestSignKey;
 
 extern NSString * const kBaseNotify;
 extern NSString * const kBaseContent;

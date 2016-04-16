@@ -21,8 +21,6 @@
 @property (nonatomic, readonly) NSString *baseURLForRegion;
 @property (nonatomic) NSString   *region;
 @property (nonatomic) CLLocation *location;
-
-@property (nonatomic) NSString   *cookie;
 @property (nonatomic) NSString   *userIdentifier;
 
 #pragma mark General
@@ -35,6 +33,8 @@
 - (void)postTo:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams callback:(ResponseBlock)callback;
 - (void)postTo:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams headers:(NSDictionary *)headers callback:(ResponseBlock)callback;
 - (void)get:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams headers:(NSDictionary *)headers callback:(ResponseBlock)callback;
+
+- (NSString *)signRequest:(NSString *)endpoint params:(NSDictionary *)params;
 
 @end
 
