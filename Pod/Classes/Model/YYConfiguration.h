@@ -9,6 +9,7 @@
 #import <Mantle/Mantle.h>
 @class YYThreatCheck;
 
+
 @interface YYConfiguration : MTLModel <MTLJSONSerializing>
 
 @property (nonatomic, readonly) NSString *configHash;

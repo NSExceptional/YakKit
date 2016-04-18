@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YYThreatCheck : MTLModel <MTLJSONSerializing>
+@interface YYThreatCheck : MTLModel
 
 @property (nonatomic, readonly) BOOL allowContinue;
 @property (nonatomic, readonly) NSString *message;

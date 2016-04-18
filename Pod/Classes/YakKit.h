@@ -8,6 +8,11 @@
 
 #import "YYClient.h"
 
+#import "YYClient+Yaks.h"
+#import "YYClient+Misc.h"
+#import "YYClient+Personal.h"
+#import "YYClient+Yakking.h"
+
 #import "YYComment.h"
 #import "YYNotification.h"
 #import "YYPeekLocation.h"

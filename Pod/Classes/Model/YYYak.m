@@ -8,6 +8,7 @@
 
 #import "YYYak.h"
 
+
 @implementation YYYak
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
@@ -28,20 +29,29 @@
               @"authorIdentifier": @"posterID",
               @"isReadOnly": @"readOnly",
               @"isReyaked": @"reyaked",
-              @"hasMedia": @"type",
               @"thumbnailURL": @"thumbnailUrl",
               @"mediaURL": @"url",
               @"type": @"type",
               @"identifier": @"messageID"} mtl_dictionaryByAddingEntriesFromDictionary:[super JSONKeyPathsByPropertyKey]];
 }
 
-+ (NSValueTransformer *)thumbnailURLTransformer { return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName]; }
-+ (NSValueTransformer *)mediaURLTransformer { return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName]; }
+MTLBoolStringJSONTransformer(hideLocationPin)
++ (NSValueTransformer *)thumbnailURLJSONTransformer { return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName]; }
++ (NSValueTransformer *)mediaURLJSONTransformer { return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName]; }
+
++ (NSValueTransformer *)typeJSONTransformer {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *value, BOOL *success, NSError *__autoreleasing *error) {
+        return @(value.integerValue);
+    } reverseBlock:^id(NSNumber *value, BOOL *success, NSError *__autoreleasing *error) {
+        return value;
+    }];
+}
 
 - (BOOL)hasMedia {
-    if (self.type == 6 && (!self.mediaURL || !self.thumbnailURL))
-        [NSException raise:NSInternalInconsistencyException format:@"Yak media type is 6 but is missing media info"];
-    return self.type == 6 && self.mediaURL && self.thumbnailURL;
+    return self.type == 6;
+//    if (self.type == 6 && (!self.mediaURL || !self.thumbnailURL))
+//        [NSException raise:NSInternalInconsistencyException format:@"Yak media type is 6 but is missing media info"];
+//    return self.type == 6 && self.mediaURL && self.thumbnailURL;
 }
 
 

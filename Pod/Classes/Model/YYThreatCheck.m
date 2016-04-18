@@ -8,6 +8,7 @@
 
 #import "YYThreatCheck.h"
 
+
 @implementation YYThreatCheck
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {

@@ -29,12 +29,16 @@
 #pragma mark Making requests
 - (NSDictionary *)generalParams;
 - (void)postTo:(NSString *)endpoint callback:(ResponseBlock)callback;
-- (void)postTo:(NSString *)endpoint params:(NSDictionary *)params callback:(ResponseBlock)callback;
-- (void)postTo:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams callback:(ResponseBlock)callback;
-- (void)postTo:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams headers:(NSDictionary *)headers callback:(ResponseBlock)callback;
-- (void)get:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams headers:(NSDictionary *)headers callback:(ResponseBlock)callback;
+- (void)postTo:(NSString *)endpoint params:(NSDictionary *)params sign:(BOOL)sign callback:(ResponseBlock)callback;
+- (void)postTo:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams sign:(BOOL)sign callback:(ResponseBlock)callback;
+- (void)postTo:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams headers:(NSDictionary *)headers sign:(BOOL)sign callback:(ResponseBlock)callback;
+- (void)get:(NSString *)endpoint callback:(ResponseBlock)callback;
+- (void)get:(NSString *)endpoint params:(NSDictionary *)params sign:(BOOL)sign callback:(ResponseBlock)callback;
+- (void)get:(NSString *)endpoint params:(NSDictionary *)params headers:(NSDictionary *)headers sign:(BOOL)sign callback:(ResponseBlock)callback;
 
 - (NSString *)signRequest:(NSString *)endpoint params:(NSDictionary *)params;
 
 @end
 
+#define URL(base, endpoint) [base stringByAppendingString:endpoint]
+#define URLDynamic(base, endpoint, ...) [NSString stringWithFormat:URL(base, endpoint), __VA_ARGS__]

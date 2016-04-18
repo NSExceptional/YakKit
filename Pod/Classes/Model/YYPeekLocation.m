@@ -8,6 +8,7 @@
 
 #import "YYPeekLocation.h"
 
+
 @implementation YYPeekLocation
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {

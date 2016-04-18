@@ -8,6 +8,7 @@
 
 #import "YYComment.h"
 
+
 @implementation YYComment
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
@@ -17,12 +18,14 @@
               @"backgroundIdentifier": @"backID",
               @"overlayIdentifier": @"overlayID",
               @"textStyle": @"textStyle",
-              @"identifier": @"commentID"} mtl_dictionaryByAddingEntriesFromDictionary:[super JSONKeyPathsByPropertyKey]];
+              @"identifier": @"commentID",
+              @"isOP": @"textStyle"} mtl_dictionaryByAddingEntriesFromDictionary:[super JSONKeyPathsByPropertyKey]];
 }
 
-- (BOOL)isOP {
-    // return [self.backgroundIdentifier isEqualToString:@"000"] && [self.overlayIdentifier isEqualToString:@"000"];
-    return [self.textStyle isEqualToString:@"OP"];
++ (NSValueTransformer *)isOPJSONTransformer {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(id value, BOOL *success, NSError **error) {
+        return @([value isEqualToString:@"OP"]);
+    }];
 }
 
 @end

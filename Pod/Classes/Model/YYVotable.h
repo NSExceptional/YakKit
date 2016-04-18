@@ -19,7 +19,7 @@ typedef NS_ENUM(NSUInteger, YYVoteStatus)
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YYVotable : YYThing <MTLJSONSerializing>
+@interface YYVotable : YYThing
 
 @property (nonatomic, readonly) NSInteger    score;
 @property (nonatomic, readonly) YYVoteStatus voteStatus;
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSDate *created;
 @property (nonatomic, readonly) NSDate *gmt;
 
-@property (nonatomic, readonly) NSString *deliveryIdentifier;
+@property (nonatomic, readonly) id deliveryIdentifier;
 
 @end
 

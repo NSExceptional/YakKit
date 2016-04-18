@@ -19,9 +19,9 @@
 }
 
 + (NSValueTransformer *)yy_UTCDateTransformer {
-    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *ts, BOOL *success, NSError *__autoreleasing *error) {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *ts, BOOL *success, NSError **error) {
         return [NSDate dateWithTimeIntervalSince1970:ts.doubleValue/1000.f];
-    } reverseBlock:^id(NSDate *ts, BOOL *success, NSError *__autoreleasing *error) {
+    } reverseBlock:^id(NSDate *ts, BOOL *success, NSError **error) {
         return @([ts timeIntervalSince1970] * 1000.f).stringValue;
     }];
 }
@@ -38,15 +38,27 @@
 }
 
 + (NSValueTransformer *)yy_stringDateTransformer {
-    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *dateString, BOOL *success, NSError *__autoreleasing *error) {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *dateString, BOOL *success, NSError **error) {
         return [[self dateFormatter] dateFromString:dateString];
-    } reverseBlock:^id(NSDate *date, BOOL *success, NSError *__autoreleasing *error) {
+    } reverseBlock:^id(NSDate *date, BOOL *success, NSError **error) {
         return [[self dateFormatter] stringFromDate:date];
     }];
 }
 
-+ (NSValueTransformer *)createdTransformer { return [self yy_stringDateTransformer]; }
-+ (NSValueTransformer *)gmtTransformer { return [self yy_stringDateTransformer]; }
++ (NSValueTransformer *)createdJSONTransformer { return [self yy_stringDateTransformer]; }
++ (NSValueTransformer *)gmtJSONTransformer { return [self yy_UTCDateTransformer]; }
+
+//+ (NSValueTransformer *)deliveryIdentifierJSONTransformer {
+//    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSNumber *value, BOOL *success, NSError *__autoreleasing *error) {
+//        if ([value isKindOfClass:[NSNumber class]]) {
+//            return value.stringValue;
+//        } else {
+//            return value;
+//        }
+//    } reverseBlock:^id(id value, BOOL *success, NSError *__autoreleasing *error) {
+//        return value;
+//    }];
+//}
 
 
 @end

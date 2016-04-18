@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL     isOP;
 @property (nonatomic, readonly) NSString *backgroundIdentifier;
 @property (nonatomic, readonly) NSString *overlayIdentifier;
-@property (nonatomic, readonly) NSString *textStyle;
+@property (nonatomic, readonly, nullable) NSString *textStyle;
 
 @end
 

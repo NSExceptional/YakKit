@@ -9,33 +9,45 @@
 #import "YYThing.h"
 
 
-typedef NS_ENUM(NSUInteger, YYNotificationKind)
+typedef NS_ENUM(NSUInteger, YYNotificationReason)
 {
-    YYNotificationKindVote = 1,
-    YYNotificationKindComment
+    YYNotificationReasonUnspecified,
+    YYNotificationReasonVote = 1,
+    YYNotificationReasonComment,
+    YYNotificationReasonHandleRemoved
+};
+
+typedef NS_ENUM(NSUInteger, YYThingType)
+{
+    YYThingTypeComment = 1,
+    YYThingTypeYak,
+    YYThingTypeInfo
 };
 
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YYNotification : YYThing <MTLJSONSerializing>
+@interface YYNotification : YYThing
 
 @property (nonatomic, readonly) BOOL     unread;
-@property (nonatomic, readonly) NSString *summary;
+@property (nonatomic, readonly, nullable) NSString *summary;
 @property (nonatomic, readonly) NSString *content;
 @property (nonatomic, readonly) NSString *subject;
 
+@property (nonatomic, readonly) YYNotificationReason reason;
 @property (nonatomic, readonly, nullable) NSString *replyIdentifier;
 
 @property (nonatomic, readonly) NSInteger count;
-@property (nonatomic, readonly) NSString  *key;
-@property (nonatomic, readonly) NSString  *hashKey;
+@property (nonatomic, readonly) id created;
+@property (nonatomic, readonly, nullable) NSString  *key;
+@property (nonatomic, readonly, nullable) NSString  *hashKey;
+@property (nonatomic, readonly, nullable) NSString  *navigationURLString;
 
 @property (nonatomic, readonly) NSString *priority;
 @property (nonatomic, readonly) BOOL     isNormalPriority;
 
 @property (nonatomic, readonly) NSString *thingIdentifier;
-@property (nonatomic, readonly) BOOL     thingIsComment;
+@property (nonatomic, readonly) YYThingType thingType;
 
 @property (nonatomic, readonly) id __v;
 @property (nonatomic, readonly) id updated;

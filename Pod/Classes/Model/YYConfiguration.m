@@ -6,8 +6,9 @@
 //
 //
 
-#import "YYSession.h"
+#import "YYConfiguration.h"
 #import "YYThreatCheck.h"
+
 
 @implementation YYConfiguration
 
@@ -41,13 +42,13 @@
 + (NSValueTransformer *)repApplicationURLTransformer { return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName]; }
 
 + (NSValueTransformer *)threatChecksTransformer {
-    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSArray *checks, BOOL *success, NSError *__autoreleasing *error) {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSArray *checks, BOOL *success, NSError **error) {
         NSMutableArray *threats = [NSMutableArray array];
         for (NSDictionary *json in checks)
             [threats addObject:[[YYThreatCheck alloc] initWithDictionary:json error:nil]];
         
         return threats.copy;
-    } reverseBlock:^id(NSArray<YYThreatCheck *> *threats, BOOL *success, NSError *__autoreleasing *error) {
+    } reverseBlock:^id(NSArray<YYThreatCheck *> *threats, BOOL *success, NSError **error) {
         return [threats valueForKeyPath:@"@unionOfObjects.dictionaryValue"];
     }];
 }

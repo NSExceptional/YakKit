@@ -7,3 +7,4 @@ end
 target 'YakKit_Tests', :exclusive => true do
   pod "YakKit", :path => "../"
 end
+

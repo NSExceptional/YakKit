@@ -8,9 +8,10 @@
 
 #import "YYThing.h"
 
+
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YYPeekLocation : YYThing <MTLJSONSerializing>
+@interface YYPeekLocation : YYThing
 
 @property (nonatomic, readonly) BOOL canReply;
 @property (nonatomic, readonly) BOOL canReport;
