@@ -12,6 +12,18 @@
 
 @implementation YYConfiguration
 
+- (id)initWithDictionary:(NSDictionary *)json {
+    NSParameterAssert(json.allKeys.count > 0);
+    NSError *error = nil;
+    self = [MTLJSONAdapter modelOfClass:[self class] fromJSONDictionary:json error:&error];
+    
+    if (error) {
+        NSLog(@"%@", error.localizedDescription);
+    }
+    
+    return self;
+}
+
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{@"configHash": @"hash",
              @"basecampURL": @"configuration.basecamp.tutorialUrl",

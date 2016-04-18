@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface YYClient (Misc)
 
 #pragma mark Misc
-- (void)logEvent:(NSDictionary *)params completion:(nullable ErrorBlock)completion;
+- (void)logEvent:(NSString *)event completion:(nullable ErrorBlock)completion;
 - (void)refreshLocate:(nullable ErrorBlock)completion;
 
 @end

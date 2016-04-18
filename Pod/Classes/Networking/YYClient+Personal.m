@@ -21,14 +21,6 @@
     }];
 }
 
-- (void)handleStatus:(NSDictionary *)json callback:(nullable ErrorBlock)completion {
-    if ([json[@"status"] isEqualToString:@"ok"]) {
-        YYRunBlockP(completion, nil);
-    } else {
-        YYRunBlockP(completion, [YYClient errorWithMessage:json[@"error"] code:1]);
-    }
-}
-
 #pragma mark User data
 
 - (void)getMyRecentYaks:(ArrayBlock)completion {

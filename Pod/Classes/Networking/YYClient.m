@@ -8,6 +8,7 @@
 
 #import "YYClient.h"
 #import "YYThing.h"
+#import "YYConfiguration.h"
 #import "NSString+YakKit.h"
 #import "NSDictionary+YakKit.h"
 #import <SystemConfiguration/SCNetworkReachability.h>
@@ -60,8 +61,13 @@ BOOL YYHasActiveConnection() {
 #pragma mark General
 
 - (void)updateConfiguration:(ErrorBlock)completion {
-    NSURL *url = [NSURL URLWithString:[kBaseContentURL stringByAppendingString:kepUpdateConfiguration]];
-    url = url;
+    NSDictionary *params = @{@"lat": @(self.location.coordinate.longitude),
+                             @"lng": @(self.location.coordinate.latitude),
+                             @"yakkerID": self.userIdentifier};
+    [self get:URL(kBaseContentURL, kepUpdateConfiguration) params:params sign:NO callback:^(NSDictionary *json, NSError *error) {
+        _configuration = [[YYConfiguration alloc] initWithDictionary:json];
+        completion(error);
+    }];
 }
 
 #pragma mark Helper methods
@@ -210,6 +216,14 @@ static NSMutableArray *requestCache;
         completion(nil, nil);
     } else {
         completion(nil, [YYClient unknownError]);
+    }
+}
+
+- (void)handleStatus:(NSDictionary *)json callback:(nullable ErrorBlock)completion {
+    if ([json[@"status"] isEqualToString:@"ok"]) {
+        YYRunBlockP(completion, nil);
+    } else {
+        YYRunBlockP(completion, [YYClient errorWithMessage:json[@"error"] code:1]);
     }
 }
 

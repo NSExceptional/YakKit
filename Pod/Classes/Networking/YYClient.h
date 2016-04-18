@@ -41,6 +41,7 @@
 #pragma mark Internal
 - (void)completeWithClass:(Class)cls jsonArray:(NSArray *)objects error:(NSError *)error completion:(ArrayBlock)completion;
 + (NSError *)errorWithMessage:(NSString *)message code:(NSInteger)code;
+- (void)handleStatus:(NSDictionary *)json callback:(nullable ErrorBlock)completion;
 
 @end
 

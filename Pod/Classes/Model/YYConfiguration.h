@@ -12,6 +12,8 @@
 
 @interface YYConfiguration : MTLModel <MTLJSONSerializing>
 
+- (id)initWithDictionary:(NSDictionary *)json;
+
 @property (nonatomic, readonly) NSString *configHash;
 
 @property (nonatomic, readonly) NSURL    *basecampURL;
