@@ -7,6 +7,7 @@
 //
 
 #import "YYClient.h"
+#import "YYThing.h"
 #import "NSString+YakKit.h"
 #import "NSDictionary+YakKit.h"
 #import <SystemConfiguration/SCNetworkReachability.h>
@@ -63,6 +64,57 @@ BOOL YYHasActiveConnection() {
     url = url;
 }
 
+#pragma mark Helper methods
+
+- (void)completeWithClass:(Class)cls jsonArray:(NSArray *)objects error:(NSError *)error completion:(ArrayBlock)completion {
+    if (!error) {
+        completion([[cls class] arrayOfModelsFromJSONArray:objects], nil);
+    } else {
+        completion(nil, error);
+    }
+}
+
+- (NSURL *)URLFromFullURL:(NSString *)urlString params:(NSDictionary *)params sign:(BOOL)sign {
+    if (sign) {
+        NSString *endpoint = Endpoint(urlString);
+        NSRange r = NSMakeRange(urlString.length - endpoint.length, endpoint.length);
+        urlString = [urlString stringByReplacingCharactersInRange:r withString:[self signRequest:Endpoint(urlString) params:params]];
+        return [NSURL URLWithString:urlString];
+    } else {
+        return [NSURL URLWithString:urlString];
+    }
+}
+
+- (NSDictionary *)generalParams:(NSDictionary *)additional {
+    NSAssert(self.userIdentifier, @"Cannot make this request without a user identifier");
+    NSAssert(self.location, @"Cannot make this request without a location");
+    
+    NSDictionary *general = @{@"userID": self.userIdentifier,
+                              @"lat": @(self.location.coordinate.latitude).stringValue,
+                              @"long": @(self.location.coordinate.longitude).stringValue,
+                              @"userLat":  @(self.location.coordinate.latitude).stringValue,
+                              @"userLong": @(self.location.coordinate.longitude).stringValue,
+                              @"version": kYikYakVersion,
+                              @"horizontalAccuracy": @"0.000000",
+                              @"verticalAccuracy": @"0.000000",
+                              @"altitude": @"0.000000",
+                              @"floorLevel": @"0",
+                              @"speed": @"0.000000",
+                              @"course": @"0.000000"};
+    
+    if (additional.count) {
+        general = [general dictionaryByReplacingValuesForKeys:additional];
+    }
+    
+    return general;
+}
+
+- (NSDictionary *)generalHeaders:(NSString *)endpoint {
+    return @{@"Host": Host(endpoint),
+             @"User-Agent": kUserAgent,
+             @"X-ThePantsThief-Header": @"1"};
+}
+
 #pragma mark Requests / error handling
 
 static NSMutableArray *requestCache;
@@ -108,8 +160,7 @@ static NSMutableArray *requestCache;
     
     // Hash that bitch
     NSString *hash = [[NSString hashHMacSHA1:[message stringByAppendingString:salt] key:kRequestSignKey] base64EncodedStringWithOptions:0];
-    
-    [message appendFormat:@"&salt=%@&hash=%@", salt, hash];
+    [message appendFormat:@"&salt=%@&hash=%@", salt, hash.URLEncodedString];
     return message;
 }
 
@@ -123,7 +174,7 @@ static NSMutableArray *requestCache;
 }
 
 - (void)handleError:(NSError *)error data:(NSData *)data response:(NSURLResponse *)response completion:(ResponseBlock)completion {
-    NSParameterAssert(completion); NSParameterAssert(response);
+    NSParameterAssert(completion); NSParameterAssert(response); NSParameterAssert(data);
     
     NSInteger code = [(NSHTTPURLResponse *)response statusCode];
     
@@ -140,6 +191,7 @@ static NSMutableArray *requestCache;
             if ([text hasPrefix:@"http"]) {
                 completion(text, nil);
             } else {
+                text = [text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
                 NSString *message = [NSString stringWithFormat:@"Unknown error:\n%@", text];
                 completion(nil, [YYClient errorWithMessage:message code:1]);
             }
@@ -161,32 +213,11 @@ static NSMutableArray *requestCache;
     }
 }
 
-- (NSDictionary *)generalParams {
-    NSAssert(self.userIdentifier, @"Cannot make this request without a user identifier");
-    NSAssert(self.location, @"Cannot make this request without a location");
-    return @{@"userID": self.userIdentifier,
-             @"lat": @(self.location.coordinate.latitude).stringValue,
-             @"long": @(self.location.coordinate.longitude).stringValue,
-             @"userLat":  @(self.location.coordinate.latitude).stringValue,
-             @"userLong": @(self.location.coordinate.longitude).stringValue,
-             @"version": kYikYakVersion,
-             @"horizontalAccuracy": @"0.000000",
-             @"verticalAccuracy": @"0.000000",
-             @"altitude": @"0.000000",
-             @"floorLevel": @"0",
-             @"speed": @"0.000000",
-             @"course": @"0.000000"};
-}
-
-- (NSDictionary *)generalHeaders:(NSString *)endpoint {
-    return @{@"Host": Host(endpoint),
-             @"User-Agent": kUserAgent,
-             @"X-ThePantsThief-Header": @"1"};
-}
+#pragma mark POST and GET
 
 /// Posts to the given endpoint with "general parameters"
 - (void)postTo:(NSString *)endpoint callback:(ResponseBlock)callback {
-    [self postTo:endpoint params:[self generalParams] sign:YES callback:callback];
+    [self postTo:endpoint params:[self generalParams:nil] sign:YES callback:callback];
 }
 
 - (void)postTo:(NSString *)endpoint params:(NSDictionary *)params sign:(BOOL)sign callback:(ResponseBlock)callback {
@@ -206,7 +237,7 @@ static NSMutableArray *requestCache;
 }
 
 - (void)get:(NSString *)endpoint callback:(ResponseBlock)callback {
-    [self get:endpoint params:[self generalParams] sign:YES callback:callback];
+    [self get:endpoint params:[self generalParams:nil] sign:YES callback:callback];
 }
 
 - (void)get:(NSString *)endpoint params:(NSDictionary *)params sign:(BOOL)sign callback:(ResponseBlock)callback {
@@ -229,17 +260,6 @@ static NSMutableArray *requestCache;
             [self handleError:error data:data response:response completion:callback];
         });
     }] resume];
-}
-
-- (NSURL *)URLFromFullURL:(NSString *)urlString params:(NSDictionary *)params sign:(BOOL)sign {
-    if (sign) {
-        NSString *endpoint = Endpoint(urlString);
-        NSRange r = NSMakeRange(urlString.length - endpoint.length, endpoint.length);
-        urlString = [urlString stringByReplacingCharactersInRange:r withString:[self signRequest:Endpoint(urlString) params:params]];
-        return [NSURL URLWithString:urlString];
-    } else {
-        return [NSURL URLWithString:urlString];
-    }
 }
 
 @end

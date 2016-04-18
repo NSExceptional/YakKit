@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define YYRunBlock(block) if ( block ) block()
+#define YYRunBlockP(block, ...) if ( block ) block( __VA_ARGS__ )
 
 typedef void (^RequestBlock)(NSData *data, NSURLResponse *response, NSError *error);
 typedef void (^BooleanBlock)(BOOL success, NSError *error);

@@ -13,13 +13,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface YYClient (Yakking)
 
-#pragma mark Posting / removing yaks
-- (void)postYak:(NSString *)title handle:(nullable NSString *)handle completion:(nullable ErrorBlock)completion;
-- (void)deleteYak:(YYYak *)yak completion:(nullable ErrorBlock)completion;
+#pragma mark Posting
+- (void)postYak:(NSString *)title useHandle:(BOOL)handle completion:(nullable ErrorBlock)completion;
+- (void)postComment:(NSString *)body toYak:(YYYak *)yak useHandle:(BOOL)handle completion:(nullable ErrorBlock)completion;
 
-#pragma mark Posting / removing comments
-- (void)postComment:(NSString *)body toYak:(YYYak *)yak completion:(nullable ErrorBlock)completion;
-- (void)deleteComment:(YYComment *)comment completion:(nullable ErrorBlock)completion;
+#pragma mark Deleting
+- (void)deleteYakOrComment:(YYVotable *)thing completion:(nullable ErrorBlock)completion;
 
 #pragma mark Voting
 - (void)upvote:(YYVotable *)yakOrComment completion:(nullable ErrorBlock)completion;

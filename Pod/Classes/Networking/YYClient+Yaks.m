@@ -8,19 +8,11 @@
 
 #import "YYClient+Yaks.h"
 #import "YYYak.h"
+#import "YYPeekLocation.h"
+#import "NSDictionary+YakKit.h"
 
 
 @implementation YYClient (Yaks)
-
-#pragma mark Helper methods
-
-- (void)completeWithClass:(Class)cls jsonArray:(NSArray *)objects error:(NSError *)error completion:(ArrayBlock)completion {
-    if (!error) {
-        completion([[cls class] arrayOfModelsFromJSONArray:objects], nil);
-    } else {
-        completion(nil, error);
-    }
-}
 
 #pragma mark Getting yak feeds
 
@@ -42,13 +34,23 @@
     }];
 }
 
-- (void)getYaksInPeek:(YYPeekLocation *)location completion:(ArrayBlock)completion {
+- (void)getYaksInPeek:(YYPeekLocation *)location hot:(BOOL)hot completion:(ArrayBlock)completion {
+    NSDictionary *params = [self generalParams:@{@"herdID": location.identifier, @"peekID": location.identifier}];
+    if (hot) {
+        params = [params dictionaryByReplacingValuesForKeys:@{@"hot": @"true"}];
+    }
+    
+    [self get:kepGetPeekYaks params:params sign:YES callback:^(id object, NSError *error) {
+        [self completeWithClass:[YYYak class] jsonArray:object[@"messages"] error:error completion:completion];
+    }];
 }
 
 #pragma mark Getting comments
 
 - (void)getCommentsForYak:(YYYak *)yak completion:(ArrayBlock)completion {
-    
+    [self get:kepGetComments params:[self generalParams:@{@"messageID": yak.identifier}] sign:YES callback:^(id object, NSError *error) {
+        [self completeWithClass:[YYYak class] jsonArray:object[@"messages"] error:error completion:completion];
+    }];
 }
 
 @end

@@ -45,7 +45,7 @@ NSString * const kepGetMyTopYaks            = @"/api/getMyTops";
 
 #pragma mark Modifying yaks and comments
 NSString * const kepPostYak                 = @"/api/sendMessage";
-NSString * const kepDeleteYak               = @"/api/deleteMessage";
+NSString * const kepDeleteYak               = @"/api/deleteMessage2";
 NSString * const kepPostComment             = @"/api/postComment";
 NSString * const kepDeleteComment           = @"/api/deleteComment";
 

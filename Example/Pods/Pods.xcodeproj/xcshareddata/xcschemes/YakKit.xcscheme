@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5159516BBBB5F80722CE8AF0"
+               BlueprintIdentifier = "D9D4B98F2DB8EB093C8A21D8"
                BuildableName = "libYakKit.a"
                BlueprintName = "YakKit"
                ReferencedContainer = "container:Pods.xcodeproj">

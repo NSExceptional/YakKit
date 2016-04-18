@@ -25,6 +25,7 @@
 
 
 @interface NSString (REST)
+@property (nonatomic, readonly) NSString *URLEncodedString;
 + (NSString *)timestamp;
 + (NSString *)timestampFrom:(NSDate *)date;
 + (NSString *)queryStringWithParams:(NSDictionary *)params;

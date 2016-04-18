@@ -7,31 +7,76 @@
 //
 
 #import "YYClient+Personal.h"
+#import "YYNotification.h"
+#import "YYYak.h"
+#import "NSArray+YakKit.h"
 
 @implementation YYClient (Personal)
 
-#pragma mark Getting user data
+#pragma mark Helper methods
 
-- (void)getNotifications:(ArrayBlock)completion {
-    
+- (void)getUserData:(NSString *)endpoint callback:(ArrayBlock)completion {
+    [self get:URL(self.baseURLForRegion, endpoint) callback:^(id object, NSError *error) {
+        [self completeWithClass:[YYYak class] jsonArray:object[@"messages"] error:error completion:completion];
+    }];
 }
 
+- (void)handleStatus:(NSDictionary *)json callback:(nullable ErrorBlock)completion {
+    if ([json[@"status"] isEqualToString:@"ok"]) {
+        YYRunBlockP(completion, nil);
+    } else {
+        YYRunBlockP(completion, [YYClient errorWithMessage:json[@"error"] code:1]);
+    }
+}
+
+#pragma mark User data
+
 - (void)getMyRecentYaks:(ArrayBlock)completion {
-    
+    [self getUserData:kepGetMyRecentYaks callback:completion];
 }
 
 - (void)getMyTopYaks:(ArrayBlock)completion {
-    
+    [self getUserData:kepGetMyTopYaks callback:completion];
 }
 
 - (void)getMyRecentReplies:(ArrayBlock)completion {
-    
+    [self getUserData:kepGetMyRecentReplies callback:completion];
 }
 
-#pragma mark Viewing notifications
+#pragma mark Notifications
 
-- (void)mark:(NSArray<YYNotification *> *)notifications read:(BOOL)read completion:(nullable DictionaryBlock)completion {
-    
+- (void)getNotifications:(ArrayBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:kepGetNotifications_user, self.userIdentifier];
+    [self get:URL(kBaseNotifyURL, endpoint) callback:^(NSDictionary *object, NSError *error) {
+        [self completeWithClass:[YYNotification class] jsonArray:object[@"data"] error:error completion:completion];
+    }];
+}
+
+- (void)mark:(YYNotification *)notification read:(BOOL)read completion:(nullable ErrorBlock)completion {
+    NSDictionary *query = @{@"notificationID": notification.identifier,
+                            @"parentID": self.userIdentifier, // TODO
+                            @"status": read ? @"read" : @"unread",
+                            @"userID": self.userIdentifier};
+    [self postTo:URL(kBaseNotifyURL, kepMarkNotification) params:[self generalParams:nil] httpBodyParams:query sign:YES callback:^(NSDictionary *json, NSError *error) {
+        if (error) {
+            YYRunBlockP(completion, error);
+        } else {
+            [self handleStatus:json callback:completion];
+        }
+    }];
+}
+
+- (void)markEach:(NSArray<YYNotification *> *)notifications read:(BOOL)read completion:(nullable ErrorBlock)completion {
+    NSDictionary *query = @{@"notificationIDs": [[notifications valueForKeyPath:@"@unionOfObjects.identifier"] JSONString],
+                            @"status": read ? @"read" : @"unread",
+                            @"userID": self.userIdentifier};
+    [self postTo:URL(kBaseNotifyURL, kepMarkNotificationsBatch) params:[self generalParams:nil] httpBodyParams:query sign:YES callback:^(NSDictionary *json, NSError *error) {
+        if (error) {
+            YYRunBlockP(completion, error);
+        } else {
+            [self handleStatus:json callback:completion];
+        }
+    }];
 }
 
 @end
