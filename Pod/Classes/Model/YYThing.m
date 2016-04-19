@@ -46,4 +46,12 @@
     }];
 }
 
++ (NSValueTransformer *)yy_UTCDateTransformer {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *ts, BOOL *success, NSError **error) {
+        return [NSDate dateWithTimeIntervalSince1970:ts.doubleValue/1000.f];
+    } reverseBlock:^id(NSDate *ts, BOOL *success, NSError **error) {
+        return @([ts timeIntervalSince1970] * 1000.f).stringValue;
+    }];
+}
+
 @end

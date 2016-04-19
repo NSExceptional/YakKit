@@ -19,7 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getLocalTopYaks:(ArrayBlock)completion;
 - (void)getYaksInPeek:(YYPeekLocation *)location hot:(BOOL)hot completion:(ArrayBlock)completion;
 
-#pragma mark Getting comments
+#pragma mark Getting info about a yak
+- (void)getYak:(YYNotification *)notification completion:(ResponseBlock)completion;
 - (void)getCommentsForYak:(YYYak *)yak completion:(ArrayBlock)completion;
 
 @end

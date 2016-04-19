@@ -10,7 +10,7 @@
 #import "YakKit-Constants.h"
 
 @import CoreLocation;
-@class YYConfiguration, YYPeekLocation, YYYak, YYComment, YYNotification, YYVotable;
+@class YYConfiguration, YYUser, YYPeekLocation, YYYak, YYComment, YYNotification, YYVotable;
 
 
 @interface YYClient : NSObject
@@ -18,13 +18,19 @@
 + (instancetype)sharedClient;
 
 @property (nonatomic, readonly) YYConfiguration *configuration;
-@property (nonatomic, readonly) NSString *baseURLForRegion;
-@property (nonatomic) NSString   *region;
-@property (nonatomic) CLLocation *location;
-@property (nonatomic) NSString   *userIdentifier;
+@property (nonatomic, readonly) YYUser          *currentUser;
+@property (nonatomic, readonly) NSString        *baseURLForRegion;
+@property (nonatomic          ) NSString        *region;
+@property (nonatomic          ) CLLocation      *location;
+@property (nonatomic          ) NSString        *userIdentifier;
 
 #pragma mark General
+/// Updates the `configuration` object.
 - (void)updateConfiguration:(ErrorBlock)completion;
+/// Updates the `currentUser` object.
+- (void)updateUser:(ErrorBlock)completion;
+/// Completion takes a the token as a string and the litefime of the code
+- (void)authenticateForWeb:(void(^)(NSString *code, NSInteger timeout, NSError *error))completion;
 
 #pragma mark Making requests
 - (NSDictionary *)generalParams:(NSDictionary *)additional;

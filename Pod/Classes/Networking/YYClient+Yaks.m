@@ -8,7 +8,9 @@
 
 #import "YYClient+Yaks.h"
 #import "YYYak.h"
+#import "YYComment.h"
 #import "YYPeekLocation.h"
+#import "YYNotification.h"
 #import "NSDictionary+YakKit.h"
 
 
@@ -45,11 +47,23 @@
     }];
 }
 
-#pragma mark Getting comments
+#pragma mark Getting info about a yak
+
+- (void)getYak:(YYNotification *)notification completion:(ResponseBlock)completion {
+    NSDictionary *params = [self generalParams:@{@"messageID": notification.thingIdentifier,
+                                                 @"notificationType": YYStringFromNotificationReason(notification.reason)}];
+    [self get:URL(self.baseURLForRegion, kepGetYakInfo) params:params sign:YES callback:^(NSDictionary *json, NSError *error) {
+        if (!error) {
+            completion([[YYYak alloc] initWithDictionary:[json[@"messages"] firstObject]], nil);
+        } else {
+            completion(nil, error);
+        }
+    }];
+}
 
 - (void)getCommentsForYak:(YYYak *)yak completion:(ArrayBlock)completion {
     [self get:kepGetComments params:[self generalParams:@{@"messageID": yak.identifier}] sign:YES callback:^(id object, NSError *error) {
-        [self completeWithClass:[YYYak class] jsonArray:object[@"messages"] error:error completion:completion];
+        [self completeWithClass:[YYComment class] jsonArray:object[@"comments"] error:error completion:completion];
     }];
 }
 

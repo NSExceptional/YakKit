@@ -16,6 +16,7 @@ typedef NS_ENUM(NSUInteger, YYNotificationReason)
     YYNotificationReasonComment,
     YYNotificationReasonHandleRemoved
 };
+NSString *_Nonnull YYStringFromNotificationReason(YYNotificationReason reason);
 
 typedef NS_ENUM(NSUInteger, YYThingType)
 {

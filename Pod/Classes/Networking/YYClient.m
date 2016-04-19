@@ -8,6 +8,7 @@
 
 #import "YYClient.h"
 #import "YYThing.h"
+#import "YYUser.h"
 #import "YYConfiguration.h"
 #import "NSString+YakKit.h"
 #import "NSDictionary+YakKit.h"
@@ -67,6 +68,28 @@ BOOL YYHasActiveConnection() {
     [self get:URL(kBaseContentURL, kepUpdateConfiguration) params:params sign:NO callback:^(NSDictionary *json, NSError *error) {
         _configuration = [[YYConfiguration alloc] initWithDictionary:json];
         completion(error);
+    }];
+}
+
+- (void)updateUser:(ErrorBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:kepGetUserData_user, self.userIdentifier];
+    [self get:URL(self.baseURLForRegion, endpoint) callback:^(NSDictionary *json, NSError *error) {
+        if (!error) {
+            _currentUser = [[YYUser alloc] initWithDictionary:json];
+            completion(nil);
+        } else {
+            completion(error);
+        }
+    }];
+}
+
+- (void)authenticateForWeb:(void(^)(NSString *code, NSInteger timeout, NSError *error))completion {
+    [self postTo:kAuthForWebURL callback:^(NSDictionary *json, NSError *error) {
+        if (!error) {
+            completion(json[@"pin"], [json[@"ttl"] integerValue], nil);
+        } else {
+            completion(nil, 0, error);
+        }
     }];
 }
 

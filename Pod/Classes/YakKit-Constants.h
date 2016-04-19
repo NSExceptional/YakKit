@@ -52,7 +52,7 @@ extern NSString * const kepGetComments;
 #pragma mark Getting user data
 /// Goes with kBaseNotify
 extern NSString * const kepGetNotifications_user;
-extern NSString * const kepGetUserData;
+extern NSString * const kepGetUserData_user;
 extern NSString * const kepGetNicknamePolicy_user;
 extern NSString * const kepCheckHandle_user_handle;
 extern NSString * const kepGetMyRecentYaks;

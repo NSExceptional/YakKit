@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark Misc
 - (void)logEvent:(NSString *)event completion:(nullable ErrorBlock)completion;
 - (void)refreshLocate:(nullable ErrorBlock)completion;
+- (void)contactUs:(NSString *)topic message:(NSString *)message email:(NSString *)email completion:(nullable ErrorBlock)completion;
 
 @end
 

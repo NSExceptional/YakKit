@@ -36,7 +36,7 @@ NSString * const kepGetComments             = @"/api/getComments";
 
 #pragma mark Getting user data
 NSString * const kepGetNotifications_user   = @"/api/getAllForUser/%@";
-NSString * const kepGetUserData             = @"/v1/user/%@";
+NSString * const kepGetUserData_user        = @"/v1/user/%@";
 NSString * const kepGetNicknamePolicy_user  = @"/v1/user/%@/nicknamepolicy";
 NSString * const kepCheckHandle_user_handle = @"/v1/user/%@/nickname/%@";
 NSString * const kepGetMyRecentYaks         = @"/api/getMyRecentYaks";

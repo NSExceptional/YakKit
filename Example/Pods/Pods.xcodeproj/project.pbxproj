@@ -61,6 +61,10 @@
 		9C9B38BF6F32C5686057AD5CDE90EBFB /* NSArray+YakKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 14AB0E49A5F13C88D53361FFD787707D /* NSArray+YakKit.m */; };
 		9F5AC65FFABED400FF2C57DD16039FED /* NSDictionary+YakKit.h in Headers */ = {isa = PBXBuildFile; fileRef = DDA72DC47F759E7BFF0984067B437BCB /* NSDictionary+YakKit.h */; };
 		B26D7A572511A9E5CF27A22C627F6835 /* YYClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 7CD0D315F3EEA15B47E3470C619AC309 /* YYClient.h */; };
+		B4E73C341CC5AEA600670CC6 /* YYUser.h in Headers */ = {isa = PBXBuildFile; fileRef = B4E73C321CC5AEA600670CC6 /* YYUser.h */; };
+		B4E73C351CC5AEA600670CC6 /* YYUser.m in Sources */ = {isa = PBXBuildFile; fileRef = B4E73C331CC5AEA600670CC6 /* YYUser.m */; };
+		B4E73C381CC5C63000670CC6 /* YYClient+Registration.h in Headers */ = {isa = PBXBuildFile; fileRef = B4E73C361CC5C63000670CC6 /* YYClient+Registration.h */; };
+		B4E73C391CC5C63000670CC6 /* YYClient+Registration.m in Sources */ = {isa = PBXBuildFile; fileRef = B4E73C371CC5C63000670CC6 /* YYClient+Registration.m */; };
 		B915985B563BA894C8CB7A5848AB6435 /* NSObject+MTLComparisonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 611703431443F934A14BC056F038705B /* NSObject+MTLComparisonAdditions.h */; };
 		BB650B97DB72AAEA6327936F7C749CA3 /* NSArray+YakKit.h in Headers */ = {isa = PBXBuildFile; fileRef = CEF7E8C2C4D00ECAC2555E1D3A638AE3 /* NSArray+YakKit.h */; };
 		BC42FFABC21E9D28DD98BD9CE2325B5D /* NSData+YakKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 60DA58AA4DF175D630321EEB6F7543D9 /* NSData+YakKit.h */; };
@@ -199,6 +203,10 @@
 		B293F9FC7FCBBC98C974E3421EA97D32 /* MTLModel+NSCoding.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "MTLModel+NSCoding.m"; path = "Mantle/MTLModel+NSCoding.m"; sourceTree = "<group>"; };
 		B351812C518468DA238D01F0F3D89733 /* Pods-YakKit_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-YakKit_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		B48340536E7CBD67F6C2463F24829F0F /* Mantle-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Mantle-prefix.pch"; sourceTree = "<group>"; };
+		B4E73C321CC5AEA600670CC6 /* YYUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYUser.h; sourceTree = "<group>"; };
+		B4E73C331CC5AEA600670CC6 /* YYUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYUser.m; sourceTree = "<group>"; };
+		B4E73C361CC5C63000670CC6 /* YYClient+Registration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "YYClient+Registration.h"; sourceTree = "<group>"; };
+		B4E73C371CC5C63000670CC6 /* YYClient+Registration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "YYClient+Registration.m"; sourceTree = "<group>"; };
 		B9DA46136F3FBFED81F6DDD0E8286AE8 /* NSError+MTLModelException.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSError+MTLModelException.h"; path = "Mantle/NSError+MTLModelException.h"; sourceTree = "<group>"; };
 		BA0478494C48AD95F031DE785C302786 /* YYConfiguration.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = YYConfiguration.m; sourceTree = "<group>"; };
 		BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -346,6 +354,8 @@
 				8FAC674F0B7A685DF4088D980DC157CF /* YYClient+Misc.m */,
 				96BF16B67AB7324C7D252D8A44BA43EF /* YYClient+Personal.h */,
 				67630830E97BF008F9008DA9D1E7920A /* YYClient+Personal.m */,
+				B4E73C361CC5C63000670CC6 /* YYClient+Registration.h */,
+				B4E73C371CC5C63000670CC6 /* YYClient+Registration.m */,
 				1A3D1191BAA7999E233AD23A741924AE /* YYClient+Yakking.h */,
 				6A6D751159D5F0A87731138585E8F312 /* YYClient+Yakking.m */,
 				81CB6B724015D9096B5C7D6C3F2652A2 /* YYClient+Yaks.h */,
@@ -500,6 +510,8 @@
 				CAB2F3BF9BBCFC675F26D3A055659C9F /* YYVotable.m */,
 				99DC6978F261704F1D407405480EC81D /* YYYak.h */,
 				D6FDC5884030A99BFD29899C12B83FA4 /* YYYak.m */,
+				B4E73C321CC5AEA600670CC6 /* YYUser.h */,
+				B4E73C331CC5AEA600670CC6 /* YYUser.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -541,8 +553,10 @@
 				4EB042F0C292BA558FF034017111E50B /* NSError+MTLModelException.h in Headers */,
 				B915985B563BA894C8CB7A5848AB6435 /* NSObject+MTLComparisonAdditions.h in Headers */,
 				53BAAB8C384A3CAC3A3FCA274ADEF3BA /* NSValueTransformer+MTLInversionAdditions.h in Headers */,
+				B4E73C381CC5C63000670CC6 /* YYClient+Registration.h in Headers */,
 				0EF4384B906BD042B42AC1B2EFB1510A /* NSValueTransformer+MTLPredefinedTransformerAdditions.h in Headers */,
 				896FE9CEBFA4D6E41531D1D89468F0E4 /* metamacros.h in Headers */,
+				B4E73C341CC5AEA600670CC6 /* YYUser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -733,11 +747,13 @@
 				265ECEF981B2E14CBAF57228B1C44C16 /* Mantle-dummy.m in Sources */,
 				441EC1641070AF0879EE8A016E37B779 /* NSArray+MTLManipulationAdditions.m in Sources */,
 				EE2B85806306FD3D29D9271E8EE31EF3 /* NSDictionary+MTLJSONKeyPath.m in Sources */,
+				B4E73C391CC5C63000670CC6 /* YYClient+Registration.m in Sources */,
 				01401A260FC504F0708CE1843EE4A189 /* NSDictionary+MTLManipulationAdditions.m in Sources */,
 				0E8C442E6D15AEFA4AD0EA0AA11EE5B0 /* NSDictionary+MTLMappingAdditions.m in Sources */,
 				542F8A28D86680AF54425E4ADC83AD90 /* NSError+MTLModelException.m in Sources */,
 				1C8E8132992639F08C6BC9A0276716E9 /* NSObject+MTLComparisonAdditions.m in Sources */,
 				F79D044E4EC078B89F7F158D95D1EED3 /* NSValueTransformer+MTLInversionAdditions.m in Sources */,
+				B4E73C351CC5AEA600670CC6 /* YYUser.m in Sources */,
 				5E74E758E2F1FE7D406BAAB6EF11D5A1 /* NSValueTransformer+MTLPredefinedTransformerAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
