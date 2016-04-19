@@ -13,6 +13,8 @@
 @class YYConfiguration, YYUser, YYPeekLocation, YYYak, YYComment, YYNotification, YYVotable;
 
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface YYClient : NSObject
 
 + (instancetype)sharedClient;
@@ -33,14 +35,13 @@
 - (void)authenticateForWeb:(void(^)(NSString *code, NSInteger timeout, NSError *error))completion;
 
 #pragma mark Making requests
-- (NSDictionary *)generalParams:(NSDictionary *)additional;
-- (void)postTo:(NSString *)endpoint callback:(ResponseBlock)callback;
-- (void)postTo:(NSString *)endpoint params:(NSDictionary *)params sign:(BOOL)sign callback:(ResponseBlock)callback;
-- (void)postTo:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams sign:(BOOL)sign callback:(ResponseBlock)callback;
-- (void)postTo:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams headers:(NSDictionary *)headers sign:(BOOL)sign callback:(ResponseBlock)callback;
-- (void)get:(NSString *)endpoint callback:(ResponseBlock)callback;
-- (void)get:(NSString *)endpoint params:(NSDictionary *)params sign:(BOOL)sign callback:(ResponseBlock)callback;
-- (void)get:(NSString *)endpoint params:(NSDictionary *)params headers:(NSDictionary *)headers sign:(BOOL)sign callback:(ResponseBlock)callback;
+- (NSDictionary *)generalParams:(nullable NSDictionary *)additional;
+- (void)postTo:(NSString *)endpoint callback:(nullable ResponseBlock)callback;
+- (void)postTo:(NSString *)endpoint params:(nullable NSDictionary *)params sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
+- (void)postTo:(NSString *)endpoint params:(nullable NSDictionary *)params httpBodyParams:(nullable NSDictionary *)bodyParams sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
+- (void)get:(NSString *)endpoint callback:(nullable ResponseBlock)callback;
+- (void)get:(NSString *)endpoint params:(nullable NSDictionary *)params sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
+- (void)get:(NSString *)endpoint params:(nullable NSDictionary *)params headers:(nullable NSDictionary *)headers sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
 
 - (NSString *)signRequest:(NSString *)endpoint params:(NSDictionary *)params;
 
@@ -50,6 +51,8 @@
 - (void)handleStatus:(NSDictionary *)json callback:(nullable ErrorBlock)completion;
 
 @end
+
+NS_ASSUME_NONNULL_END
 
 #define URL(base, endpoint) [base stringByAppendingString:endpoint]
 #define URLDynamic(base, endpoint, ...) [NSString stringWithFormat:URL(base, endpoint), __VA_ARGS__]
