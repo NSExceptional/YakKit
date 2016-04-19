@@ -8,9 +8,16 @@
 
 #import "YYAppDelegate.h"
 #import "YakKit.h"
-#import "Login.h"
 #import "TBTableViewController.h"
+// You can safely remove this import
+#import "Login.h"
 
+
+#ifndef kYYUserID
+#define kYYUserID your-user-identifier
+#define kYYLat latitude
+#define kYYLong longitude
+#endif
 
 @implementation YYAppDelegate
 

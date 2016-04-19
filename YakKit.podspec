@@ -12,6 +12,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '7.0'
   s.osx.deployment_target = '10.8'
 
-  s.source_files = 'Pod/Classes/*', 'Pod/Classes/**/*', 'Pod/Dependencies/*', 'Pod/Dependencies/**/*'
+  s.source_files = 'Pod/Classes/*', 'Pod/Classes/**/*'
   s.dependency 'Mantle'
 end
