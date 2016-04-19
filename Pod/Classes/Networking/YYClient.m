@@ -18,6 +18,7 @@
 // Relies on the fact that kHostRegexPattern does not end in a '/'
 #define Endpoint(string) [string stringByReplacingCharactersInRange:NSMakeRange(0, [string matchGroupAtIndex:0 forRegex:kHostRegexPattern].length) withString:@""]
 
+
 BOOL YYHasActiveConnection() {
     SCNetworkReachabilityFlags flags;
     SCNetworkReachabilityRef address;
@@ -31,6 +32,11 @@ BOOL YYHasActiveConnection() {
     
     return canReach;
 }
+
+BOOL YYIsValidUserIdentifier(NSString *uid) {
+    return [uid matchGroupAtIndex:0 forRegex:@"^[a-zA-Z\\d]{8}-[a-zA-Z\\d]{4}-[a-zA-Z\\d]{4}-[a-zA-Z\\d]{4}-[a-zA-Z\\d]{12}$"] != nil;
+}
+
 
 @implementation YYClient
 

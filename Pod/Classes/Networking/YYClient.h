@@ -13,6 +13,9 @@
 @class YYConfiguration, YYUser, YYPeekLocation, YYYak, YYComment, YYNotification, YYVotable;
 
 
+extern BOOL YYIsValidUserIdentifier(NSString * _Nonnull uid);
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface YYClient : NSObject
