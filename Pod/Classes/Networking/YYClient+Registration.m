@@ -34,7 +34,7 @@
         if (!error) {
             completion([json[@"code"] integerValue] == 2, nil);
         } else {
-            completion(nil, error);
+            completion(NO, error);
         }
     }];
 }
