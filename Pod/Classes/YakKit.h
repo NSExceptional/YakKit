@@ -8,10 +8,11 @@
 
 #import "YYClient.h"
 
-#import "YYClient+Yaks.h"
 #import "YYClient+Misc.h"
 #import "YYClient+Personal.h"
+#import "YYClient+Registration.h"
 #import "YYClient+Yakking.h"
+#import "YYClient+Yaks.h"
 
 #import "YYComment.h"
 #import "YYNotification.h"
@@ -19,3 +20,4 @@
 #import "YYConfiguration.h"
 #import "YYThreatCheck.h"
 #import "YYYak.h"
+#import "YYUser.h"
