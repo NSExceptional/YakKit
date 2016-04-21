@@ -23,6 +23,21 @@
     return self;
 }
 
+- (BOOL)isEqual:(id)object {
+    if ([object class] == [self class])
+        return [self isEqualToThing:object];
+    
+    return [super isEqual:object];
+}
+
+- (BOOL)isEqualToThing:(YYThing *)thing {
+    return [thing.identifier isEqualToString:self.identifier];
+}
+
+- (NSUInteger)hash {
+    return self.identifier.hash;
+}
+
 + (NSArray *)arrayOfModelsFromJSONArray:(NSArray *)json {
     NSParameterAssert(json.count);
     
