@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getMyRecentReplies:(ArrayBlock)completion;
 
 #pragma mark Notifications
+/// Will post kYYDidLoadNotificationsNotification on success before calling the completion block.
 - (void)getNotifications:(ArrayBlock)completion;
 - (void)mark:(YYNotification *)notification read:(BOOL)read completion:(nullable ErrorBlock)completion;
 - (void)markEach:(NSArray<YYNotification *> *)notifications read:(BOOL)read completion:(nullable ErrorBlock)completion;

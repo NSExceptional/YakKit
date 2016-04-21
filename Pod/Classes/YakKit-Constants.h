@@ -24,6 +24,12 @@ typedef void (^ErrorBlock)(NSError *error);
 typedef void (^VoidBlock)();
 
 
+#pragma mark Notifications
+extern NSString * const kYYDidUpdateUserNotification;
+extern NSString * const kYYDidUpdateConfigurationNotification;
+extern NSString * const kYYDidLoadNotificationsNotification;
+
+#pragma mark Misc
 extern NSString * const kUserAgent;
 extern NSString * const kYikYakVersion;
 extern NSString * const kRequestSignKey;

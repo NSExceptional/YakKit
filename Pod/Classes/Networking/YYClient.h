@@ -22,17 +22,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)sharedClient;
 
-@property (nonatomic, readonly) YYConfiguration *configuration;
-@property (nonatomic, readonly) YYUser          *currentUser;
-@property (nonatomic, readonly) NSString        *baseURLForRegion;
-@property (nonatomic          ) NSString        *region;
-@property (nonatomic          ) CLLocation      *location;
-@property (nonatomic          ) NSString        *userIdentifier;
+/// KVO compliant.
+@property (nonatomic, readonly, nullable) YYConfiguration *configuration;
+/// KVO compliant.
+@property (nonatomic, readonly, nullable) YYUser *currentUser;
+@property (nonatomic, nullable) CLLocation       *location;
+@property (nonatomic, nullable) NSString         *userIdentifier;
+@property (nonatomic, readonly) NSString         *baseURLForRegion;
+@property (nonatomic          ) NSString         *region;
 
 #pragma mark General
-/// Updates the `configuration` object.
+/// Updates the `configuration` object. Will post kYYDidUpdateConfigurationNotification on success before calling the completion block.
 - (void)updateConfiguration:(ErrorBlock)completion;
-/// Updates the `currentUser` object.
+/// Updates the `currentUser` object. Will post kYYDidUpdateUserNotification on success before calling the completion block.
 - (void)updateUser:(ErrorBlock)completion;
 /// Completion takes a the token as a string and the litefime of the code
 - (void)authenticateForWeb:(void(^)(NSString *code, NSInteger timeout, NSError *error))completion;

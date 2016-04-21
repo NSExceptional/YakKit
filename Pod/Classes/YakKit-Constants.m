@@ -9,6 +9,12 @@
 #import "YakKit-Constants.h"
 
 
+#pragma mark Notifications
+NSString * const kYYDidUpdateUserNotification          = @"kYYDidUpdateUserNotification";
+NSString * const kYYDidUpdateConfigurationNotification = @"kYYDidUpdateConfigurationNotification";
+NSString * const kYYDidLoadNotificationsNotification   = @"kYYDidLoadNotificationsNotification";
+
+#pragma mark Misc
 NSString * const kUserAgent     = @"Yik Yak/3.3.1 (iPhone; iOS 9.0.2; Scale/2.00)";
 NSString * const kYikYakVersion = @"3.3.1";
 

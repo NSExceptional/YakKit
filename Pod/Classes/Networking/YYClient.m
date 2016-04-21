@@ -65,6 +65,14 @@ BOOL YYIsValidUserIdentifier(NSString *uid) {
     _baseURLForRegion = [NSString stringWithFormat:@"https://%@.yikyakapi.net", region];
 }
 
+- (void)setCurrentUser:(YYUser *)currentUser {
+    _currentUser = currentUser;
+}
+
+- (void)setConfiguration:(YYConfiguration *)configuration {
+    _configuration = configuration;
+}
+
 #pragma mark General
 
 - (void)updateConfiguration:(ErrorBlock)completion {
@@ -72,8 +80,13 @@ BOOL YYIsValidUserIdentifier(NSString *uid) {
                              @"lng": @(self.location.coordinate.latitude),
                              @"yakkerID": self.userIdentifier};
     [self get:URL(kBaseContentURL, kepUpdateConfiguration) params:params sign:NO callback:^(NSDictionary *json, NSError *error) {
-        _configuration = [[YYConfiguration alloc] initWithDictionary:json];
-        completion(error);
+        if (!error) {
+            self.configuration = [[YYConfiguration alloc] initWithDictionary:json];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kYYDidUpdateConfigurationNotification object:self];
+            completion(nil);
+        } else {
+            completion(error);
+        }
     }];
 }
 
@@ -81,7 +94,8 @@ BOOL YYIsValidUserIdentifier(NSString *uid) {
     NSString *endpoint = [NSString stringWithFormat:kepGetUserData_user, self.userIdentifier];
     [self get:URL(self.baseURLForRegion, endpoint) callback:^(NSDictionary *json, NSError *error) {
         if (!error) {
-            _currentUser = [[YYUser alloc] initWithDictionary:json];
+            self.currentUser = [[YYUser alloc] initWithDictionary:json];
+            [[NSNotificationCenter defaultCenter] postNotificationName:kYYDidUpdateUserNotification object:self];
             completion(nil);
         } else {
             completion(error);

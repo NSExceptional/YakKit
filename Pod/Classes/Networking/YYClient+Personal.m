@@ -38,6 +38,11 @@
 #pragma mark Notifications
 
 - (void)getNotifications:(ArrayBlock)completion {
+    // For posting the notification
+    completion = ^(NSArray *collection, NSError *error) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kYYDidLoadNotificationsNotification object:self];
+        completion(collection, error);
+    };
     NSString *endpoint = [NSString stringWithFormat:kepGetNotifications_user, self.userIdentifier];
     [self get:URL(kBaseNotifyURL, endpoint) callback:^(NSDictionary *object, NSError *error) {
         [self completeWithClass:[YYNotification class] jsonArray:object[@"data"] error:error completion:completion];
