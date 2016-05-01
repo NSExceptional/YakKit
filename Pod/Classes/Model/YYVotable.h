@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface YYVotable : YYThing
 
+- (NSComparisonResult)compareScore:(YYVotable *)votable;
+- (NSComparisonResult)compareCreated:(YYVotable *)votable;
+
 @property (nonatomic, readonly) NSInteger    score;
 @property (nonatomic, readonly) YYVoteStatus voteStatus;
 

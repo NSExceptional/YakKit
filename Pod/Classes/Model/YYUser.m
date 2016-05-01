@@ -8,6 +8,7 @@
 
 #import "YYUser.h"
 
+
 @implementation YYUser
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
@@ -15,6 +16,7 @@
              @"handle": @"nickname",
              @"created": @"created",
              @"isVerified": @"isVerified",
+             @"IsSuspended": @"isSuspended",
              @"forceVerification": @"forceVerification",
              @"basecamp": @"basecamp",
              @"identifier": @"id"};

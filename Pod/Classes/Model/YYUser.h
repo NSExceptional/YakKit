@@ -15,6 +15,7 @@
 @property (nonatomic, readonly) NSString  *handle;
 @property (nonatomic, readonly) NSDate    *created;
 @property (nonatomic, readonly) BOOL      isVerified;
+@property (nonatomic, readonly) BOOL      isSuspended;
 
 @property (nonatomic, readonly) BOOL forceVerification;
 @property (nonatomic, readonly) NSDictionary *basecamp;

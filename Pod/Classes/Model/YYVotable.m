@@ -52,5 +52,19 @@
 //    }];
 //}
 
+- (NSComparisonResult)compareScore:(YYVotable *)votable {
+    if (self.score < votable.score) {
+        return NSOrderedAscending;
+    } else if (self.score == votable.score) {
+        return NSOrderedSame;
+    } else {
+        return NSOrderedDescending;
+    }
+}
+
+- (NSComparisonResult)compareCreated:(YYVotable *)votable {
+    return [self.created compare:votable.created];
+}
+
 
 @end
