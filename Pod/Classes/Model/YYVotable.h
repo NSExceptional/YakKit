@@ -32,6 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) id deliveryIdentifier;
 
+/// Use this however you want to flag or identify objects.
+@property (nonatomic) NSInteger tag;
+
 @end
 
 NS_ASSUME_NONNULL_END
