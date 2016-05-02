@@ -94,7 +94,7 @@ BOOL YYIsValidUserIdentifier(NSString *uid) {
     NSString *endpoint = [NSString stringWithFormat:kepGetUserData_user, self.userIdentifier];
     [self get:URL(self.baseURLForRegion, endpoint) callback:^(NSDictionary *json, NSError *error) {
         if (!error) {
-            self.currentUser = [[YYUser alloc] initWithDictionary:json];
+            self.currentUser = [[YYUser alloc] initWithDictionary:json[@"user"]];
             [[NSNotificationCenter defaultCenter] postNotificationName:kYYDidUpdateUserNotification object:self];
             YYRunBlockP(completion, nil);
         } else {

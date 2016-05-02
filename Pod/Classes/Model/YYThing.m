@@ -39,7 +39,7 @@
 }
 
 + (NSArray *)arrayOfModelsFromJSONArray:(NSArray *)json {
-    NSParameterAssert(json.count);
+    NSParameterAssert(json);
     
     NSMutableArray *things = [NSMutableArray array];
     for (NSDictionary *obj in json)

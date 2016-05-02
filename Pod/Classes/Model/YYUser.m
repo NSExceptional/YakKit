@@ -16,12 +16,12 @@
              @"handle": @"nickname",
              @"created": @"created",
              @"isVerified": @"isVerified",
-             @"IsSuspended": @"isSuspended",
+             @"isSuspended": @"IsSuspended",
              @"forceVerification": @"forceVerification",
              @"basecamp": @"basecamp",
              @"identifier": @"id"};
 }
 
-+ (NSValueTransformer *)createdJOSONTransformer { return [self yy_UTCDateTransformer]; }
++ (NSValueTransformer *)createdJSONTransformer { return [self yy_UTCDateTransformer]; }
 
 @end
