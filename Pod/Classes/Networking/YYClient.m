@@ -75,7 +75,7 @@ BOOL YYIsValidUserIdentifier(NSString *uid) {
 
 #pragma mark General
 
-- (void)updateConfiguration:(ErrorBlock)completion {
+- (void)updateConfiguration:(nullable ErrorBlock)completion {
     NSDictionary *params = @{@"lat": @(self.location.coordinate.longitude),
                              @"lng": @(self.location.coordinate.latitude),
                              @"yakkerID": self.userIdentifier};
@@ -83,22 +83,22 @@ BOOL YYIsValidUserIdentifier(NSString *uid) {
         if (!error) {
             self.configuration = [[YYConfiguration alloc] initWithDictionary:json];
             [[NSNotificationCenter defaultCenter] postNotificationName:kYYDidUpdateConfigurationNotification object:self];
-            completion(nil);
+            YYRunBlockP(completion, nil);
         } else {
-            completion(error);
+            YYRunBlockP(completion, error);
         }
     }];
 }
 
-- (void)updateUser:(ErrorBlock)completion {
+- (void)updateUser:(nullable ErrorBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:kepGetUserData_user, self.userIdentifier];
     [self get:URL(self.baseURLForRegion, endpoint) callback:^(NSDictionary *json, NSError *error) {
         if (!error) {
             self.currentUser = [[YYUser alloc] initWithDictionary:json];
             [[NSNotificationCenter defaultCenter] postNotificationName:kYYDidUpdateUserNotification object:self];
-            completion(nil);
+            YYRunBlockP(completion, nil);
         } else {
-            completion(error);
+            YYRunBlockP(completion, error);
         }
     }];
 }

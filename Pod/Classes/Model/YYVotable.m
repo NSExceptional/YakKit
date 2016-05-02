@@ -24,7 +24,8 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedFormatter = [NSDateFormatter new];
-        sharedFormatter.dateFormat = @"y-mm-dd HH:mm:ss";
+        sharedFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+        sharedFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"EST"];
     });
     
     return sharedFormatter;

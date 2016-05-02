@@ -33,9 +33,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark General
 /// Updates the `configuration` object. Will post kYYDidUpdateConfigurationNotification on success before calling the completion block.
-- (void)updateConfiguration:(ErrorBlock)completion;
+- (void)updateConfiguration:(nullable ErrorBlock)completion;
 /// Updates the `currentUser` object. Will post kYYDidUpdateUserNotification on success before calling the completion block.
-- (void)updateUser:(ErrorBlock)completion;
+- (void)updateUser:(nullable ErrorBlock)completion;
 /// Completion takes a the token as a string and the litefime of the code
 - (void)authenticateForWeb:(void(^)(NSString *code, NSInteger timeout, NSError *error))completion;
 

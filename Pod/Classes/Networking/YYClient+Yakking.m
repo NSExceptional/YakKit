@@ -77,7 +77,7 @@
 }
 
 - (void)downvote:(YYVotable *)thing completion:(nullable ErrorBlock)completion {
-    if (thing.voteStatus == YYVoteStatusUpvoted) { YYRunBlockP(completion, nil); return; }
+    if (thing.voteStatus == YYVoteStatusDownvoted) { YYRunBlockP(completion, nil); return; }
     
     NSDictionary *params;
     NSString *endpoint;
