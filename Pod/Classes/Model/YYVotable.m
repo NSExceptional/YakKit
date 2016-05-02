@@ -15,6 +15,7 @@
              @"voteStatus": @"liked",
              @"created": @"time",
              @"gmt": @"gmt",
+             @"username": @"nickname",
              @"deliveryIdentifier": @"deliveryID"};
 }
 
