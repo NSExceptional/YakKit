@@ -63,7 +63,7 @@
 
 - (void)getCommentsForYak:(YYYak *)yak completion:(ArrayBlock)completion {
     [self get:URL(self.baseURLForRegion, kepGetComments) params:[self generalParams:@{@"messageID": yak.identifier}] sign:YES callback:^(id object, NSError *error) {
-        [self completeWithClass:[YYComment class] jsonArray:object[@"comments"] error:error completion:completion];
+        [self completeWithClass:[YYComment class] jsonArray:[object[@"comments"] reverseObjectEnumerator].allObjects error:error completion:completion];
     }];
 }
 
