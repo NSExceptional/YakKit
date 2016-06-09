@@ -9,7 +9,7 @@
 #import "YYThing.h"
 
 
-typedef NS_ENUM(NSUInteger, YYVoteStatus)
+typedef NS_ENUM(NSInteger, YYVoteStatus)
 {
     YYVoteStatusDownvoted = -1,
     YYVoteStatusNone = 0,

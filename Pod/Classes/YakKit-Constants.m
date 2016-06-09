@@ -15,8 +15,8 @@ NSString * const kYYDidUpdateConfigurationNotification = @"kYYDidUpdateConfigura
 NSString * const kYYDidLoadNotificationsNotification   = @"kYYDidLoadNotificationsNotification";
 
 #pragma mark Misc
-NSString * const kUserAgent     = @"Yik Yak/3.3.1 (iPhone; iOS 9.0.2; Scale/2.00)";
-NSString * const kYikYakVersion = @"3.3.1";
+NSString * const kUserAgent     = @"Yik Yak/3.6 (iPhone; iOS 9.0.2; Scale/2.00)";
+NSString * const kYikYakVersion = @"3.6";
 
 NSString * const kSignGETKey     = @"EF64523D2BD1FA21F18F5BC654DFC41B";
 NSString * const kSignPOSTKey    = @"F7CAFA2F-FE67-4E03-A090-AC7FFF010729";
