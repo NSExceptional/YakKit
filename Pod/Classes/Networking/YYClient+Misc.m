@@ -45,7 +45,7 @@
 - (void)authenticateForLayer:(NSString *)nonce completion:(StringBlock)completion {
     NSDictionary *body = @{@"userID": self.userIdentifier,
                            @"nonce": nonce};
-    [self postTo:URL(self.baseURLForRegion, kepLayerAuthenticate) body:body callback:^(NSDictionary *json, NSError *error) {
+    [self postTo:URL(self.baseURLForRegion, kepLayerAuthentication) body:body callback:^(NSDictionary *json, NSError *error) {
         completion(error ? nil : json[@"identity_token"], error);
     }];
 }
