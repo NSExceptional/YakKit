@@ -14,7 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface YYComment : YYVotable
 
 @property (nonatomic, readonly) NSString *body;
+/** @discussion Not gauranteed to identify comments by the same user even
+ in the same thread. Use relevantAuthorIdentifier instead. */
 @property (nonatomic, readonly) NSString *authorIdentifier;
+@property (nonatomic, readonly) NSString *relevantAuthorIdentifier;
 @property (nonatomic, readonly) NSString *yakIdentifier;
 
 @property (nonatomic, readonly) BOOL     isOP;

@@ -67,6 +67,7 @@ NSString * const kepStartVerification       = @"/api/startVerification";
 NSString * const kepEndVerification         = @"/api/verify";
 
 #pragma mark Misc
+NSString * const kepLayerAuthentication     = @"/v1/layer/authenticate";
 NSString * const kepLogEvent                = @"/api/logEvent";
 NSString * const kepRefreshersLocate        = @"/refreshers/locate";
 NSString * const kepUpdateConfiguration     = @"/configurations/locate";

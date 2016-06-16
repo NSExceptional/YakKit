@@ -11,6 +11,15 @@
 
 @implementation YYComment
 
+- (id)initWithDictionary:(NSDictionary *)json {
+    self = [super initWithDictionary:json];
+    if (self) {
+        _relevantAuthorIdentifier = [self.backgroundIdentifier stringByAppendingString:self.overlayIdentifier];
+    }
+    
+    return self;
+}
+
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return [@{@"body": @"comment",
               @"authorIdentifier": @"posterID",

@@ -11,6 +11,7 @@
 #import "YYYak.h"
 #import "NSArray+YakKit.h"
 
+
 @implementation YYClient (Personal)
 
 #pragma mark Helper methods
@@ -51,10 +52,10 @@
 
 - (void)mark:(YYNotification *)notification read:(BOOL)read completion:(nullable ErrorBlock)completion {
     NSDictionary *query = @{@"notificationID": notification.identifier,
-                            @"parentID": self.userIdentifier, // TODO
+                            @"parentID": notification.thingIdentifier,
                             @"status": read ? @"read" : @"unread",
                             @"userID": self.userIdentifier};
-    [self postTo:URL(kBaseNotifyURL, kepMarkNotification) params:[self generalParams:nil] httpBodyParams:query sign:YES callback:^(NSDictionary *json, NSError *error) {
+    [self postTo:URL(kBaseNotifyURL, kepMarkNotification) query:[self generalQuery:nil] body:query sign:YES callback:^(NSDictionary *json, NSError *error) {
         if (error) {
             YYRunBlockP(completion, error);
         } else {
@@ -64,10 +65,13 @@
 }
 
 - (void)markEach:(NSArray<YYNotification *> *)notifications read:(BOOL)read completion:(nullable ErrorBlock)completion {
-    NSDictionary *query = @{@"notificationIDs": [[notifications valueForKeyPath:@"@unionOfObjects.identifier"] JSONString],
+    notifications = [notifications filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(YYNotification *n, id bindings) {
+        return n.unread != read;
+    }]];
+    NSDictionary *query = @{@"notificationIDs[]": [[notifications valueForKeyPath:@"@unionOfObjects.identifier"] componentsJoinedByString:@","],
                             @"status": read ? @"read" : @"unread",
                             @"userID": self.userIdentifier};
-    [self postTo:URL(kBaseNotifyURL, kepMarkNotificationsBatch) params:[self generalParams:nil] httpBodyParams:query sign:YES callback:^(NSDictionary *json, NSError *error) {
+    [self postTo:URL(kBaseNotifyURL, kepMarkNotificationsBatch) query:[self generalQuery:nil] body:query sign:YES callback:^(NSDictionary *json, NSError *error) {
         if (error) {
             YYRunBlockP(completion, error);
         } else {

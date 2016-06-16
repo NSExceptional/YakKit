@@ -85,18 +85,26 @@ NSString * YYStringFromNotificationReason(YYNotificationReason reason) {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedFormatter = [NSDateFormatter new];
-        sharedFormatter.dateFormat = @"y-mm-ddTHH:mm:SZ";
+        sharedFormatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     });
     
     return sharedFormatter;
 }
 
-+ (NSValueTransformer *)updatedJSONTransformer {
++ (NSValueTransformer *)dateTransformer {
     return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *dateString, BOOL *success, NSError **error) {
         return [[self dateFormatter] dateFromString:dateString];
     } reverseBlock:^id(NSDate *date, BOOL *success, NSError **error) {
         return [[self dateFormatter] stringFromDate:date];
     }];
+}
+
++ (NSValueTransformer *)createdJSONTransformer {
+    return [self dateTransformer];
+}
+
++ (NSValueTransformer *)updatedJSONTransformer {
+    return [self dateTransformer];
 }
 
 + (NSValueTransformer *)unreadJSONTransformer {

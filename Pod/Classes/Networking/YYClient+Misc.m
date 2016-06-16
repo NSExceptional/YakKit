@@ -8,6 +8,7 @@
 
 #import "YYClient+Misc.h"
 
+
 @implementation YYClient (Misc)
 
 - (void)logEvent:(NSString *)event completion:(nullable ErrorBlock)completion {
@@ -15,7 +16,7 @@
     
     NSDictionary *query = @{@"eventType": event,
                             @"userID": self.userIdentifier};
-    [self postTo:URL(self.baseURLForRegion, kepLogEvent) params:[self generalParams:nil] httpBodyParams:query sign:YES callback:^(NSDictionary *json, NSError *error) {
+    [self postTo:URL(self.baseURLForRegion, kepLogEvent) query:[self generalQuery:nil] body:query sign:YES callback:^(NSDictionary *json, NSError *error) {
         [self handleStatus:json callback:completion];
     }];
 }
@@ -23,7 +24,7 @@
 - (void)refreshLocate:(nullable ErrorBlock)completion {
     NSDictionary *params = @{@"latitude": @(self.location.coordinate.longitude),
                              @"longitude": @(self.location.coordinate.latitude)};
-    [self get:URL(kBaseContentURL, kepRefreshersLocate) params:params sign:NO callback:^(id object, NSError *error) {
+    [self get:URL(kBaseContentURL, kepRefreshersLocate) query:params sign:NO callback:^(id object, NSError *error) {
         YYRunBlockP(completion, error);
     }];
 }
@@ -36,8 +37,16 @@
                             @"message": message,
                             @"logs": [NSUUID UUID].UUIDString, // TODO idk what goes here, so
                             @"userID": self.userIdentifier};
-    [self postTo:URL(self.baseURLForRegion, kepContactUs) params:[self generalParams:nil] httpBodyParams:query sign:YES callback:^(id object, NSError *error) {
+    [self postTo:URL(self.baseURLForRegion, kepContactUs) query:[self generalQuery:nil] body:query sign:YES callback:^(id object, NSError *error) {
         YYRunBlockP(completion, error);
+    }];
+}
+
+- (void)authenticateForLayer:(NSString *)nonce completion:(StringBlock)completion {
+    NSDictionary *body = @{@"userID": self.userIdentifier,
+                           @"nonce": nonce};
+    [self postTo:URL(self.baseURLForRegion, kepLayerAuthenticate) body:body callback:^(NSDictionary *json, NSError *error) {
+        completion(error ? nil : json[@"identity_token"], error);
     }];
 }
 

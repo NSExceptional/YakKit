@@ -40,9 +40,17 @@ MTLBoolStringJSONTransformer(hideLocationPin)
 + (NSValueTransformer *)mediaURLJSONTransformer { return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName]; }
 
 + (NSValueTransformer *)typeJSONTransformer {
-    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *value, BOOL *success, NSError *__autoreleasing *error) {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *value, BOOL *success, NSError **error) {
         return @(value.integerValue);
-    } reverseBlock:^id(NSNumber *value, BOOL *success, NSError *__autoreleasing *error) {
+    } reverseBlock:^id(NSNumber *value, BOOL *success, NSError **error) {
+        return value;
+    }];
+}
+
++ (NSValueTransformer *)replyCountJSONTransformer {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *value, BOOL *success, NSError **error) {
+        return @(value.integerValue);
+    } reverseBlock:^id(NSNumber *value, BOOL *success, NSError **error) {
         return value;
     }];
 }

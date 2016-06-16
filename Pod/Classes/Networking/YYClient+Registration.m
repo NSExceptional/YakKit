@@ -44,7 +44,7 @@
                              @"number": phoneNumber,
                              @"prefix": prefix,
                              @"type": @"sms"};
-    [self postTo:URL(self.baseURLForRegion, kepStartVerification) params:params sign:NO callback:^(NSDictionary *json, NSError *error) {
+    [self postTo:URL(self.baseURLForRegion, kepStartVerification) query:params sign:NO callback:^(NSDictionary *json, NSError *error) {
         if (!error) {
             completion(json[@"token"], nil);
         } else {
@@ -57,7 +57,7 @@
     NSDictionary *params = @{@"code": code,
                              @"token": token,
                              @"userID": self.userIdentifier};
-    [self postTo:URL(self.baseURLForRegion, kepEndVerification) params:params sign:NO callback:^(NSDictionary *json, NSError *error) {
+    [self postTo:URL(self.baseURLForRegion, kepEndVerification) query:params sign:NO callback:^(NSDictionary *json, NSError *error) {
         if (!error) {
             completion([json[@"success"] isEqualToString:@"true"], nil);
         } else {

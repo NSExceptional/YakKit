@@ -39,7 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) NSString *replyIdentifier;
 
 @property (nonatomic, readonly) NSInteger count;
-@property (nonatomic, readonly) id created;
+@property (nonatomic, readonly) NSDate *created;
 @property (nonatomic, readonly, nullable) NSString  *key;
 @property (nonatomic, readonly, nullable) NSString  *hashKey;
 @property (nonatomic, readonly, nullable) NSString  *navigationURLString;
@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) YYThingType thingType;
 
 @property (nonatomic, readonly) id __v;
-@property (nonatomic, readonly) id updated;
+@property (nonatomic, readonly) NSDate *updated;
 @property (nonatomic, readonly) NSString *userIdentifier;
 
 @end

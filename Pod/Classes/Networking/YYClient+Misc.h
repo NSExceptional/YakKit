@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)refreshLocate:(nullable ErrorBlock)completion;
 - (void)contactUs:(NSString *)topic message:(NSString *)message email:(NSString *)email completion:(nullable ErrorBlock)completion;
 
+- (void)authenticateForLayer:(NSString *)nonce completion:(StringBlock)completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

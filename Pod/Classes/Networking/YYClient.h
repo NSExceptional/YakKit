@@ -40,15 +40,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)authenticateForWeb:(void(^)(NSString *code, NSInteger timeout, NSError *error))completion;
 
 #pragma mark Making requests
-- (NSDictionary *)generalParams:(nullable NSDictionary *)additional;
-- (void)postTo:(NSString *)endpoint callback:(nullable ResponseBlock)callback;
-- (void)postTo:(NSString *)endpoint params:(nullable NSDictionary *)params sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
-- (void)postTo:(NSString *)endpoint params:(nullable NSDictionary *)params httpBodyParams:(nullable NSDictionary *)bodyParams sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
-- (void)get:(NSString *)endpoint callback:(nullable ResponseBlock)callback;
-- (void)get:(NSString *)endpoint params:(nullable NSDictionary *)params sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
-- (void)get:(NSString *)endpoint params:(nullable NSDictionary *)params headers:(nullable NSDictionary *)headers sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
 
-- (NSString *)signRequest:(NSString *)endpoint params:(NSDictionary *)params;
+- (NSDictionary *)generalQuery:(nullable NSDictionary *)additional;
+- (void)postTo:(NSString *)endpoint callback:(nullable ResponseBlock)callback;
+- (void)postTo:(NSString *)endpoint body:(NSDictionary *)body callback:(ResponseBlock)callback;
+- (void)postTo:(NSString *)endpoint query:(nullable NSDictionary *)params sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
+- (void)postTo:(NSString *)endpoint query:(nullable NSDictionary *)params body:(nullable NSDictionary *)bodyParams sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
+- (void)get:(NSString *)endpoint callback:(nullable ResponseBlock)callback;
+- (void)get:(NSString *)endpoint query:(nullable NSDictionary *)params sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
+- (void)get:(NSString *)endpoint query:(nullable NSDictionary *)params headers:(nullable NSDictionary *)headers sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
+
+- (NSString *)signRequest:(NSString *)endpoint query:(NSDictionary *)params;
 
 #pragma mark Internal
 - (void)completeWithClass:(Class)cls jsonArray:(NSArray *)objects error:(NSError *)error completion:(ArrayBlock)completion;

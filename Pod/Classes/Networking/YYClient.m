@@ -79,7 +79,7 @@ BOOL YYIsValidUserIdentifier(NSString *uid) {
     NSDictionary *params = @{@"lat": @(self.location.coordinate.longitude),
                              @"lng": @(self.location.coordinate.latitude),
                              @"yakkerID": self.userIdentifier};
-    [self get:URL(kBaseContentURL, kepUpdateConfiguration) params:params sign:NO callback:^(NSDictionary *json, NSError *error) {
+    [self get:URL(kBaseContentURL, kepUpdateConfiguration) query:params sign:NO callback:^(NSDictionary *json, NSError *error) {
         if (!error) {
             self.configuration = [[YYConfiguration alloc] initWithDictionary:json];
             [[NSNotificationCenter defaultCenter] postNotificationName:kYYDidUpdateConfigurationNotification object:self];
@@ -123,18 +123,18 @@ BOOL YYIsValidUserIdentifier(NSString *uid) {
     }
 }
 
-- (NSURL *)URLFromFullURL:(NSString *)urlString params:(NSDictionary *)params sign:(BOOL)sign {
+- (NSURL *)URLFromFullURL:(NSString *)urlString query:(NSDictionary *)params sign:(BOOL)sign {
     if (sign) {
         NSString *endpoint = Endpoint(urlString);
         NSRange r = NSMakeRange(urlString.length - endpoint.length, endpoint.length);
-        urlString = [urlString stringByReplacingCharactersInRange:r withString:[self signRequest:Endpoint(urlString) params:params]];
+        urlString = [urlString stringByReplacingCharactersInRange:r withString:[self signRequest:Endpoint(urlString) query:params]];
         return [NSURL URLWithString:urlString];
     } else {
         return [NSURL URLWithString:urlString];
     }
 }
 
-- (NSDictionary *)generalParams:(NSDictionary *)additional {
+- (NSDictionary *)generalQuery:(NSDictionary *)additional {
     NSAssert(self.userIdentifier, @"Cannot make this request without a user identifier");
     NSAssert(self.location, @"Cannot make this request without a location");
     
@@ -160,8 +160,8 @@ BOOL YYIsValidUserIdentifier(NSString *uid) {
 
 - (NSDictionary *)generalHeaders:(NSString *)endpoint {
     return @{@"Host": Host(endpoint),
-             @"User-Agent": kUserAgent,
-             @"X-ThePantsThief-Header": @"1"};
+             @"User-Agent": kUserAgent,};
+    //             @"X-ThePantsThief-Header": @"1"};
 }
 
 #pragma mark Requests / error handling
@@ -197,7 +197,7 @@ static NSMutableArray *requestCache;
     [requestCache addObject:request];
 }
 
-- (NSString *)signRequest:(NSString *)endpoint params:(NSDictionary *)params {
+- (NSString *)signRequest:(NSString *)endpoint query:(NSDictionary *)params {
     NSMutableString *message = [NSMutableString stringWithString:endpoint];
     NSString *salt = [NSString timestamp];
     //    NSArray *keys = [params.allKeys sortedArrayUsingSelector:@selector(compare:)];
@@ -241,8 +241,7 @@ static NSMutableArray *requestCache;
                 completion(text, nil);
             } else {
                 text = [text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-                NSString *message = [NSString stringWithFormat:@"Unknown error:\n%@", text];
-                completion(nil, [YYClient errorWithMessage:message code:1]);
+                [self handleCode:code text:text completion:completion];
             }
         } else {
             if ((code > 199 && code < 300) || code == 304) {
@@ -250,15 +249,26 @@ static NSMutableArray *requestCache;
                 completion(json, nil);
             } else {
                 // Failed with a message
-                error = [YYClient errorWithMessage:json[@"message"] code:code];
+                error = [YYClient errorWithMessage:json[@"error"][@"message"] code:code];
                 completion(nil, error);
             }
         }
-    } else if ((code > 199 && code < 300) || code == 304) {
+    } else {
+        [self handleCode:code text:nil completion:completion];
+    }
+}
+
+- (void)handleCode:(NSInteger)code text:(NSString *)text completion:(ResponseBlock)completion {
+    if ((code > 199 && code < 300) || code == 304) {
         // Succeeded with no response
         completion(nil, nil);
+    } else if (code >= 500) {
+        completion(nil, [YYClient errorWithMessage:@"Bad request / internal server error" code:code]);
+    } else if (text) {
+        if (text.length > 200) text = [text substringToIndex:200];
+        completion(nil, [YYClient errorWithMessage:text code:code]);
     } else {
-        completion(nil, [YYClient unknownError]);
+        completion(nil, [YYClient errorWithMessage:@"Unknown error" code:code]);
     }
 }
 
@@ -274,37 +284,41 @@ static NSMutableArray *requestCache;
 
 /// Posts to the given endpoint with "general parameters"
 - (void)postTo:(NSString *)endpoint callback:(ResponseBlock)callback {
-    [self postTo:endpoint params:[self generalParams:nil] sign:YES callback:callback];
+    [self postTo:endpoint query:[self generalQuery:nil] sign:YES callback:callback];
 }
 
-- (void)postTo:(NSString *)endpoint params:(NSDictionary *)params sign:(BOOL)sign callback:(ResponseBlock)callback {
-    [self postTo:endpoint params:params httpBodyParams:@{} sign:sign callback:callback];
+- (void)postTo:(NSString *)endpoint body:(NSDictionary *)body callback:(ResponseBlock)callback {
+    [self postTo:endpoint query:[self generalQuery:nil] body:@{} sign:YES callback:callback];
 }
 
-- (void)postTo:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams sign:(BOOL)sign callback:(ResponseBlock)callback {
-    [self postTo:endpoint params:params httpBodyParams:bodyParams headers:[self generalHeaders:endpoint] sign:sign callback:callback];
+- (void)postTo:(NSString *)endpoint query:(NSDictionary *)params sign:(BOOL)sign callback:(ResponseBlock)callback {
+    [self postTo:endpoint query:params body:@{} sign:sign callback:callback];
 }
 
-- (void)postTo:(NSString *)endpoint params:(NSDictionary *)params httpBodyParams:(NSDictionary *)bodyParams headers:(NSDictionary *)headers sign:(BOOL)sign callback:(ResponseBlock)callback {
+- (void)postTo:(NSString *)endpoint query:(NSDictionary *)params body:(NSDictionary *)bodyParams sign:(BOOL)sign callback:(ResponseBlock)callback {
+    [self postTo:endpoint query:params body:bodyParams headers:[self generalHeaders:endpoint] sign:sign callback:callback];
+}
+
+- (void)postTo:(NSString *)endpoint query:(NSDictionary *)params body:(NSDictionary *)bodyParams headers:(NSDictionary *)headers sign:(BOOL)sign callback:(ResponseBlock)callback {
     NSParameterAssert(endpoint);
     
-    NSURL *url = [self URLFromFullURL:endpoint params:params sign:sign];
+    NSURL *url = [self URLFromFullURL:endpoint query:params sign:sign];
     NSMutableURLRequest *request = [self request:url post:YES body:bodyParams headers:headers];
     [self request:request callback:callback];
 }
 
 - (void)get:(NSString *)endpoint callback:(ResponseBlock)callback {
-    [self get:endpoint params:[self generalParams:nil] sign:YES callback:callback];
+    [self get:endpoint query:[self generalQuery:nil] sign:YES callback:callback];
 }
 
-- (void)get:(NSString *)endpoint params:(NSDictionary *)params sign:(BOOL)sign callback:(ResponseBlock)callback {
-    [self get:endpoint params:params headers:[self generalHeaders:endpoint] sign:sign callback:callback];
+- (void)get:(NSString *)endpoint query:(NSDictionary *)params sign:(BOOL)sign callback:(ResponseBlock)callback {
+    [self get:endpoint query:params headers:[self generalHeaders:endpoint] sign:sign callback:callback];
 }
 
-- (void)get:(NSString *)endpoint params:(NSDictionary *)params headers:(NSDictionary *)headers sign:(BOOL)sign callback:(ResponseBlock)callback {
+- (void)get:(NSString *)endpoint query:(NSDictionary *)params headers:(NSDictionary *)headers sign:(BOOL)sign callback:(ResponseBlock)callback {
     NSParameterAssert(endpoint);
     
-    NSURL *url = [self URLFromFullURL:endpoint params:params ?: @{} sign:sign];
+    NSURL *url = [self URLFromFullURL:endpoint query:params ?: @{} sign:sign];
     NSMutableURLRequest *request = [self request:url post:NO body:@{} headers:headers];
     [self request:request callback:callback];
 }

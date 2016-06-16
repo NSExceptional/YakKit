@@ -20,6 +20,8 @@
         NSLog(@"%@", error.localizedDescription);
     }
     
+    NSParameterAssert((!error && self) || (error && !self));
+    
     return self;
 }
 
