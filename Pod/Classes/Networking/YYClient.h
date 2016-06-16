@@ -10,7 +10,9 @@
 #import "YakKit-Constants.h"
 
 @import CoreLocation;
-@class YYConfiguration, YYUser, YYPeekLocation, YYYak, YYComment, YYNotification, YYVotable;
+@class LYRClient;
+@class YYConfiguration, YYUser, YYPeekLocation;
+@class YYYak, YYComment, YYNotification, YYVotable;
 
 
 extern BOOL YYIsValidUserIdentifier(NSString * _Nonnull uid);
@@ -30,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable) NSString         *userIdentifier;
 @property (nonatomic, readonly) NSString         *baseURLForRegion;
 @property (nonatomic          ) NSString         *region;
+/// Set this property manually if you want to use chat. Requires the LayerKit framework.
+@property (nonatomic, nullable) LYRClient        *layerClient;
 
 #pragma mark General
 /// Updates the `configuration` object. Will post kYYDidUpdateConfigurationNotification on success before calling the completion block.
