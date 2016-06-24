@@ -9,8 +9,8 @@
 #import <Mantle/Mantle.h>
 
 
-#define MTLBoolStringJSONTransformer(property) + (NSValueTransformer *) property##JSONTransformer { \
-return [self yy_intBoolTransformer]; }
+#define MTLStringToNumberJSONTransformer(property) + (NSValueTransformer *) property##JSONTransformer { \
+return [self yy_stringToNumberTransformer]; }
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSArray *)arrayOfModelsFromJSONArray:(NSArray *)json;
 
-+ (NSValueTransformer *)yy_intBoolTransformer;
++ (NSValueTransformer *)yy_stringToNumberTransformer;
 + (NSValueTransformer *)yy_UTCDateTransformer;
 
 @property (nonatomic, readonly) NSString *identifier;

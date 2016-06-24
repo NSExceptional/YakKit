@@ -14,9 +14,9 @@
 - (void)logEvent:(NSString *)event completion:(nullable ErrorBlock)completion {
     NSParameterAssert(event);
     
-    NSDictionary *query = @{@"eventType": event,
-                            @"userID": self.userIdentifier};
-    [self postTo:URL(self.baseURLForRegion, kepLogEvent) query:[self generalQuery:nil] body:query sign:YES callback:^(NSDictionary *json, NSError *error) {
+    NSDictionary *body = @{@"eventType": event,
+                           @"userID": self.userIdentifier};
+    [self postTo:URL(self.baseURLForRegion, kepLogEvent) query:[self generalQuery:nil] body:body sign:YES callback:^(NSDictionary *json, NSError *error) {
         [self handleStatus:json callback:completion];
     }];
 }
@@ -43,8 +43,8 @@
 }
 
 - (void)authenticateForLayer:(NSString *)nonce completion:(StringBlock)completion {
-    NSDictionary *body = @{@"userID": self.userIdentifier,
-                           @"nonce": nonce};
+    // This endpoint takes JSON
+    NSDictionary *body = (id)[NSJSONSerialization dataWithJSONObject:@{@"userID": self.userIdentifier, @"nonce": nonce} options:0 error:nil];
     [self postTo:URL(self.baseURLForRegion, kepLayerAuthentication) body:body callback:^(NSDictionary *json, NSError *error) {
         completion(error ? nil : json[@"identity_token"], error);
     }];

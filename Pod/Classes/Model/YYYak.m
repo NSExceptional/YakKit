@@ -35,25 +35,12 @@
               @"identifier": @"messageID"} mtl_dictionaryByAddingEntriesFromDictionary:[super JSONKeyPathsByPropertyKey]];
 }
 
-MTLBoolStringJSONTransformer(hideLocationPin)
+MTLStringToNumberJSONTransformer(hideLocationPin)
+MTLStringToNumberJSONTransformer(type)
+MTLStringToNumberJSONTransformer(replyCount)
+
 + (NSValueTransformer *)thumbnailURLJSONTransformer { return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName]; }
 + (NSValueTransformer *)mediaURLJSONTransformer { return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName]; }
-
-+ (NSValueTransformer *)typeJSONTransformer {
-    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *value, BOOL *success, NSError **error) {
-        return @(value.integerValue);
-    } reverseBlock:^id(NSNumber *value, BOOL *success, NSError **error) {
-        return value;
-    }];
-}
-
-+ (NSValueTransformer *)replyCountJSONTransformer {
-    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *value, BOOL *success, NSError **error) {
-        return @(value.integerValue);
-    } reverseBlock:^id(NSNumber *value, BOOL *success, NSError **error) {
-        return value;
-    }];
-}
 
 - (BOOL)hasMedia {
     return self.type == 6;

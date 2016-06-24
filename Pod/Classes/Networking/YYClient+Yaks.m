@@ -19,7 +19,7 @@
 #pragma mark Getting yak feeds
 
 - (void)getLocalYaks:(ArrayBlock)completion {
-    [self get:URL(self.baseURLForRegion, kepGetYaksAndLocations) callback:^(NSDictionary *object, NSError *error) {
+    [self get:URL(self.baseURLForRegion, kepGetYaksAndLocations) query:[self generalQuery:@{@"loc": @"false"}] sign:YES callback:^(NSDictionary *object, NSError *error) {
         [self completeWithClass:[YYYak class] jsonArray:object[@"messages"] error:error completion:completion];
     }];
 }

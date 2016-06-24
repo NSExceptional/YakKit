@@ -39,6 +39,7 @@
     }];
 }
 
+MTLStringToNumberJSONTransformer(voteStatus)
 + (NSValueTransformer *)createdJSONTransformer { return [self yy_stringDateTransformer]; }
 + (NSValueTransformer *)gmtJSONTransformer { return [self yy_UTCDateTransformer]; }
 

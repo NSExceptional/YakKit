@@ -55,7 +55,7 @@
     return nil;
 }
 
-+ (NSValueTransformer *)yy_intBoolTransformer {
++ (NSValueTransformer *)yy_stringToNumberTransformer {
     return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *value, BOOL *success, NSError **error) {
         return @(value.integerValue);
     } reverseBlock:^id(NSNumber *value, BOOL *success, NSError *__autoreleasing *error) {

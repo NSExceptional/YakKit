@@ -20,7 +20,7 @@ extern BOOL YYIsValidUserIdentifier(NSString * _Nonnull uid);
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YYClient : NSObject
+@interface YYClient : NSObject <NSCopying>
 
 + (instancetype)sharedClient;
 
