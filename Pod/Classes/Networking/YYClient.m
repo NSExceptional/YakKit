@@ -10,8 +10,8 @@
 #import "YYThing.h"
 #import "YYUser.h"
 #import "YYConfiguration.h"
-#import "NSString+YakKit.h"
-#import "NSDictionary+YakKit.h"
+#import "NSString+Networking.h"
+#import "NSDictionary+Networking.h"
 #import <SystemConfiguration/SCNetworkReachability.h>
 
 #define Host(string) [string matchGroupAtIndex:1 forRegex:kHostRegexPattern]
@@ -35,6 +35,16 @@ BOOL YYHasActiveConnection() {
 
 BOOL YYIsValidUserIdentifier(NSString *uid) {
     return [uid matchGroupAtIndex:0 forRegex:@"^[a-zA-Z\\d]{8}-[a-zA-Z\\d]{4}-[a-zA-Z\\d]{4}-[a-zA-Z\\d]{4}-[a-zA-Z\\d]{12}$"] != nil;
+}
+
+NSString * YYUniqueIdentifier() {
+    NSString *uuid = [NSUUID new].UUIDString.MD5Hash;
+    return [NSString stringWithFormat:@"%8@-%4@-%4@-%4@-%12@",
+            [uuid substringWithRange:NSMakeRange(0, 8)],
+            [uuid substringWithRange:NSMakeRange(8, 4)],
+            [uuid substringWithRange:NSMakeRange(12, 4)],
+            [uuid substringWithRange:NSMakeRange(16, 4)],
+            [uuid substringWithRange:NSMakeRange(20, 12)]];
 }
 
 
@@ -89,36 +99,42 @@ BOOL YYIsValidUserIdentifier(NSString *uid) {
     NSDictionary *params = @{@"lat": @(self.location.coordinate.longitude),
                              @"lng": @(self.location.coordinate.latitude),
                              @"yakkerID": self.userIdentifier};
-    [self get:URL(kBaseContentURL, kepUpdateConfiguration) query:params sign:NO callback:^(NSDictionary *json, NSError *error) {
-        if (!error) {
-            self.configuration = [[YYConfiguration alloc] initWithDictionary:json];
+    [self unsignedGet:^(TBURLRequestBuilder * _Nonnull make) {
+        make.baseURL(kBaseContentURL).endpoint(kepUpdateConfiguration).queries(params);
+    } callback:^(TBResponseParser *parser) {
+        if (!parser.error) {
+            self.configuration = [[YYConfiguration alloc] initWithDictionary:parser.JSON];
             [[NSNotificationCenter defaultCenter] postNotificationName:kYYDidUpdateConfigurationNotification object:self];
             YYRunBlockP(completion, nil);
         } else {
-            YYRunBlockP(completion, error);
+            YYRunBlockP(completion, parser.error);
         }
     }];
 }
 
 - (void)updateUser:(nullable ErrorBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:kepGetUserData_user, self.userIdentifier];
-    [self get:URL(self.baseURLForRegion, endpoint) callback:^(NSDictionary *json, NSError *error) {
-        if (!error) {
-            self.currentUser = [[YYUser alloc] initWithDictionary:json[@"user"]];
+    [self get:^(TBURLRequestBuilder * _Nonnull make) {
+        make.endpoint(endpoint);
+    } callback:^(TBResponseParser *parser) {
+        if (!parser.error) {
+            self.currentUser = [[YYUser alloc] initWithDictionary:parser.JSON[@"user"]];
             [[NSNotificationCenter defaultCenter] postNotificationName:kYYDidUpdateUserNotification object:self];
             YYRunBlockP(completion, nil);
         } else {
-            YYRunBlockP(completion, error);
+            YYRunBlockP(completion, parser.error);
         }
     }];
 }
 
 - (void)authenticateForWeb:(void(^)(NSString *code, NSInteger timeout, NSError *error))completion {
-    [self postTo:kAuthForWebURL callback:^(NSDictionary *json, NSError *error) {
-        if (!error) {
-            completion(json[@"pin"], [json[@"ttl"] integerValue], nil);
+    [self post:^(TBURLRequestBuilder * _Nonnull make) {
+        make.baseURL(nil).URL(kAuthForWebURL);
+    } callback:^(TBResponseParser *parser) {
+        if (!parser.error) {
+            completion(parser.JSON[@"pin"], [parser.JSON[@"ttl"] integerValue], nil);
         } else {
-            completion(nil, 0, error);
+            completion(nil, 0, parser.error);
         }
     }];
 }
@@ -126,22 +142,7 @@ BOOL YYIsValidUserIdentifier(NSString *uid) {
 #pragma mark Helper methods
 
 - (void)completeWithClass:(Class)cls jsonArray:(NSArray *)objects error:(NSError *)error completion:(ArrayBlock)completion {
-    if (!error) {
-        completion([[cls class] arrayOfModelsFromJSONArray:objects], nil);
-    } else {
-        completion(nil, error);
-    }
-}
-
-- (NSURL *)URLFromFullURL:(NSString *)urlString query:(NSDictionary *)params sign:(BOOL)sign {
-    if (sign) {
-        NSString *endpoint = Endpoint(urlString);
-        NSRange r = NSMakeRange(urlString.length - endpoint.length, endpoint.length);
-        urlString = [urlString stringByReplacingCharactersInRange:r withString:[self signRequest:Endpoint(urlString) query:params]];
-        return [NSURL URLWithString:urlString];
-    } else {
-        return [NSURL URLWithString:urlString];
-    }
+    completion(error ? nil : [[cls class] arrayOfModelsFromJSONArray:objects], error);
 }
 
 - (NSDictionary *)generalQuery:(NSDictionary *)additional {
@@ -168,124 +169,38 @@ BOOL YYIsValidUserIdentifier(NSString *uid) {
     return general;
 }
 
-- (NSDictionary *)generalHeaders:(NSString *)endpoint {
-    return @{@"Host": Host(endpoint),
-             @"User-Agent": kUserAgent,};
+- (NSDictionary *)generalHeaders {
+    return @{@"User-Agent": kUserAgent,};
     //             @"X-ThePantsThief-Header": @"1"};
 }
 
 #pragma mark Requests / error handling
 
-static NSMutableArray *requestCache;
-
-- (NSMutableURLRequest *)request:(NSURL *)url post:(BOOL)post body:(nullable NSDictionary *)params headers:(nullable NSDictionary *)headers {
-    NSParameterAssert(url);
-    // Init request cache
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        requestCache = [NSMutableArray array];
-    });
-    
-    // Get NSMutableURLRequest instance
-    NSMutableURLRequest *request;
-    if (requestCache.count) {
-        request = requestCache.lastObject;
-        [requestCache removeLastObject];
+- (NSURL *)URLFromFullURL:(NSString *)urlString sign:(BOOL)sign {
+    if (sign) {
+        NSString *endpointWithQuery = Endpoint(urlString);
+        NSRange r = NSMakeRange(urlString.length - endpointWithQuery.length, endpointWithQuery.length);
+        urlString = [urlString stringByReplacingCharactersInRange:r withString:[self signRequest:Endpoint(urlString)]];
+        return [NSURL URLWithString:urlString];
     } else {
-        request = [[NSMutableURLRequest alloc] initWithURL:url];//[NSURL URLWithString:url]];
+        return [NSURL URLWithString:urlString];
     }
-    
-    // Some use JSON
-    NSData *body = ({
-        BOOL isData = [params isKindOfClass:[NSData class]];
-        isData ? (id)params : [[NSString queryStringWithParams:params] dataUsingEncoding:NSUTF8StringEncoding];
-    });
-    
-    request.URL = url;//[NSURL URLWithString:url];
-    request.HTTPBody   = body;
-    request.HTTPMethod = post ? @"POST" : @"GET";
-    request.allHTTPHeaderFields = headers;
-    
-    return request;
 }
 
-- (void)returnRequest:(NSMutableURLRequest *)request {
-    [requestCache addObject:request];
-}
-
-- (NSString *)signRequest:(NSString *)endpoint query:(NSDictionary *)params {
-    NSMutableString *message = [NSMutableString stringWithString:endpoint];
+- (NSString *)signRequest:(NSString *)endpointWithQuery {
     NSString *salt = [[NSString timestamp] substringToIndex:10];
-    //    NSArray *keys = [params.allKeys sortedArrayUsingSelector:@selector(compare:)];
     
-    // Append parameters to message before hashing
-    if (params.count) {
-        [message appendFormat:@"?%@", [NSString queryStringWithParams:params]];
-    }
+    NSMutableString *message = endpointWithQuery.mutableCopy;
+    [message appendString:salt];
     
     // Hash that bitch
-    NSString *hash = [[NSString hashHMacSHA1:[message stringByAppendingString:salt] key:kRequestSignKey] base64EncodedStringWithOptions:0];
+    NSString *hash = [[NSString hashHMacSHA1:message key:kRequestSignKey] base64EncodedStringWithOptions:0];
     [message appendFormat:@"&salt=%@&hash=%@", salt, hash.URLEncodedString];
     return message;
 }
 
-+ (NSError *)unknownError {
-    return [self errorWithMessage:@"Unknown error" code:1];
-}
-
 + (NSError *)errorWithMessage:(NSString *)message code:(NSInteger)code {
-    return [NSError errorWithDomain:@"YakKit" code:code userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(message, @""),
-                                                                   NSLocalizedFailureReasonErrorKey: NSLocalizedString(message, @"")}];
-}
-
-- (void)handleError:(NSError *)error data:(NSData *)data response:(NSURLResponse *)response completion:(ResponseBlock)completion {
-    NSParameterAssert(completion); NSParameterAssert(response); NSParameterAssert(data);
-    
-    NSInteger code = [(NSHTTPURLResponse *)response statusCode];
-    
-    if (error) {
-        completion(nil, error);
-    }
-    else if (data.length) {
-        NSError *jsonError;
-        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
-        
-        // Could not parse JSON (it's probably raw text)
-        if (jsonError) {
-            NSString *text = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-            if ([text hasPrefix:@"http"]) {
-                completion(text, nil);
-            } else {
-                text = [text stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-                [self handleCode:code text:text completion:completion];
-            }
-        } else {
-            if ((code > 199 && code < 300) || code == 304) {
-                // Suceeded with a response
-                completion(json, nil);
-            } else {
-                // Failed with a message
-                error = [YYClient errorWithMessage:json[@"error"][@"message"] code:code];
-                completion(nil, error);
-            }
-        }
-    } else {
-        [self handleCode:code text:nil completion:completion];
-    }
-}
-
-- (void)handleCode:(NSInteger)code text:(NSString *)text completion:(ResponseBlock)completion {
-    if ((code > 199 && code < 300) || code == 304) {
-        // Succeeded with no response
-        completion(nil, nil);
-    } else if (code >= 500) {
-        completion(nil, [YYClient errorWithMessage:@"Bad request / internal server error" code:code]);
-    } else if (text) {
-        if (text.length > 200) text = [text substringToIndex:200];
-        completion(nil, [YYClient errorWithMessage:text code:code]);
-    } else {
-        completion(nil, [YYClient errorWithMessage:@"Unknown error" code:code]);
-    }
+    return [TBResponseParser error:message domain:@"YakKit" code:code];
 }
 
 - (void)handleStatus:(NSDictionary *)json callback:(nullable ErrorBlock)completion {
@@ -298,55 +213,39 @@ static NSMutableArray *requestCache;
 
 #pragma mark POST and GET
 
-/// Posts to the given endpoint with "general parameters"
-- (void)postTo:(NSString *)endpoint callback:(ResponseBlock)callback {
-    [self postTo:endpoint query:[self generalQuery:nil] sign:YES callback:callback];
-}
-
-- (void)postTo:(NSString *)endpoint body:(NSDictionary *)body callback:(ResponseBlock)callback {
-    [self postTo:endpoint query:[self generalQuery:nil] body:body sign:YES callback:callback];
-}
-
-- (void)postTo:(NSString *)endpoint query:(NSDictionary *)params sign:(BOOL)sign callback:(ResponseBlock)callback {
-    [self postTo:endpoint query:params body:@{} sign:sign callback:callback];
-}
-
-- (void)postTo:(NSString *)endpoint query:(NSDictionary *)params body:(NSDictionary *)bodyParams sign:(BOOL)sign callback:(ResponseBlock)callback {
-    [self postTo:endpoint query:params body:bodyParams headers:[self generalHeaders:endpoint] sign:sign callback:callback];
-}
-
-- (void)postTo:(NSString *)endpoint query:(NSDictionary *)params body:(NSDictionary *)bodyParams headers:(NSDictionary *)headers sign:(BOOL)sign callback:(ResponseBlock)callback {
-    NSParameterAssert(endpoint);
+- (TBURLRequestProxy *)request:(void(^)(TBURLRequestBuilder *))configurationHandler sign:(BOOL)sign {
+    NSParameterAssert(self.userIdentifier);
     
-    NSURL *url = [self URLFromFullURL:endpoint query:params sign:sign];
-    NSMutableURLRequest *request = [self request:url post:YES body:bodyParams headers:headers];
-    [self request:request callback:callback];
-}
-
-- (void)get:(NSString *)endpoint callback:(ResponseBlock)callback {
-    [self get:endpoint query:[self generalQuery:nil] sign:YES callback:callback];
-}
-
-- (void)get:(NSString *)endpoint query:(NSDictionary *)params sign:(BOOL)sign callback:(ResponseBlock)callback {
-    [self get:endpoint query:params headers:[self generalHeaders:endpoint] sign:sign callback:callback];
-}
-
-- (void)get:(NSString *)endpoint query:(NSDictionary *)params headers:(NSDictionary *)headers sign:(BOOL)sign callback:(ResponseBlock)callback {
-    NSParameterAssert(endpoint);
+    // Make request proxy with base URL, default headers and queries
+    // Pass to given block for further customization (endpoint, overriden headers, more queries, etc)
+    TBURLRequestProxy *proxy = [TBURLRequestBuilder make:^(TBURLRequestBuilder *make) {
+        make.baseURL(self.baseURLForRegion).headers(self.generalHeaders).queries([self generalQuery:nil]);
+        configurationHandler(make);
+    }];
     
-    NSURL *url = [self URLFromFullURL:endpoint query:params ?: @{} sign:sign];
-    NSMutableURLRequest *request = [self request:url post:NO body:@{} headers:headers];
-    [self request:request callback:callback];
+    // Customize proxy URL before sending request
+    if (sign) {
+        proxy.request.URL = [self URLFromFullURL:proxy.request.URL.absoluteString sign:YES];
+    }
+    
+    // Calling method is ready to send the request with [proxy POST:callback]
+    return proxy;
 }
 
-- (void)request:(NSMutableURLRequest *)request callback:(ResponseBlock)callback {
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self returnRequest:request];
-            [self handleError:error data:data response:response completion:callback];
-        });
-    }] resume];
+- (void)post:(void(^)(TBURLRequestBuilder *))configurationHandler callback:(TBResponseBlock)callback {
+    [[self request:configurationHandler sign:YES] POST:callback];
+}
+
+- (void)get:(void(^)(TBURLRequestBuilder *))configurationHandler callback:(TBResponseBlock)callback {
+    [[self request:configurationHandler sign:YES] GET:callback];
+}
+
+- (void)unsignedPost:(void(^)(TBURLRequestBuilder *))configurationHandler callback:(TBResponseBlock)callback {
+    [[self request:configurationHandler sign:NO] POST:callback];
+}
+
+- (void)unsignedGet:(void(^)(TBURLRequestBuilder *))configurationHandler callback:(TBResponseBlock)callback {
+    [[self request:configurationHandler sign:NO] GET:callback];
 }
 
 @end

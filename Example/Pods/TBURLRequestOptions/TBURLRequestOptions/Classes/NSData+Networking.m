@@ -1,15 +1,16 @@
 //
-//  NSData+YakKit.m
-//  YakKit
+//  NSData+Networking.m
+//  TBURLRequestOptions
 //
-//  Created by Tanner on 5/5/15.
+//  Created by Tanner Bennett on 1/7/16.
 //  Copyright (c) 2015 Tanner Bennett. All rights reserved.
 //
 
-#import "NSData+YakKit.h"
-#import "NSString+YakKit.h"
+#import "NSData+Networking.h"
+#import "NSString+Networking.h"
 #import <CommonCrypto/CommonCryptor.h>
 #import <CommonCrypto/CommonDigest.h>
+
 
 #pragma mark Encryption
 @implementation NSData (Encryption)
@@ -44,7 +45,7 @@
     
     size_t bufferSize = self.length + kCCKeySizeAES128;
     void *buffer = malloc(bufferSize);
-
+    
     size_t decryptedLength = 0;
     CCCryptorStatus cryptStatus = CCCrypt(operation,
                                           kCCAlgorithmAES128,
@@ -77,6 +78,7 @@
 }
 
 @end
+
 
 #pragma mark FileFormat
 @implementation NSData (FileFormat)
@@ -128,19 +130,21 @@
     [self getBytes:d range:NSMakeRange(3, 1)];
 }
 
-- (NSString *)appropriateFileExtension {
-    if (self.isJPEG) return @".jpg";
-    if (self.isPNG) return @".png";
-    if (self.isMPEG4) return @".mp4";
-    if (self.isCompressed) return @".zip";
-    return @".dat";
-}
-
 @end
 
 
 #pragma mark Encoding
 @implementation NSData (Encoding)
+
+- (NSString *)base64URLEncodedString {
+    NSString *str = [self base64EncodedStringWithOptions:0];
+    
+    str = [str stringByReplacingOccurrencesOfString:@"=" withString:@""];
+    str = [str stringByReplacingOccurrencesOfString:@"+" withString:@"-"];
+    str = [str stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
+    
+    return str;
+}
 
 - (NSString *)MD5Hash {
     unsigned char result[CC_MD5_DIGEST_LENGTH];
@@ -180,33 +184,28 @@
     return hash;
 }
 
-- (NSString *)stringValueBase64 {
-    return [self base64EncodedStringWithOptions:0];
-}
-
 @end
 
 
-#pragma mark Blob
-@implementation NSData (Blob)
+#pragma mark REST
+@implementation NSData (REST)
 
-/** Decrypts blob data for standard images and videos. */
-//- (NSData *)decryptECB {
-//    return [[self pad:0] AES128DecryptedDataWithKey:kBlobEncryptionKey];
-//}
-
-/** Encrypts blob data for standard images and videos. */
-//- (NSData *)encryptECB {
-//    return [[self pad:0] AES128EncryptedDataWithKey:kBlobEncryptionKey];
-//}
-
-/** Decrypts blob data for stories. key and iv are base 64 encoded. */
-- (NSData *)decryptStoryWithKey:(NSString *)key iv:(NSString *)iv {
-    // Decode the key and IV
-    NSData *keyData = [[NSData alloc] initWithBase64EncodedString:key options:0];
-    NSData *ivData  = [[NSData alloc] initWithBase64EncodedString:iv options:0];
++ (NSData *)boundary:(NSString *)boundary withKey:(NSString *)key forStringValue:(NSString *)string {
+    NSMutableData *boundaryData = [NSMutableData data];
+    [boundaryData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n%@", key, string] dataUsingEncoding:NSUTF8StringEncoding]];
+    [boundaryData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     
-    return [self AES128DecryptedDataWithKeyData:keyData ivData:ivData];
+    return boundaryData;
+}
+
++ (NSData *)boundary:(NSString *)boundary withKey:(NSString *)key forDataValue:(NSData *)data {
+    NSMutableData *boundaryData = [NSMutableData data];
+    [boundaryData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n", key, key] dataUsingEncoding:NSUTF8StringEncoding]];
+    [boundaryData appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [boundaryData appendData:data];
+    [boundaryData appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    
+    return boundaryData;
 }
 
 @end

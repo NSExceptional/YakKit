@@ -13,29 +13,27 @@
 
 - (void)nicknamePolicy:(ResponseBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:kepGetNicknamePolicy_user, self.userIdentifier];
-    [self get:URL(self.baseURLForRegion, endpoint) callback:^(NSDictionary *json, NSError *error) {
-        if (!error) {
-            completion([[YYNicknamePolicy alloc] initWithDictionary:json], nil);
-        } else {
-            completion(nil, error);
-        }
+    [self get:^(TBURLRequestBuilder *make) {
+        make.endpoint(endpoint);
+    } callback:^(TBResponseParser *parser) {
+        completion(parser.error ? [[YYNicknamePolicy alloc] initWithDictionary:parser.JSON] : nil, parser.error);
     }];
 }
 
 - (void)registerNewUser:(ErrorBlock)completion {
-    [self get:URL(self.baseURLForRegion, kepRegisterUser) callback:^(id object, NSError *error) {
-        completion(error);
+    [self get:^(TBURLRequestBuilder *make) {
+        make.endpoint(kepRegisterUser);
+    } callback:^(TBResponseParser *parser) {
+        completion(parser.error);
     }];
 }
 
 - (void)checkHandleAvailability:(NSString *)handle completion:(BooleanBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:kepCheckHandle_user_handle, self.userIdentifier, handle];
-    [self get:URL(self.baseURLForRegion, endpoint) callback:^(NSDictionary *json, NSError *error) {
-        if (!error) {
-            completion([json[@"code"] integerValue] == 2, nil);
-        } else {
-            completion(NO, error);
-        }
+    [self get:^(TBURLRequestBuilder *make) {
+        make.endpoint(endpoint);
+    } callback:^(TBResponseParser *parser) {
+        completion(parser.error ? NO : [parser.JSON[@"code"] integerValue] == 2, parser.error);
     }];
 }
 
@@ -44,12 +42,11 @@
                              @"number": phoneNumber,
                              @"prefix": prefix,
                              @"type": @"sms"};
-    [self postTo:URL(self.baseURLForRegion, kepStartVerification) query:params sign:NO callback:^(NSDictionary *json, NSError *error) {
-        if (!error) {
-            completion(json[@"token"], nil);
-        } else {
-            completion(nil, error);
-        }
+    
+    [self unsignedPost:^(TBURLRequestBuilder *make) {
+        make.endpoint(kepStartVerification).queries(params);
+    } callback:^(TBResponseParser *parser) {
+        completion(parser.error ? nil : parser.JSON[@"token"], parser.error);
     }];
 }
 
@@ -57,12 +54,11 @@
     NSDictionary *params = @{@"code": code,
                              @"token": token,
                              @"userID": self.userIdentifier};
-    [self postTo:URL(self.baseURLForRegion, kepEndVerification) query:params sign:NO callback:^(NSDictionary *json, NSError *error) {
-        if (!error) {
-            completion([json[@"success"] isEqualToString:@"true"], nil);
-        } else {
-            completion(NO, error);
-        }
+    
+    [self unsignedPost:^(TBURLRequestBuilder *make) {
+        make.endpoint(kepEndVerification).queries(params);
+    } callback:^(TBResponseParser *parser) {
+        completion(parser.error ? NO : [parser.JSON[@"success"] isEqualToString:@"true"], parser.error);
     }];
 }
 

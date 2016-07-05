@@ -24,6 +24,9 @@
   "dependencies": {
     "Mantle": [
 
+    ],
+    "TBURLRequestOptions": [
+
     ]
   }
 }

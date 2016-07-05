@@ -1,15 +1,15 @@
 //
-//  NSString+YakKit.m
-//  YakKit
+//  NSString+Encoding.m
+//  TBURLRequestOptions
 //
-//  Created by Tanner on 5/5/15.
+//  Created by Tanner Bennett on 1/7/16.
 //  Copyright (c) 2015 Tanner Bennett. All rights reserved.
 //
 
-#import "NSString+YakKit.h"
-#import "NSData+YakKit.h"
-#import "YakKit-Constants.h"
+#import "NSString+Networking.h"
+#import "NSData+Networking.h"
 #import <CommonCrypto/CommonHMAC.h>
+
 
 @implementation NSString (Encoding)
 
@@ -17,12 +17,16 @@
     return [[NSData alloc] initWithBase64EncodedString:self options:0];
 }
 
-- (NSString *)base64Encode {
+- (NSString *)base64Encoded {
     NSData *stringData = [self dataUsingEncoding:NSUTF8StringEncoding];
     return [stringData base64EncodedStringWithOptions:0];
 }
 
-- (NSString *)base64Decode {
+- (NSString *)base64URLEncoded {
+    return [[self dataUsingEncoding:NSUTF8StringEncoding] base64URLEncodedString];
+}
+
+- (NSString *)base64Decoded {
     return [[NSString alloc] initWithData:self.base64DecodedData encoding:NSUTF8StringEncoding];
 }
 
@@ -30,7 +34,7 @@
     return [[self dataUsingEncoding:NSUTF8StringEncoding] sha256Hash];
 }
 
-- (NSData *)sha256HashRaw {
+- (NSData *)sha256HashData {
     NSData *data = [self dataUsingEncoding:NSUTF8StringEncoding];
     
     unsigned char result[CC_SHA256_DIGEST_LENGTH];
@@ -41,7 +45,11 @@
     return data;
 }
 
-+ (NSData *)hashHMac:(NSString *)data key:(NSString *)key {
++ (NSString *)hashHMac256ToString:(NSString *)data key:(NSString *)key {
+    return [[self hashHMacSHA256:data key:key] base64EncodedStringWithOptions:0];
+}
+
++ (NSData *)hashHMacSHA256:(NSString *)data key:(NSString *)key {
     const char *cKey  = [key cStringUsingEncoding:NSUTF8StringEncoding];
     const char *cData = [data cStringUsingEncoding:NSUTF8StringEncoding];
     unsigned char cHMAC[CC_SHA256_DIGEST_LENGTH];
@@ -199,13 +207,3 @@
 }
 
 @end
-
-NSString * YYUniqueIdentifier() {
-    NSString *uuid = [NSUUID new].UUIDString.MD5Hash;
-    return [NSString stringWithFormat:@"%8@-%4@-%4@-%4@-%12@",
-            [uuid substringWithRange:NSMakeRange(0, 8)],
-            [uuid substringWithRange:NSMakeRange(8, 4)],
-            [uuid substringWithRange:NSMakeRange(12, 4)],
-            [uuid substringWithRange:NSMakeRange(16, 4)],
-            [uuid substringWithRange:NSMakeRange(20, 12)]];
-}

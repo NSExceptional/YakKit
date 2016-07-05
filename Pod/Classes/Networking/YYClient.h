@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "YakKit-Constants.h"
+#import "TBURLRequestBuilder.h"
 
 @import CoreLocation;
 @class LYRClient;
@@ -16,6 +17,7 @@
 
 
 extern BOOL YYIsValidUserIdentifier(NSString * _Nonnull uid);
+extern NSString * _Nonnull YYUniqueIdentifier();
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -44,17 +46,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)authenticateForWeb:(void(^)(NSString *code, NSInteger timeout, NSError *error))completion;
 
 #pragma mark Making requests
+@property (nonatomic, readonly) NSDictionary *generalHeaders;
 
 - (NSDictionary *)generalQuery:(nullable NSDictionary *)additional;
-- (void)postTo:(NSString *)endpoint callback:(nullable ResponseBlock)callback;
-- (void)postTo:(NSString *)endpoint body:(NSDictionary *)body callback:(ResponseBlock)callback;
-- (void)postTo:(NSString *)endpoint query:(nullable NSDictionary *)params sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
-- (void)postTo:(NSString *)endpoint query:(nullable NSDictionary *)params body:(nullable NSDictionary *)bodyParams sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
-- (void)get:(NSString *)endpoint callback:(nullable ResponseBlock)callback;
-- (void)get:(NSString *)endpoint query:(nullable NSDictionary *)params sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
-- (void)get:(NSString *)endpoint query:(nullable NSDictionary *)params headers:(nullable NSDictionary *)headers sign:(BOOL)sign callback:(nullable ResponseBlock)callback;
 
-- (NSString *)signRequest:(NSString *)endpoint query:(NSDictionary *)params;
+- (void)post:(void(^)(TBURLRequestBuilder *make))configurationHandler callback:(TBResponseBlock)callback;
+- (void)get:(void(^)(TBURLRequestBuilder *make))configurationHandler callback:(TBResponseBlock)callback;
+- (void)unsignedPost:(void(^)(TBURLRequestBuilder *make))configurationHandler callback:(TBResponseBlock)callback;
+- (void)unsignedGet:(void(^)(TBURLRequestBuilder *make))configurationHandler callback:(TBResponseBlock)callback;
 
 #pragma mark Internal
 - (void)completeWithClass:(Class)cls jsonArray:(NSArray *)objects error:(NSError *)error completion:(ArrayBlock)completion;
@@ -65,5 +64,4 @@ NS_ASSUME_NONNULL_BEGIN
 
 NS_ASSUME_NONNULL_END
 
-#define URL(base, endpoint) [base stringByAppendingString:endpoint]
 #define URLDynamic(base, endpoint, ...) [NSString stringWithFormat:URL(base, endpoint), __VA_ARGS__]
