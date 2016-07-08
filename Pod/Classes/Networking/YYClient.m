@@ -191,10 +191,10 @@ NSString * YYUniqueIdentifier() {
     NSString *salt = [[NSString timestamp] substringToIndex:10];
     
     NSMutableString *message = endpointWithQuery.mutableCopy;
-    [message appendString:salt];
     
     // Hash that bitch
-    NSString *hash = [[NSString hashHMacSHA1:message key:kRequestSignKey] base64EncodedStringWithOptions:0];
+    NSString *input = [message stringByAppendingString:salt];
+    NSString *hash = [[NSString hashHMacSHA1:input key:kRequestSignKey] base64EncodedStringWithOptions:0];
     [message appendFormat:@"&salt=%@&hash=%@", salt, hash.URLEncodedString];
     return message;
 }
@@ -216,19 +216,15 @@ NSString * YYUniqueIdentifier() {
 - (TBURLRequestProxy *)request:(void(^)(TBURLRequestBuilder *))configurationHandler sign:(BOOL)sign {
     NSParameterAssert(self.userIdentifier);
     
-    // Make request proxy with base URL, default headers and queries
-    // Pass to given block for further customization (endpoint, overriden headers, more queries, etc)
     TBURLRequestProxy *proxy = [TBURLRequestBuilder make:^(TBURLRequestBuilder *make) {
         make.baseURL(self.baseURLForRegion).headers(self.generalHeaders).queries([self generalQuery:nil]);
         configurationHandler(make);
     }];
     
-    // Customize proxy URL before sending request
     if (sign) {
-        proxy.request.URL = [self URLFromFullURL:proxy.request.URL.absoluteString sign:YES];
+        proxy.request.URL = [self URLFromFullURL:proxy.request.URL.absoluteString sign:sign];
     }
     
-    // Calling method is ready to send the request with [proxy POST:callback]
     return proxy;
 }
 
