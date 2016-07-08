@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "YakKit-Constants.h"
-#import "TBURLRequestBuilder.h"
+#import <TBURLRequestOptions/TBURLRequestBuilder.h>
 
 @import CoreLocation;
 @class LYRClient;
