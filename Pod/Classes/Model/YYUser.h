@@ -13,6 +13,7 @@
 
 @property (nonatomic, readonly) NSInteger karma;
 @property (nonatomic, readonly) NSString  *handle;
+@property (nonatomic, readonly) NSString  *personaIdentifier;
 @property (nonatomic, readonly) NSDate    *created;
 @property (nonatomic, readonly) BOOL      isVerified;
 @property (nonatomic, readonly) BOOL      isSuspended;

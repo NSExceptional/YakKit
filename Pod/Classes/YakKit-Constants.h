@@ -37,6 +37,7 @@ extern NSString * const kRequestSignKey;
 #pragma mark Base URLs
 extern NSString * const kBaseNotifyURL;
 extern NSString * const kBaseContentURL;
+extern NSString * const kBaseProfilesURL;
 /// Use this with -[YYClient setRegion:]
 extern NSString * const kRegionUSEast;
 /// Use this with -[YYClient setRegion:]
@@ -60,7 +61,7 @@ extern NSString * const kepGetComments;
 extern NSString * const kepGetNotifications_user;
 extern NSString * const kepGetUserData_user;
 extern NSString * const kepGetNicknamePolicy_user;
-extern NSString * const kepCheckHandle_user_handle;
+extern NSString * const kepHandle_user_handle;
 extern NSString * const kepGetMyRecentYaks;
 extern NSString * const kepGetMyRecentReplies;
 extern NSString * const kepGetMyTopYaks;
@@ -81,6 +82,14 @@ extern NSString * const kepToggleDownvoteComment;
 extern NSString * const kepRegisterUser;
 extern NSString * const kepStartVerification;
 extern NSString * const kepEndVerification;
+
+#pragma mark Profiles
+extern NSString * const kepProfile_persona;
+extern NSString * const kepProfileLayer_persona;
+extern NSString * const kepProfileAvatar_persona;
+extern NSString * const kepProfileSetAvatar_persona;
+extern NSString * const kepProfileUpdateBio_user;
+extern NSString * const kepProfileUpdateSocial_user;
 
 #pragma mark Misc
 extern NSString * const kepLayerAuthentication;

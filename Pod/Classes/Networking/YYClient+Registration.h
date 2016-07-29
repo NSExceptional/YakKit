@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)nicknamePolicy:(ResponseBlock)completion;
 /// Completion takes a boolean indicating success.
 - (void)checkHandleAvailability:(NSString *)handle completion:(BooleanBlock)completion;
+/// Completion takes a boolean indicating success.
+- (void)setHandle:(NSString *)handle completion:(BooleanBlock)completion;
 /** Begins phone registration. Completion takes a token to be used in the next step.
  @param phoneNumber The phone number to send a verification text to. Must be formatted like (XXX) XXX-XXXX
  @param prefix The country code prefix to the phone number.

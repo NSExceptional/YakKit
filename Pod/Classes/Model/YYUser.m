@@ -19,7 +19,8 @@
              @"isSuspended": @"IsSuspended",
              @"forceVerification": @"forceVerification",
              @"basecamp": @"basecamp",
-             @"identifier": @"id"};
+             @"identifier": @"id",
+             @"personaIdentifier": @"personaID"};
 }
 
 + (NSValueTransformer *)createdJSONTransformer { return [self yy_UTCDateTransformer]; }

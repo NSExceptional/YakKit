@@ -29,12 +29,26 @@
 }
 
 - (void)checkHandleAvailability:(NSString *)handle completion:(BooleanBlock)completion {
-    NSString *endpoint = [NSString stringWithFormat:kepCheckHandle_user_handle, self.userIdentifier, handle];
-    [self get:^(TBURLRequestBuilder *make) {
+    [self handle:handle set:NO completion:completion];
+}
+
+- (void)setHandle:(NSString *)handle completion:(BooleanBlock)completion {
+    [self handle:handle set:YES completion:completion];
+}
+
+- (void)handle:(NSString *)handle set:(BOOL)set completion:(BooleanBlock)completion {
+    NSString *endpoint = [NSString stringWithFormat:kepHandle_user_handle, self.userIdentifier, handle];
+    id make = ^(TBURLRequestBuilder *make) {
         make.endpoint(endpoint);
-    } callback:^(TBResponseParser *parser) {
-        completion(parser.error ? NO : [parser.JSON[@"code"] integerValue] == 2, parser.error);
-    }];
+    }, callback = ^(TBResponseParser *parser) {
+        completion(parser.error ? NO : [parser.JSON[@"code"] integerValue] == 0, parser.error);
+    };
+    
+    if (set) {
+        [self post:make callback:callback];
+    } else {
+        [self get:make callback:callback];
+    }
 }
 
 - (void)startVerification:(NSString *)phoneNumber countryPrefix:(NSString *)prefix country:(NSString *)country completion:(StringBlock)completion {
