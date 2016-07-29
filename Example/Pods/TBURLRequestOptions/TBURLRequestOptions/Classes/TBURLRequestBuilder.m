@@ -42,6 +42,7 @@ static NSMutableDictionary *progressToTasks;
     NSURLRequestNetworkServiceType _serviceType;
     NSURLSessionConfiguration *_configuration;
     NSURLSession *_session;
+    id _metadata;
 }
 @property (nonatomic, readonly) NSData *mutlipartBodyData;
 @property (nonatomic, readonly) NSString *multipartContentTypeHeader;
@@ -51,12 +52,11 @@ static NSMutableDictionary *progressToTasks;
 /// Returns the reciever
 - (instancetype)build:(TBURLRequestBuilder *)builder;
 @property (nonatomic) BOOL background;
-@property (nonatomic) NSMutableURLRequest *internalRequest;
 @end
 
 @implementation TBURLRequestBuilder
 
-+ (TBURLRequestProxy *)make:(void (^)(TBURLRequestBuilder *make))configurationHandler {
++ (TBURLRequestProxy *)make:(void (^)(TBURLRequestBuilder *))configurationHandler {
     TBURLRequestBuilder *builder = [self new];
     configurationHandler(builder);
     return [[TBURLRequestProxy new] build:builder];
@@ -105,6 +105,7 @@ BuilderOptionAutoIMP(NSTimeInterval, timeout)
 BuilderOptionAutoIMP(NSURLRequestNetworkServiceType, serviceType);
 BuilderOptionAutoIMP(NSURLSessionConfiguration *, configuration);
 BuilderOptionAutoIMP(NSURLSession *, session);
+BuilderOptionAutoIMP(id, metadata);
 
 
 BuilderOptionIMP(NSString *, bodyString, {
@@ -131,17 +132,19 @@ BuilderOptionIMP(NSDictionary *, bodyJSONFormString, {
     
     NSMutableData *body = [NSMutableData data];
     // Initial boundary
-    [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", _boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-    // Raw data
-    [_multipartData enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSData *data, BOOL *stop) {
-        [body appendData:[NSData boundary:_boundary withKey:key forDataValue:data]];
-    }];
+    [body appendData:[[NSString stringWithFormat:@"--%@\r\n", _boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    
     // Form parameters
     if (_multipartStrings) {
         [_multipartStrings enumerateKeysAndObjectsUsingBlock:^(NSString *key, id obj, BOOL *stop) {
             [body appendData:[NSData boundary:_boundary withKey:key forStringValue:obj]];
         }];
     }
+    
+    // Raw data
+    [_multipartData enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSData *data, BOOL *stop) {
+        [body appendData:[NSData boundary:_boundary withKey:key forDataValue:data]];
+    }];
     
     // Replace last \r\n with --
     [body replaceBytesInRange:NSMakeRange(body.length-2, 2) withBytes:[@"--" dataUsingEncoding:NSUTF8StringEncoding].bytes];
@@ -156,8 +159,9 @@ BuilderOptionIMP(NSDictionary *, bodyJSONFormString, {
             _boundary = _boundary ?: [NSUUID UUID].UUIDString;
             return [NSString stringWithFormat:@"%@; boundary=%@", _contentTypeHeader, _boundary];
         }
+        return _contentTypeHeader;
     } else if (_multipartData || _multipartStrings) {
-        _contentTypeHeader = @"mutlipart/form-data";
+        _contentTypeHeader = TBContentType.multipartFormData;
         return self.multipartContentTypeHeader;
     }
     
@@ -181,30 +185,37 @@ BuilderOptionIMP(NSDictionary *, bodyJSONFormString, {
     // Explicit Content-Type
     NSString *contentType = builder.multipartContentTypeHeader ?: builder->_contentTypeHeader;
     if (contentType) {
-        builder->_headers = MergeDictionaries(builder->_headers, @{@"Content-Type": builder->_contentTypeHeader});
+        builder->_headers = MergeDictionaries(builder->_headers, @{@"Content-Type": contentType});
     }
     
-    NSURL *url = [NSURL URLWithString:builder->_URL ?: [builder->_baseURL stringByAppendingPathComponent:builder->_endpoint]];
-    if (_internalRequest) {
-        self.internalRequest.URL = url;
+    NSString *urlString = builder->_URL ?: [builder->_baseURL stringByAppendingString:builder->_endpoint];
+    if (builder->_queries) {
+        urlString = [NSString stringWithFormat:@"%@?%@", urlString, builder->_queries.queryString];
+    }
+    
+    NSURL *url = [NSURL URLWithString:urlString];
+    if (_request) {
+        self.request.URL = url;
     } else {
-        self.internalRequest = [NSMutableURLRequest requestWithURL:url];
+        self.request = [NSMutableURLRequest requestWithURL:url];
     }
     
-    self.internalRequest.HTTPBody            = builder.mutlipartBodyData ?: builder->_body;
-    self.internalRequest.allHTTPHeaderFields = builder->_headers;
-    self.internalRequest.timeoutInterval     = builder->_timeout;
-    self.internalRequest.networkServiceType  = builder->_serviceType;
+    self.request.HTTPBody            = builder.mutlipartBodyData ?: builder->_body;
+    self.request.allHTTPHeaderFields = builder->_headers;
+    self.request.timeoutInterval     = builder->_timeout;
+    self.request.networkServiceType  = builder->_serviceType;
     
     self.background = builder->_background;
     _configuration  = builder->_configuration;
     self.session    = builder->_session;
     
+    self.metadata = builder->_metadata;
+    
     return self;
 }
 
-- (NSMutableURLRequest *)request { return self.internalRequest.copy; }
-- (NSURLSessionConfiguration *)configuration { return self.session.configuration ?: _configuration ?: defaultURLSessionConfig; }
+- (void)setRequest:(NSMutableURLRequest *)request { NSParameterAssert(request); _request = request; }
+- (NSURLSessionConfiguration *)configuration { return _session.configuration ?: _configuration ?: defaultURLSessionConfig; }
 - (NSURLSession *)session {
     if (!_session) {
         _session = [NSURLSession sessionWithConfiguration:self.configuration delegate:self delegateQueue:nil];
@@ -223,13 +234,14 @@ BuilderOptionIMP(NSDictionary *, bodyJSONFormString, {
 
 - (NSProgress *)start:(NSString *)method callback:(TBResponseBlock)completion {
     NSParameterAssert(method);
-    self.internalRequest.HTTPMethod = method;
+    self.request.HTTPMethod = method;
     
-    NSURLSessionTask *task = [self.session dataTaskWithRequest:self.internalRequest completionHandler:^(NSData *d, NSURLResponse *r, NSError *e) {
+    NSURLSessionTask *task = [self.session dataTaskWithRequest:self.request completionHandler:^(NSData *d, NSURLResponse *r, NSError *e) {
         [TBResponseParser parseResponseData:d response:(id)r error:e callback:completion];
     }];
+    [task resume];
     
-    // NSProgress for task 
+    // NSProgress for task
     if (self.session.delegate == self) {
         NSProgress *progress = [NSProgress progressWithTotalUnitCount:100];
         progressToTasks[@(task.taskIdentifier)] = progress;

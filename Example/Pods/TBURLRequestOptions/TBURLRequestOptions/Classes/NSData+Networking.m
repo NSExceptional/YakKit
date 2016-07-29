@@ -10,6 +10,7 @@
 #import "NSString+Networking.h"
 #import <CommonCrypto/CommonCryptor.h>
 #import <CommonCrypto/CommonDigest.h>
+#import "TBResponseParser.h"
 
 
 #pragma mark Encryption
@@ -97,7 +98,18 @@
     return a == 0x89 && b == 0x50 && c == 0x4E && d == 0x47;
 }
 
+- (BOOL)isGIF {
+    uint8_t a, b, c, d;
+    [self getHeader:&a b:&b c:&c d:&d];
+    
+    return a == 0x47 && b == 0x49 && c == 0x46 && d == 0x38;
+}
+
 - (BOOL)isImage {
+    return self.isJPEG || self.isPNG || self.isGIF;
+}
+
+- (BOOL)isStillImage {
     return self.isJPEG || self.isPNG;
 }
 
@@ -119,8 +131,12 @@
     uint8_t a, b, c, d;
     [self getHeader:&a b:&b c:&c d:&d];
     
-    // PK header
-    return a == 0x50 && b == 0x4B && c == 0x03 && d == 0x04;
+    return (a == 0x50 && b == 0x4B && c == 0x03 && d == 0x04) || // PK zip
+    (a == 0x1F && b == 0x8B && c == 0x08) || // GZIP, GZ, TGZ
+    (a == 0x1F && b == 0x9D) || (a == 0x1F && b == 0xA0) || // TAR.Z
+    (a == 0x37 && b == 0x7A && c == 0xBC && d == 0xAF) || // 7z
+    (a == 0x42 && b == 0x5A && c == 0x68); // bzip2
+    
 }
 
 - (void)getHeader:(void *)a b:(void *)b c:(void *)c d:(void *)d {
@@ -128,6 +144,29 @@
     [self getBytes:b range:NSMakeRange(1, 1)];
     [self getBytes:c range:NSMakeRange(2, 1)];
     [self getBytes:d range:NSMakeRange(3, 1)];
+}
+
+- (NSString *)appropriateFileExtension {
+    if (self.isJPEG) return @".jpg";
+    if (self.isPNG) return @".png";
+    if (self.isMPEG4) return @".mp4";
+    if (self.isCompressed) return @".zip";
+    return @".dat";
+}
+
+- (NSString *)contentType {
+    if (self.isPNG) return TBContentType.PNG;
+    if (self.isJPEG) return TBContentType.JPEG;
+    if (self.isGIF) return TBContentType.GIF;
+    if (self.isMPEG4) return TBContentType.MPEG4VideoGeneric;
+    
+    uint8_t a, b, c, d;
+    [self getHeader:&a b:&b c:&c d:&d];
+    
+    if (a == 0x50 && b == 0x4B && c == 0x03 && d == 0x04) return TBContentType.ZIP;
+    if (a == 0x1F && b == 0x8B && c == 0x08) return TBContentType.GZIP;
+    
+    return nil;
 }
 
 @end
