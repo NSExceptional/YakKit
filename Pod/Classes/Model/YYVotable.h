@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSComparisonResult)compareScore:(YYVotable *)votable;
 - (NSComparisonResult)compareCreated:(YYVotable *)votable;
 
+@property (nonatomic, readonly, nullable) NSString     *personaIdentifier;
+
 @property (nonatomic, readonly) NSString     *username;
 @property (nonatomic, readonly) NSInteger    score;
 @property (nonatomic, readonly) YYVoteStatus voteStatus;

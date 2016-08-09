@@ -16,7 +16,8 @@
              @"created": @"time",
              @"gmt": @"gmt",
              @"username": @"nickname",
-             @"deliveryIdentifier": @"deliveryID"};
+             @"deliveryIdentifier": @"deliveryID",
+             @"personaIdentifier": @"personaID"};
 }
 
 + (NSDateFormatter *)dateFormatter {
