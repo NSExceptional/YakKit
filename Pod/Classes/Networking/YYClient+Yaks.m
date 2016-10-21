@@ -20,7 +20,8 @@
 
 - (void)getLocalYaks:(ArrayBlock)completion {
     [self get:^(TBURLRequestBuilder *make) {
-        make.endpoint(kepGetYaksAndLocations).queries([self generalQuery:@{@"loc": @"false"}]);
+        make.baseURL(kBaseFeedURL).endpoint(kepGetYaksAndLocations);
+        make.queries([self generalQuery:@{@"loc": @"false"}]);
     } callback:^(TBResponseParser *parser) {
         [self completeWithClass:[YYYak class] jsonArray:parser.JSON[@"messages"] error:parser.error completion:completion];
     }];

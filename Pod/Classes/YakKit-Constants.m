@@ -15,8 +15,8 @@ NSString * const kYYDidUpdateConfigurationNotification = @"kYYDidUpdateConfigura
 NSString * const kYYDidLoadNotificationsNotification   = @"kYYDidLoadNotificationsNotification";
 
 #pragma mark Misc
-NSString * const kUserAgent     = @"Yik Yak/3.9 (iPhone; iOS 9.3.3; Scale/2.00)";
-NSString * const kYikYakVersion = @"3.9";
+NSString * const kUserAgent     = @"Yik Yak/4.3 (iPhone; iOS 9.3.3; Scale/2.00)";
+NSString * const kYikYakVersion = @"4.3";
 
 NSString * const kSignGETKey     = @"EF64523D2BD1FA21F18F5BC654DFC41B";
 NSString * const kSignPOSTKey    = @"F7CAFA2F-FE67-4E03-A090-AC7FFF010729";
@@ -26,6 +26,7 @@ NSString * const kRequestSignKey = @"F7CAFA2F-FE67-4E03-A090-AC7FFF010729";
 NSString * const kBaseNotifyURL             = @"https://notify.yikyakapi.net";
 NSString * const kBaseContentURL            = @"https://content.yikyakapi.net";
 NSString * const kBaseProfilesURL           = @"https://omega.yikyakapi.net";
+NSString * const kBaseFeedURL               = @"https://omega.yikyakapi.net";
 NSString * const kRegionUSEast              = @"us-east-api";
 NSString * const kRegionUSCentral           = @"us-central-api";
 NSString * const kUploadPhotoURL            = @"https://signedup.yikyakapi.net/upload";
@@ -45,7 +46,7 @@ NSString * const kepGetComments             = @"/api/getComments";
 NSString * const kepGetNotifications_user   = @"/api/getAllForUser/%@";
 NSString * const kepGetUserData_user        = @"/v1/user/%@";
 NSString * const kepGetNicknamePolicy_user  = @"/v1/user/%@/nicknamepolicy";
-NSString * const kepHandle_user_handle = @"/v1/user/%@/nickname/%@";
+NSString * const kepHandle_user_handle      = @"/v1/user/%@/nickname/%@";
 NSString * const kepGetMyRecentYaks         = @"/api/getMyRecentYaks";
 NSString * const kepGetMyRecentReplies      = @"/api/getMyRecentReplies";
 NSString * const kepGetMyTopYaks            = @"/api/getMyTops";

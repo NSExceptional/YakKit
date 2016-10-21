@@ -38,6 +38,7 @@ extern NSString * const kRequestSignKey;
 extern NSString * const kBaseNotifyURL;
 extern NSString * const kBaseContentURL;
 extern NSString * const kBaseProfilesURL;
+extern NSString * const kBaseFeedURL;
 /// Use this with -[YYClient setRegion:]
 extern NSString * const kRegionUSEast;
 /// Use this with -[YYClient setRegion:]
