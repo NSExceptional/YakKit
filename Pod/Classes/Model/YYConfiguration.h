@@ -26,6 +26,7 @@
 @property (nonatomic, readonly) BOOL         enableVoteChanging;
 @property (nonatomic, readonly) NSInteger    yakarmaIncreaseValue;
 
+@property (nonatomic, readonly) CGFloat      ratingRetryInterval;
 @property (nonatomic, readonly) NSInteger    ratingThreshold;
 @property (nonatomic, readonly) BOOL         shouldPromptForRating;
 
