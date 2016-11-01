@@ -47,7 +47,9 @@
              @"betaMinimumThreshold": @"configuration.webAuthentication.minimumThreshold",
              @"repApplicationURL": @"configuration.yikYakRepApplicationConfiguration.applicationUrl",
              @"repEntryText": @"configuration.yikYakRepApplicationConfiguration.entryText",
-             @"repYakarmaThreshold": @"configuration.yikYakRepApplicationConfiguration.yakarmaThreshold"};
+             @"repYakarmaThreshold": @"configuration.yikYakRepApplicationConfiguration.yakarmaThreshold",
+             @"identityCreationRequired": @"configuration.identity.isIdentityCreationRequired",
+             @"identityUsageRequired": @"configuration.identity.isIdentityUsageRequired"};
 }
 
 + (NSValueTransformer *)basecampURLTransformer { return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName]; }
