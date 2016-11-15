@@ -14,7 +14,17 @@
 - (id)initWithDictionary:(NSDictionary *)json {
     self = [super initWithDictionary:json];
     if (self) {
-        _relevantAuthorIdentifier = [self.backgroundIdentifier stringByAppendingString:self.overlayIdentifier];
+        if (self.personaIdentifier) {
+            _relevantAuthorIdentifier = self.personaIdentifier;
+        } else {
+            // TODO does yik yak give same backID and overlayID to same commentor with and without handle?
+            _relevantAuthorIdentifier = [self.backgroundIdentifier stringByAppendingString:self.overlayIdentifier];
+        }
+        
+        if (!_textStyle.length) {
+            _textStyle = nil;
+        }
+        
     }
     
     return self;

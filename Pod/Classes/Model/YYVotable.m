@@ -16,6 +16,13 @@
         if (self.created.timeIntervalSinceReferenceDate == 25261) {
             _created = self.gmt;
         }
+        
+        if (!_username.length) {
+            _username = nil;
+        }
+        if (!_personaIdentifier.length) {
+            _personaIdentifier = nil;
+        }
     }
     
     return self;
