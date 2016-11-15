@@ -213,6 +213,13 @@ NSString * YYUniqueIdentifier() {
 
 #pragma mark POST and GET
 
+- (TBResponseBlock)makeAlwaysTryParseJSON:(TBResponseBlock)callback {
+    return ^(TBResponseParser *parser) {
+        parser.ignoreContentTypeForJSON = YES;
+        callback(parser);
+    };
+}
+
 - (TBURLRequestProxy *)request:(void(^)(TBURLRequestBuilder *))configurationHandler sign:(BOOL)sign {
     NSParameterAssert(self.userIdentifier);
     
@@ -229,18 +236,22 @@ NSString * YYUniqueIdentifier() {
 }
 
 - (void)post:(void(^)(TBURLRequestBuilder *))configurationHandler callback:(TBResponseBlock)callback {
+    callback = [self makeAlwaysTryParseJSON:callback];
     [[self request:configurationHandler sign:YES] POST:callback];
 }
 
 - (void)get:(void(^)(TBURLRequestBuilder *))configurationHandler callback:(TBResponseBlock)callback {
+    callback = [self makeAlwaysTryParseJSON:callback];
     [[self request:configurationHandler sign:YES] GET:callback];
 }
 
 - (void)unsignedPost:(void(^)(TBURLRequestBuilder *))configurationHandler callback:(TBResponseBlock)callback {
+    callback = [self makeAlwaysTryParseJSON:callback];
     [[self request:configurationHandler sign:NO] POST:callback];
 }
 
 - (void)unsignedGet:(void(^)(TBURLRequestBuilder *))configurationHandler callback:(TBResponseBlock)callback {
+    callback = [self makeAlwaysTryParseJSON:callback];
     [[self request:configurationHandler sign:NO] GET:callback];
 }
 
