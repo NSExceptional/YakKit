@@ -10,10 +10,21 @@
 
 @implementation YYVotable
 
+- (id)initWithDictionary:(NSDictionary *)json {
+    self = [super initWithDictionary:json];
+    if (self) {
+        if (self.created.timeIntervalSinceReferenceDate == 25261) {
+            _created = self.gmt;
+        }
+    }
+    
+    return self;
+}
+
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{@"score": @"numberOfLikes",
              @"voteStatus": @"liked",
-             @"created": @"time",
+             @"created": @"gmt", // "time" is deprecated
              @"gmt": @"gmt",
              @"username": @"nickname",
              @"deliveryIdentifier": @"deliveryID",
@@ -41,7 +52,7 @@
 }
 
 MTLStringToNumberJSONTransformer(voteStatus)
-+ (NSValueTransformer *)createdJSONTransformer { return [self yy_stringDateTransformer]; }
++ (NSValueTransformer *)createdJSONTransformer { return [self gmtJSONTransformer]; }//yy_stringDateTransformer]; }
 + (NSValueTransformer *)gmtJSONTransformer { return [self yy_UTCDateTransformer]; }
 
 //+ (NSValueTransformer *)deliveryIdentifierJSONTransformer {

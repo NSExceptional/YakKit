@@ -58,16 +58,16 @@
 + (NSValueTransformer *)yy_stringToNumberTransformer {
     return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *value, BOOL *success, NSError **error) {
         return @(value.integerValue);
-    } reverseBlock:^id(NSNumber *value, BOOL *success, NSError *__autoreleasing *error) {
+    } reverseBlock:^id(NSNumber *value, BOOL *success, NSError **error) {
         return value;
     }];
 }
 
 + (NSValueTransformer *)yy_UTCDateTransformer {
     return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *ts, BOOL *success, NSError **error) {
-        return [NSDate dateWithTimeIntervalSince1970:ts.doubleValue/1000.f];
+        return [NSDate dateWithTimeIntervalSince1970:ts.doubleValue];
     } reverseBlock:^id(NSDate *ts, BOOL *success, NSError **error) {
-        return @([ts timeIntervalSince1970] * 1000.f).stringValue;
+        return @(ts.timeIntervalSince1970).stringValue;
     }];
 }
 
