@@ -1,9 +1,9 @@
 PODS:
-  - Mantle (2.0.7):
-    - Mantle/extobjc (= 2.0.7)
-  - Mantle/extobjc (2.0.7)
-  - TBURLRequestOptions (0.1.4)
-  - YakKit (0.2.0):
+  - Mantle (2.1.0):
+    - Mantle/extobjc (= 2.1.0)
+  - Mantle/extobjc (2.1.0)
+  - TBURLRequestOptions (0.1.5)
+  - YakKit (0.2.1):
     - Mantle
     - TBURLRequestOptions
 
@@ -15,8 +15,10 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  Mantle: bc40bb061d8c2c6fb48d5083e04d928c3b7f73d9
-  TBURLRequestOptions: 28d0ee0531c5c6e6d138b57a833a4227b3d400d9
-  YakKit: 510a46d0131b648c05079e05704464714d187972
+  Mantle: 2fa750afa478cd625a94230fbf1c13462f29395b
+  TBURLRequestOptions: badb2323efa0cfc4a88c47ab851142ec7dc09dc2
+  YakKit: 1c38ccca35fd1ce04a7a9c70dbcd879cca26d162
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 437275477f4ca4ee231ae74d2d1f62c4d62ea711
+
+COCOAPODS: 1.1.1

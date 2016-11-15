@@ -34,6 +34,10 @@ typedef void (^TBResponseBlock)(TBResponseParser *parser);
 
 + (NSError *)error:(NSString *)message domain:(NSString *)domain code:(NSInteger)code;
 
+/// If set, will attempt to deserialize JSON once, regardless of the content type.
+/// Returns to NO after accessing the JSON property.
+@property (nonatomic) BOOL ignoreContentTypeForJSON;
+
 #pragma mark Response information
 
 @property (nonatomic, readonly) NSHTTPURLResponse *response;

@@ -1,10 +1,10 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'YakKit_Example', :exclusive => true do
+target 'YakKit_Example' do
   pod "YakKit", :path => "../"
 end
 
-target 'YakKit_Tests', :exclusive => true do
+target 'YakKit_Tests' do
   pod "YakKit", :path => "../"
 end
 

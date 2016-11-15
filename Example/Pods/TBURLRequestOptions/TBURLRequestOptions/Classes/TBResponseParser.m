@@ -59,8 +59,9 @@
 - (NSString *)javascript { return _hasJavascript ? self.text : nil; }
 
 - (NSDictionary *)JSON {
-    if (!_JSON && _hasJSON) {
+    if ((!_JSON && _hasJSON) || _ignoreContentTypeForJSON) {
         _JSON = [NSJSONSerialization JSONObjectWithData:self.data options:0 error:nil];
+        _ignoreContentTypeForJSON = NO;
     }
     
     return _JSON;
