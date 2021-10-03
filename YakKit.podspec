@@ -15,4 +15,6 @@ Pod::Spec.new do |s|
   s.source_files = 'Pod/Classes/*', 'Pod/Classes/**/*'
   s.dependency 'Mantle'
   s.dependency 'TBURLRequestOptions'
+  s.dependency 'Firebase/Auth'
+  s.dependency 'Firebase/Firestore'
 end
