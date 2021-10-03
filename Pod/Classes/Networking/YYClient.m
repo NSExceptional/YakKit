@@ -75,7 +75,6 @@ NSString * YYUniqueIdentifier() {
     new.location       = self.location;
     new.userIdentifier = self.userIdentifier;
     new.region         = self.region;
-    new.layerClient    = self.layerClient;
     return new;
 }
 

@@ -70,14 +70,12 @@ NSString * const kepEndVerification         = @"/api/verify";
 
 #pragma mark Profiles
 NSString * const kepProfile_persona          = @"/v1/user/profile/%@";
-NSString * const kepProfileLayer_persona     = @"/v1/layer/profile/%@";
 NSString * const kepProfileAvatar_persona    = @"/v1/user/photo/%@/0";
 NSString * const kepProfileSetAvatar_persona = @"/v1/user/photo/%@";
 NSString * const kepProfileUpdateBio_user    = @"/v1/user/profile/bio/%@";
 NSString * const kepProfileUpdateSocial_user = @"/v1/user/profile/external/%@";
 
 #pragma mark Misc
-NSString * const kepLayerAuthentication     = @"/v1/layer/authenticate";
 NSString * const kepLogEvent                = @"/api/logEvent";
 NSString * const kepRefreshersLocate        = @"/refreshers/locate";
 NSString * const kepUpdateConfiguration     = @"/configurations/locate";

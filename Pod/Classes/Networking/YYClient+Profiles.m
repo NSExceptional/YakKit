@@ -42,14 +42,6 @@ NSString * YYStringFromSocialMediaType(YYSocialMediaType type) {
     }];
 }
 
-- (void)layerIdentifierForPersona:(NSString *)personaIdentifier completion:(YYStringBlock)completion {
-    [self get:^(TBURLRequestBuilder *make) {
-        make.baseURL(kBaseProfilesURL).endpoint([NSString stringWithFormat:kepProfileLayer_persona, personaIdentifier]);
-    } callback:^(TBResponseParser *parser) {
-        completion(parser.error ? nil : parser.JSON[@"layerID"], parser.error);
-    }];
-}
-
 - (void)avatarForPersona:(NSString *)personaIdentifier completion:(YYDataBlock)completion {
     [self get:^(TBURLRequestBuilder *make) {
         make.baseURL(kBaseProfilesURL).endpoint([NSString stringWithFormat:kepProfileAvatar_persona, personaIdentifier]);

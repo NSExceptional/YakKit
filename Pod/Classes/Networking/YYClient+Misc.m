@@ -51,13 +51,4 @@
     }];
 }
 
-- (void)authenticateForLayer:(NSString *)nonce completion:(YYStringBlock)completion {
-    // This endpoint takes JSON
-    [self post:^(TBURLRequestBuilder *make) {
-        make.endpoint(kepLayerAuthentication).bodyJSON(@{@"userID": self.userIdentifier, @"nonce": nonce});
-    } callback:^(TBResponseParser *parser) {
-        completion(parser.error ? nil : parser.JSON[@"identity_token"], parser.error);
-    }];
-}
-
 @end

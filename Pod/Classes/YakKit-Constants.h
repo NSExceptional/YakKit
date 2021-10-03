@@ -86,14 +86,12 @@ extern NSString * const kepEndVerification;
 
 #pragma mark Profiles
 extern NSString * const kepProfile_persona;
-extern NSString * const kepProfileLayer_persona;
 extern NSString * const kepProfileAvatar_persona;
 extern NSString * const kepProfileSetAvatar_persona;
 extern NSString * const kepProfileUpdateBio_user;
 extern NSString * const kepProfileUpdateSocial_user;
 
 #pragma mark Misc
-extern NSString * const kepLayerAuthentication;
 extern NSString * const kepLogEvent;
 /// Goes with kBaseContent
 extern NSString * const kepRefreshersLocate;
