@@ -14,15 +14,15 @@ NS_ASSUME_NONNULL_BEGIN
 @interface YYClient (Personal)
 
 #pragma mark User data
-- (void)getMyRecentYaks:(ArrayBlock)completion;
-- (void)getMyTopYaks:(ArrayBlock)completion;
-- (void)getMyRecentReplies:(ArrayBlock)completion;
+- (void)getMyRecentYaks:(YYArrayBlock)completion;
+- (void)getMyTopYaks:(YYArrayBlock)completion;
+- (void)getMyRecentReplies:(YYArrayBlock)completion;
 
 #pragma mark Notifications
 /// Will post kYYDidLoadNotificationsNotification on success before calling the completion block.
-- (void)getNotifications:(ArrayBlock)completion;
-- (void)mark:(YYNotification *)notification read:(BOOL)read completion:(nullable ErrorBlock)completion;
-- (void)markEach:(NSArray<YYNotification *> *)notifications read:(BOOL)read completion:(nullable ErrorBlock)completion;
+- (void)getNotifications:(YYArrayBlock)completion;
+- (void)mark:(YYNotification *)notification read:(BOOL)read completion:(nullable YYErrorBlock)completion;
+- (void)markEach:(NSArray<YYNotification *> *)notifications read:(BOOL)read completion:(nullable YYErrorBlock)completion;
 
 @end
 

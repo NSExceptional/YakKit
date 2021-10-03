@@ -11,7 +11,7 @@
 
 @implementation YYClient (Misc)
 
-- (void)logEvent:(NSString *)event completion:(nullable ErrorBlock)completion {
+- (void)logEvent:(NSString *)event completion:(nullable YYErrorBlock)completion {
     NSParameterAssert(event);
     
     NSDictionary *body = @{@"eventType": event,
@@ -24,7 +24,7 @@
     }];
 }
 
-- (void)refreshLocate:(nullable ErrorBlock)completion {
+- (void)refreshLocate:(nullable YYErrorBlock)completion {
     NSDictionary *params = @{@"latitude": @(self.location.coordinate.longitude),
                              @"longitude": @(self.location.coordinate.latitude)};
     
@@ -35,7 +35,7 @@
     }];
 }
 
-- (void)contactUs:(NSString *)category message:(NSString *)message email:(NSString *)email completion:(nullable ErrorBlock)completion {
+- (void)contactUs:(NSString *)category message:(NSString *)message email:(NSString *)email completion:(nullable YYErrorBlock)completion {
     NSParameterAssert(category); NSParameterAssert(message); NSParameterAssert(email);
     
     NSDictionary *query = @{@"category": category,
@@ -51,7 +51,7 @@
     }];
 }
 
-- (void)authenticateForLayer:(NSString *)nonce completion:(StringBlock)completion {
+- (void)authenticateForLayer:(NSString *)nonce completion:(YYStringBlock)completion {
     // This endpoint takes JSON
     [self post:^(TBURLRequestBuilder *make) {
         make.endpoint(kepLayerAuthentication).bodyJSON(@{@"userID": self.userIdentifier, @"nonce": nonce});

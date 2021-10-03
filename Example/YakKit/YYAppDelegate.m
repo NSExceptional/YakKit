@@ -42,7 +42,7 @@
     return YES;
 }
 
-- (void)refreshTable:(TBTableViewController *)table callback:(ArrayBlock)callback {
+- (void)refreshTable:(TBTableViewController *)table callback:(YYArrayBlock)callback {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     [[YYClient sharedClient] getLocalYaks:^(NSArray *collection, NSError *error) {

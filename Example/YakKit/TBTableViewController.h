@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^VoidBlock)();
+typedef void(^YYVoidBlock)();
 
 NS_ASSUME_NONNULL_BEGIN
 /// This class functions as its table view's delegate and data source. Changing either of those will
@@ -34,7 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// The state of each value determines whether to allow selection at that particular index path. Defaults to `defaultCanSelectRow`.
 @property (nonatomic) NSDictionary<NSIndexPath*, NSNumber*> *canSelectRow;
 /// A block/closure to be executed when the given row is selected.
-@property (nonatomic) NSDictionary<NSIndexPath*, VoidBlock> *selectionActionForRow;
+@property (nonatomic) NSDictionary<NSIndexPath*, YYVoidBlock> *selectionActionForRow;
 
 /// The default cell class to be used for the table view. Defaults to `UITableViewCell`.
 @property (nonatomic) Class cellClass;

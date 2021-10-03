@@ -34,7 +34,7 @@ NSString * YYStringFromSocialMediaType(YYSocialMediaType type) {
 
 #pragma mark Getting other users' data
 
-- (void)profileForPersona:(NSString *)personaIdentifier completion:(ResponseBlock)completion {
+- (void)profileForPersona:(NSString *)personaIdentifier completion:(YYResponseBlock)completion {
     [self get:^(TBURLRequestBuilder *make) {
         make.baseURL(kBaseProfilesURL).endpoint([NSString stringWithFormat:kepProfile_persona, personaIdentifier]);
     } callback:^(TBResponseParser *parser) {
@@ -42,7 +42,7 @@ NSString * YYStringFromSocialMediaType(YYSocialMediaType type) {
     }];
 }
 
-- (void)layerIdentifierForPersona:(NSString *)personaIdentifier completion:(StringBlock)completion {
+- (void)layerIdentifierForPersona:(NSString *)personaIdentifier completion:(YYStringBlock)completion {
     [self get:^(TBURLRequestBuilder *make) {
         make.baseURL(kBaseProfilesURL).endpoint([NSString stringWithFormat:kepProfileLayer_persona, personaIdentifier]);
     } callback:^(TBResponseParser *parser) {
@@ -50,7 +50,7 @@ NSString * YYStringFromSocialMediaType(YYSocialMediaType type) {
     }];
 }
 
-- (void)avatarForPersona:(NSString *)personaIdentifier completion:(DataBlock)completion {
+- (void)avatarForPersona:(NSString *)personaIdentifier completion:(YYDataBlock)completion {
     [self get:^(TBURLRequestBuilder *make) {
         make.baseURL(kBaseProfilesURL).endpoint([NSString stringWithFormat:kepProfileAvatar_persona, personaIdentifier]);
     } callback:^(TBResponseParser *parser) {
@@ -60,7 +60,7 @@ NSString * YYStringFromSocialMediaType(YYSocialMediaType type) {
 
 #pragma mark Updating your own data
 
-- (void)setProfileAvatar:(NSData *)imageData completion:(ErrorBlock)completion {
+- (void)setProfileAvatar:(NSData *)imageData completion:(YYErrorBlock)completion {
     NSString *contentType = imageData.contentType ?: TBContentType.PNG;
     NSDictionary *query = @{@"userLat": @(self.location.coordinate.latitude),
                             @"userLong": @(self.location.coordinate.longitude),
@@ -76,7 +76,7 @@ NSString * YYStringFromSocialMediaType(YYSocialMediaType type) {
     }];
 }
 
-- (void)setProfileBio:(NSString *)bio completion:(ErrorBlock)completion {
+- (void)setProfileBio:(NSString *)bio completion:(YYErrorBlock)completion {
     [self post:^(TBURLRequestBuilder *make) {
         make.baseURL(kBaseProfilesURL).endpoint([NSString stringWithFormat:kepProfileUpdateBio_user, self.userIdentifier]);
         make.bodyJSON(@{@"yakarma": @500, @"bio": bio}); //TODO
@@ -85,7 +85,7 @@ NSString * YYStringFromSocialMediaType(YYSocialMediaType type) {
     }];
 }
 
-- (void)setUsernamesForSocialAccounts:(NSDictionary<NSNumber*,NSString*> *)socialToUser completion:(ErrorBlock)completion {
+- (void)setUsernamesForSocialAccounts:(NSDictionary<NSNumber*,NSString*> *)socialToUser completion:(YYErrorBlock)completion {
     NSMutableArray *externalProfiles = [NSMutableArray array];
     [socialToUser enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, NSString *account, BOOL *stop) {
         [externalProfiles addObject:@{@"network": @1, @"key": YYStringFromSocialMediaType(key.integerValue), @"account": account}];

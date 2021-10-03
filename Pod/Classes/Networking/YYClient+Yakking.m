@@ -15,7 +15,7 @@
 
 #pragma mark Posting
 
-- (void)postYak:(NSString *)title useHandle:(BOOL)handle completion:(nullable ErrorBlock)completion {
+- (void)postYak:(NSString *)title useHandle:(BOOL)handle completion:(nullable YYErrorBlock)completion {
     NSDictionary *body = @{@"hidePin": @"1",
                            @"lat": @(self.location.coordinate.latitude),
                            @"long": @(self.location.coordinate.longitude),
@@ -30,7 +30,7 @@
     }];
 }
 
-- (void)postComment:(NSString *)body toYak:(YYYak *)yak useHandle:(BOOL)handle completion:(nullable ErrorBlock)completion {
+- (void)postComment:(NSString *)body toYak:(YYYak *)yak useHandle:(BOOL)handle completion:(nullable YYErrorBlock)completion {
     NSDictionary *bodyForm = @{@"comment": body,
                                @"herdID": @"0",
                                @"messageID": yak.identifier,
@@ -47,7 +47,7 @@
 #pragma mark Deleting
 
 // Uses YYComment here on purpose
-- (void)deleteYakOrComment:(YYComment *)thing completion:(nullable ErrorBlock)completion {
+- (void)deleteYakOrComment:(YYComment *)thing completion:(nullable YYErrorBlock)completion {
     NSDictionary *query;
     NSString *endpoint;
     if ([thing isKindOfClass:[YYYak class]]) {
@@ -68,7 +68,7 @@
 
 #pragma mark Voting
 
-- (void)upvote:(YYVotable *)thing completion:(nullable ErrorBlock)completion {
+- (void)upvote:(YYVotable *)thing completion:(nullable YYErrorBlock)completion {
     if (thing.voteStatus == YYVoteStatusUpvoted) { YYRunBlockP(completion, nil); return; }
     
     NSDictionary *query;
@@ -89,7 +89,7 @@
     }];
 }
 
-- (void)downvote:(YYVotable *)thing completion:(nullable ErrorBlock)completion {
+- (void)downvote:(YYVotable *)thing completion:(nullable YYErrorBlock)completion {
     if (thing.voteStatus == YYVoteStatusDownvoted) { YYRunBlockP(completion, nil); return; }
     
     NSDictionary *query;
@@ -110,7 +110,7 @@
     }];
 }
 
-- (void)removeVote:(YYVotable *)thing completion:(nullable ErrorBlock)completion {
+- (void)removeVote:(YYVotable *)thing completion:(nullable YYErrorBlock)completion {
     NSString *idName;
     NSString *endpoint;
     

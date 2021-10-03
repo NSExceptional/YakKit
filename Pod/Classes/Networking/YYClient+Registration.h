@@ -17,22 +17,22 @@ NS_ASSUME_NONNULL_BEGIN
 /** Creates a new user by generating a new user identifier.
  @discussion The old user information (id, object, configuration) will be discarded.
  @warning Do not call this method without first providing a location and region. */
-- (void)registerNewUser:(ErrorBlock)completion;
+- (void)registerNewUser:(YYErrorBlock)completion;
 /// Completion block takes a YYNicknamePolicy object.
-- (void)nicknamePolicy:(ResponseBlock)completion;
+- (void)nicknamePolicy:(YYResponseBlock)completion;
 /// Completion takes a boolean indicating success.
-- (void)checkHandleAvailability:(NSString *)handle completion:(BooleanBlock)completion;
+- (void)checkHandleAvailability:(NSString *)handle completion:(YYBooleanBlock)completion;
 /// Completion takes a boolean indicating success.
-- (void)setHandle:(NSString *)handle completion:(BooleanBlock)completion;
+- (void)setHandle:(NSString *)handle completion:(YYBooleanBlock)completion;
 /** Begins phone registration. Completion takes a token to be used in the next step.
  @param phoneNumber The phone number to send a verification text to. Must be formatted like (XXX) XXX-XXXX
  @param prefix The country code prefix to the phone number.
  @param country ie "USA" */
-- (void)startVerification:(NSString *)phoneNumber countryPrefix:(NSString *)prefix country:(NSString *)country completion:(StringBlock)completion;
+- (void)startVerification:(NSString *)phoneNumber countryPrefix:(NSString *)prefix country:(NSString *)country completion:(YYStringBlock)completion;
 /** Completes phone registration. Completion takes a boolean indicating success.
  @param code The code sent via text message from the first step.
  @param token The token returned from the first step. */
-- (void)endVerification:(NSString *)code token:(NSString *)token completion:(BooleanBlock)completion;
+- (void)endVerification:(NSString *)code token:(NSString *)token completion:(YYBooleanBlock)completion;
 
 @end
 

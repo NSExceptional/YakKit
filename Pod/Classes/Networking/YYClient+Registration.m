@@ -11,7 +11,7 @@
 
 @implementation YYClient (Registration)
 
-- (void)nicknamePolicy:(ResponseBlock)completion {
+- (void)nicknamePolicy:(YYResponseBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:kepGetNicknamePolicy_user, self.userIdentifier];
     [self get:^(TBURLRequestBuilder *make) {
         make.endpoint(endpoint);
@@ -20,7 +20,7 @@
     }];
 }
 
-- (void)registerNewUser:(ErrorBlock)completion {
+- (void)registerNewUser:(YYErrorBlock)completion {
     [self get:^(TBURLRequestBuilder *make) {
         make.endpoint(kepRegisterUser);
     } callback:^(TBResponseParser *parser) {
@@ -28,15 +28,15 @@
     }];
 }
 
-- (void)checkHandleAvailability:(NSString *)handle completion:(BooleanBlock)completion {
+- (void)checkHandleAvailability:(NSString *)handle completion:(YYBooleanBlock)completion {
     [self handle:handle set:NO completion:completion];
 }
 
-- (void)setHandle:(NSString *)handle completion:(BooleanBlock)completion {
+- (void)setHandle:(NSString *)handle completion:(YYBooleanBlock)completion {
     [self handle:handle set:YES completion:completion];
 }
 
-- (void)handle:(NSString *)handle set:(BOOL)set completion:(BooleanBlock)completion {
+- (void)handle:(NSString *)handle set:(BOOL)set completion:(YYBooleanBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:kepHandle_user_handle, self.userIdentifier, handle];
     id make = ^(TBURLRequestBuilder *make) {
         make.endpoint(endpoint);
@@ -51,7 +51,7 @@
     }
 }
 
-- (void)startVerification:(NSString *)phoneNumber countryPrefix:(NSString *)prefix country:(NSString *)country completion:(StringBlock)completion {
+- (void)startVerification:(NSString *)phoneNumber countryPrefix:(NSString *)prefix country:(NSString *)country completion:(YYStringBlock)completion {
     NSDictionary *params = @{@"country": country,
                              @"number": phoneNumber,
                              @"prefix": prefix,
@@ -64,7 +64,7 @@
     }];
 }
 
-- (void)endVerification:(NSString *)code token:(NSString *)token completion:(BooleanBlock)completion {
+- (void)endVerification:(NSString *)code token:(NSString *)token completion:(YYBooleanBlock)completion {
     NSDictionary *params = @{@"code": code,
                              @"token": token,
                              @"userID": self.userIdentifier};

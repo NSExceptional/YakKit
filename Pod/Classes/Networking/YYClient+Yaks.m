@@ -18,7 +18,7 @@
 
 #pragma mark Getting yak feeds
 
-- (void)getLocalYaks:(ArrayBlock)completion {
+- (void)getLocalYaks:(YYArrayBlock)completion {
     [self get:^(TBURLRequestBuilder *make) {
         make.baseURL(kBaseFeedURL).endpoint(kepGetYaksAndLocations);
         make.queries([self generalQuery:@{@"loc": @"false"}]);
@@ -27,7 +27,7 @@
     }];
 }
 
-- (void)getLocalHotYaks:(ArrayBlock)completion {
+- (void)getLocalHotYaks:(YYArrayBlock)completion {
     [self get:^(TBURLRequestBuilder *make) {
         make.endpoint(kepGetHotYaks);
     } callback:^(TBResponseParser *parser) {
@@ -35,7 +35,7 @@
     }];
 }
 
-- (void)getLocalTopYaks:(ArrayBlock)completion {
+- (void)getLocalTopYaks:(YYArrayBlock)completion {
     [self get:^(TBURLRequestBuilder *make) {
         make.endpoint(kepGetAreaTopYaks);
     } callback:^(TBResponseParser *parser) {
@@ -43,7 +43,7 @@
     }];
 }
 
-- (void)getYaksInPeek:(YYPeekLocation *)location hot:(BOOL)hot completion:(ArrayBlock)completion {
+- (void)getYaksInPeek:(YYPeekLocation *)location hot:(BOOL)hot completion:(YYArrayBlock)completion {
     NSDictionary *query = [self generalQuery:@{@"herdID": location.identifier, @"peekID": location.identifier}];
     if (hot) {
         query = [query dictionaryByReplacingValuesForKeys:@{@"hot": @"true"}];
@@ -58,7 +58,7 @@
 
 #pragma mark Getting info about a yak
 
-- (void)getYak:(YYNotification *)notification completion:(ResponseBlock)completion {
+- (void)getYak:(YYNotification *)notification completion:(YYResponseBlock)completion {
     NSDictionary *query = [self generalQuery:@{@"messageID": notification.thingIdentifier,
                                                @"notificationType": YYStringFromNotificationReason(notification.reason)}];
     
@@ -69,7 +69,7 @@
     }];
 }
 
-- (void)getCommentsForYak:(YYYak *)yak completion:(ArrayBlock)completion {
+- (void)getCommentsForYak:(YYYak *)yak completion:(YYArrayBlock)completion {
     [self get:^(TBURLRequestBuilder *make) {
         make.endpoint(kepGetComments).queries([self generalQuery:@{@"messageID": yak.identifier}]);
     } callback:^(TBResponseParser *parser) {

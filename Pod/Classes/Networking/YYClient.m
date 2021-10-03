@@ -95,7 +95,7 @@ NSString * YYUniqueIdentifier() {
 
 #pragma mark General
 
-- (void)updateConfiguration:(nullable ErrorBlock)completion {
+- (void)updateConfiguration:(nullable YYErrorBlock)completion {
     NSDictionary *params = @{@"lat": @(self.location.coordinate.longitude),
                              @"lng": @(self.location.coordinate.latitude),
                              @"yakkerID": self.userIdentifier};
@@ -112,7 +112,7 @@ NSString * YYUniqueIdentifier() {
     }];
 }
 
-- (void)updateUser:(nullable ErrorBlock)completion {
+- (void)updateUser:(nullable YYErrorBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:kepGetUserData_user, self.userIdentifier];
     [self get:^(TBURLRequestBuilder * _Nonnull make) {
         make.endpoint(endpoint);
@@ -141,7 +141,7 @@ NSString * YYUniqueIdentifier() {
 
 #pragma mark Helper methods
 
-- (void)completeWithClass:(Class)cls jsonArray:(NSArray *)objects error:(NSError *)error completion:(ArrayBlock)completion {
+- (void)completeWithClass:(Class)cls jsonArray:(NSArray *)objects error:(NSError *)error completion:(YYArrayBlock)completion {
     completion(error ? nil : [[cls class] arrayOfModelsFromJSONArray:objects], error);
 }
 
@@ -203,7 +203,7 @@ NSString * YYUniqueIdentifier() {
     return [TBResponseParser error:message domain:@"YakKit" code:code];
 }
 
-- (void)handleStatus:(NSDictionary *)json callback:(nullable ErrorBlock)completion {
+- (void)handleStatus:(NSDictionary *)json callback:(nullable YYErrorBlock)completion {
     if ([json[@"status"] isEqualToString:@"ok"]) {
         YYRunBlockP(completion, nil);
     } else {

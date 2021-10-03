@@ -14,14 +14,14 @@ NS_ASSUME_NONNULL_BEGIN
 @interface YYClient (Yaks)
 
 #pragma mark Getting yak feeds
-- (void)getLocalYaks:(ArrayBlock)completion;
-- (void)getLocalHotYaks:(ArrayBlock)completion;
-- (void)getLocalTopYaks:(ArrayBlock)completion;
-- (void)getYaksInPeek:(YYPeekLocation *)location hot:(BOOL)hot completion:(ArrayBlock)completion;
+- (void)getLocalYaks:(YYArrayBlock)completion;
+- (void)getLocalHotYaks:(YYArrayBlock)completion;
+- (void)getLocalTopYaks:(YYArrayBlock)completion;
+- (void)getYaksInPeek:(YYPeekLocation *)location hot:(BOOL)hot completion:(YYArrayBlock)completion;
 
 #pragma mark Getting info about a yak
-- (void)getYak:(YYNotification *)notification completion:(ResponseBlock)completion;
-- (void)getCommentsForYak:(YYYak *)yak completion:(ArrayBlock)completion;
+- (void)getYak:(YYNotification *)notification completion:(YYResponseBlock)completion;
+- (void)getCommentsForYak:(YYYak *)yak completion:(YYArrayBlock)completion;
 
 @end
 

@@ -11,17 +11,17 @@
 #define YYRunBlock(block) if ( block ) block()
 #define YYRunBlockP(block, ...) if ( block ) block( __VA_ARGS__ )
 
-typedef void (^RequestBlock)(NSData *data, NSURLResponse *response, NSError *error);
-typedef void (^BooleanBlock)(BOOL success, NSError *error);
-typedef void (^DataBlock)(NSData *data, NSError *error);
-typedef void (^StringBlock)(NSString *string, NSError *error);
-typedef void (^DictionaryBlock)(NSDictionary *dict, NSError *error);
-typedef void (^ArrayBlock)(NSArray *collection, NSError *error);
-typedef void (^CollectionResponseBlock)(NSArray *success, NSArray *failed, NSArray *errors);
-typedef void (^ResponseBlock)(id object, NSError *error);
-typedef void (^MiddleManBlock)(id object, NSError *error, NSURLResponse *response);
-typedef void (^ErrorBlock)(NSError *error);
-typedef void (^VoidBlock)();
+typedef void (^YYRequestBlock)(NSData *data, NSURLResponse *response, NSError *error);
+typedef void (^YYBooleanBlock)(BOOL success, NSError *error);
+typedef void (^YYDataBlock)(NSData *data, NSError *error);
+typedef void (^YYStringBlock)(NSString *string, NSError *error);
+typedef void (^YYDictionaryBlock)(NSDictionary *dict, NSError *error);
+typedef void (^YYArrayBlock)(NSArray *collection, NSError *error);
+typedef void (^YYCollectionResponseBlock)(NSArray *success, NSArray *failed, NSArray *errors);
+typedef void (^YYResponseBlock)(id object, NSError *error);
+typedef void (^YYMiddleManBlock)(id object, NSError *error, NSURLResponse *response);
+typedef void (^YYErrorBlock)(NSError *error);
+typedef void (^YYVoidBlock)();
 
 
 #pragma mark Notifications
