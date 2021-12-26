@@ -1,4 +1,3 @@
-source 'https://github.com/CocoaPods/Specs.git'
 
 target 'YakKit_Example' do
   pod "YakKit", :path => "../"
