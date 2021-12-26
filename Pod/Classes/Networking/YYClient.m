@@ -13,6 +13,7 @@
 #import "NSString+Networking.h"
 #import "NSDictionary+Networking.h"
 #import <SystemConfiguration/SCNetworkReachability.h>
+#import <Firebase/Firebase.h>
 
 #define Host(string) [string matchGroupAtIndex:1 forRegex:kHostRegexPattern]
 // Relies on the fact that kHostRegexPattern does not end in a '/'
@@ -35,8 +36,21 @@ BOOL YYHasActiveConnection() {
     return canReach;
 }
 
-BOOL YYIsValidUserIdentifier(NSString *uid) {
-    return [uid matchGroupAtIndex:0 forRegex:@"^[a-zA-Z\\d]{8}-[a-zA-Z\\d]{4}-[a-zA-Z\\d]{4}-[a-zA-Z\\d]{4}-[a-zA-Z\\d]{12}$"] != nil;
+BOOL YYIsValidPhoneNumber(NSString *phone) {
+    NSDataDetector *pattern = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypePhoneNumber error:nil];
+    return [pattern numberOfMatchesInString:phone options:0 range:NSMakeRange(0, phone.length)];
+}
+
+NSString * YYExtractFormattedPhoneNumber(NSString *input) {
+    static NSDataDetector *pattern = nil;
+    static NSCharacterSet *notDigits = nil;
+    if (!pattern || !notDigits) {
+        pattern = [NSDataDetector dataDetectorWithTypes:NSTextCheckingTypePhoneNumber error:nil];
+        notDigits = [NSCharacterSet characterSetWithCharactersInString:@"+0123456789"].invertedSet;
+    }
+    
+    NSTextCheckingResult *match = [pattern firstMatchInString:input options:0 range:NSMakeRange(0, input.length)];
+    return [[match.phoneNumber componentsSeparatedByCharactersInSet:notDigits] componentsJoinedByString:@""];
 }
 
 NSString * YYUniqueIdentifier() {
@@ -95,6 +109,25 @@ NSString * YYUniqueIdentifier() {
 }
 
 #pragma mark General
+
+- (void)startSignInWithPhone:(NSString *)phoneNumber verify:(YYStringBlock)verificationCallback {
+    if (![phoneNumber hasPrefix:@"+1"]) {
+        phoneNumber = [@"+1" stringByAppendingString:phoneNumber];
+    }
+    
+    [FIRPhoneAuthProvider.provider verifyPhoneNumber:phoneNumber UIDelegate:nil completion:verificationCallback];
+}
+
+- (void)verifyPhone:(NSString *)code identifier:(NSString *)verificationID completion:(YYErrorBlock)completion {
+    FIRPhoneAuthCredential *cred = [FIRPhoneAuthProvider.provider
+        credentialWithVerificationID:verificationID
+        verificationCode:code
+    ];
+    [FIRAuth.auth signInWithCredential:cred completion:^(FIRAuthDataResult *authResult, NSError *error) {
+        _currentUser = authResult.user;
+        completion(error);
+    }];
+}
 
 - (void)updateConfiguration:(nullable YYErrorBlock)completion {
     NSDictionary *params = @{@"lat": @(self.location.coordinate.longitude),
