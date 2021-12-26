@@ -53,7 +53,7 @@ NSString * YYStringFromSocialMediaType(YYSocialMediaType type) {
 #pragma mark Updating your own data
 
 - (void)setProfileAvatar:(NSData *)imageData completion:(YYErrorBlock)completion {
-    NSString *contentType = imageData.contentType ?: TBContentType.PNG;
+    NSString *contentType = imageData.tb_contentType ?: TBContentType.PNG;
     NSDictionary *query = @{@"userLat": @(self.location.coordinate.latitude),
                             @"userLong": @(self.location.coordinate.longitude),
                             @"userID": self.userIdentifier,
@@ -85,7 +85,7 @@ NSString * YYStringFromSocialMediaType(YYSocialMediaType type) {
     
     [self post:^(TBURLRequestBuilder *make) {
         make.baseURL(kBaseProfilesURL).endpoint([NSString stringWithFormat:kepProfileUpdateSocial_user, self.userIdentifier]);
-        make.bodyJSON(@{@"yakarma": @500, @"externalProfiles": externalProfiles.JSONString});
+        make.bodyJSON(@{@"yakarma": @500, @"externalProfiles": externalProfiles.tb_JSONString});
     } callback:^(TBResponseParser *parser) {
         completion(parser.error);
     }];

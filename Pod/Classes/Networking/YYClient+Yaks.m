@@ -46,7 +46,7 @@
 - (void)getYaksInPeek:(YYPeekLocation *)location hot:(BOOL)hot completion:(YYArrayBlock)completion {
     NSDictionary *query = [self generalQuery:@{@"herdID": location.identifier, @"peekID": location.identifier}];
     if (hot) {
-        query = [query dictionaryByReplacingValuesForKeys:@{@"hot": @"true"}];
+        query = [query tb_dictionaryByReplacingValuesForKeys:@{@"hot": @"true"}];
     }
     
     [self get:^(TBURLRequestBuilder *make) {

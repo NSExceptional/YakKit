@@ -16,7 +16,9 @@
 
 #define Host(string) [string matchGroupAtIndex:1 forRegex:kHostRegexPattern]
 // Relies on the fact that kHostRegexPattern does not end in a '/'
-#define Endpoint(string) [string stringByReplacingCharactersInRange:NSMakeRange(0, [string matchGroupAtIndex:0 forRegex:kHostRegexPattern].length) withString:@""]
+#define Endpoint(string) [string stringByReplacingCharactersInRange:NSMakeRange( \
+    0, [string tb_matchGroupAtIndex:0 forRegex:kHostRegexPattern].length \
+) withString:@""]
 
 
 BOOL YYHasActiveConnection() {
@@ -38,7 +40,7 @@ BOOL YYIsValidUserIdentifier(NSString *uid) {
 }
 
 NSString * YYUniqueIdentifier() {
-    NSString *uuid = [NSUUID new].UUIDString.MD5Hash;
+    NSString *uuid = [NSUUID new].UUIDString.tb_MD5Hash;
     return [NSString stringWithFormat:@"%8@-%4@-%4@-%4@-%12@",
             [uuid substringWithRange:NSMakeRange(0, 8)],
             [uuid substringWithRange:NSMakeRange(8, 4)],
@@ -162,7 +164,7 @@ NSString * YYUniqueIdentifier() {
                               @"course": @"0.000000"};
     
     if (additional.count) {
-        general = [general dictionaryByReplacingValuesForKeys:additional];
+        general = [general tb_dictionaryByReplacingValuesForKeys:additional];
     }
     
     return general;
@@ -187,14 +189,14 @@ NSString * YYUniqueIdentifier() {
 }
 
 - (NSString *)signRequest:(NSString *)endpointWithQuery {
-    NSString *salt = [[NSString timestamp] substringToIndex:10];
+    NSString *salt = [[NSString tb_timestamp] substringToIndex:10];
     
     NSMutableString *message = endpointWithQuery.mutableCopy;
     
     // Hash that bitch
     NSString *input = [message stringByAppendingString:salt];
-    NSString *hash = [[NSString hashHMacSHA1:input key:kRequestSignKey] base64EncodedStringWithOptions:0];
-    [message appendFormat:@"&salt=%@&hash=%@", salt, hash.URLEncodedString];
+    NSString *hash = [[NSString tb_hashHMacSHA1:input key:kRequestSignKey] base64EncodedStringWithOptions:0];
+    [message appendFormat:@"&salt=%@&hash=%@", salt, hash.tb_URLEncodedString];
     return message;
 }
 
