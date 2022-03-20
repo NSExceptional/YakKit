@@ -14,31 +14,18 @@
 - (id)initWithDictionary:(NSDictionary *)json {
     self = [super initWithDictionary:json];
     if (self) {
-        if (self.personaIdentifier) {
-            _relevantAuthorIdentifier = self.personaIdentifier;
-        } else {
-            // TODO does yik yak give same backID and overlayID to same commentor with and without handle?
-            _relevantAuthorIdentifier = [self.backgroundIdentifier stringByAppendingString:self.overlayIdentifier];
-        }
-        
-        if (!_textStyle.length) {
-            _textStyle = nil;
-        }
-        
+        _isOP = [self.yakkerUID isEqualToString:self.relevantAuthorIdentifier];
     }
     
     return self;
 }
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
-    return [@{@"body": @"comment",
-              @"authorIdentifier": @"posterID",
-              @"yakIdentifier": @"messageID",
-              @"backgroundIdentifier": @"backID",
-              @"overlayIdentifier": @"overlayID",
-              @"textStyle": @"textStyle",
-              @"identifier": @"commentID",
-              @"isOP": @"textStyle"} mtl_dictionaryByAddingEntriesFromDictionary:[super JSONKeyPathsByPropertyKey]];
+    return [@{
+        @"body": @"text",
+        @"relevantAuthorIdentifier": @"commenterUID",
+        @"yakIdentifier": @"yakID",
+    } mtl_dictionaryByAddingEntriesFromDictionary:[super JSONKeyPathsByPropertyKey]];
 }
 
 + (NSValueTransformer *)isOPJSONTransformer {
