@@ -30,21 +30,9 @@ extern NSString * const kYYDidUpdateConfigurationNotification;
 extern NSString * const kYYDidLoadNotificationsNotification;
 
 #pragma mark Misc
-extern NSString * const kUserAgent;
-extern NSString * const kYikYakVersion;
-extern NSString * const kRequestSignKey;
 
 #pragma mark Base URLs
-extern NSString * const kBaseNotifyURL;
-extern NSString * const kBaseContentURL;
-extern NSString * const kBaseProfilesURL;
-extern NSString * const kBaseFeedURL;
-/// Use this with -[YYClient setRegion:]
-extern NSString * const kRegionUSEast;
-/// Use this with -[YYClient setRegion:]
-extern NSString * const kRegionUSCentral;
-extern NSString * const kUploadPhotoURL;
-extern NSString * const kAuthForWebURL;
+extern NSString * const kBaseAPIURL;
 extern NSString * const kHostRegexPattern;
 
 #pragma mark - Endpoints
