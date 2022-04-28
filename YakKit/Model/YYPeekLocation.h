@@ -23,8 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL isLocal;
 @property (nonatomic, readonly) BOOL isMediaEnabled;
 
-@property (nonatomic, readonly) CGFloat latitude;
-@property (nonatomic, readonly) CGFloat longitude;
+@property (nonatomic, readonly) double latitude;
+@property (nonatomic, readonly) double longitude;
 @property (nonatomic, readonly) NSDictionary *location;
 
 @end

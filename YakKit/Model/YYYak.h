@@ -25,8 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL      isReyaked;
 @property (nonatomic, readonly) NSInteger replyCount;
 
-@property (nonatomic, readonly) CGFloat      latitude;
-@property (nonatomic, readonly) CGFloat      longitude;
+@property (nonatomic, readonly) double      latitude;
+@property (nonatomic, readonly) double      longitude;
 @property (nonatomic, readonly) NSDictionary *location;
 @property (nonatomic, readonly) BOOL         hideLocationPin;
 @property (nonatomic, readonly) NSInteger    locationDisplayStyle;
