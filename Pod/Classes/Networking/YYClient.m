@@ -249,4 +249,8 @@ NSString * YYUniqueIdentifier() {
     [[self request:configurationHandler sign:NO] GET:callback];
 }
 
+- (void)graphQL:(NSString *)query variables:(NSDictionary<NSString *,id> *)variables callback:(TBResponseBlock)callback {
+    
+}
+
 @end

@@ -52,6 +52,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)unsignedPost:(void(^)(TBURLRequestBuilder *make))configurationHandler callback:(TBResponseBlock)callback;
 - (void)unsignedGet:(void(^)(TBURLRequestBuilder *make))configurationHandler callback:(TBResponseBlock)callback;
 
+- (void)graphQL:(NSString *)query variables:(NSDictionary<NSString *, id> *)variables callback:(TBResponseBlock)callback;
+
 #pragma mark Internal
 - (void)completeWithClass:(Class)cls jsonArray:(NSArray *)objects error:(NSError *)error completion:(YYArrayBlock)completion;
 + (NSError *)errorWithMessage:(NSString *)message code:(NSInteger)code;
