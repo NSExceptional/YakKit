@@ -95,7 +95,14 @@ NSString * YYUniqueIdentifier() {
     ];
     [FIRAuth.auth signInWithCredential:cred completion:^(FIRAuthDataResult *authResult, NSError *error) {
         _currentUser = (id)authResult.user;
-        completion(error);
+        self.refreshToken = authResult.user.refreshToken;
+        
+        [authResult.user getIDTokenWithCompletion:^(NSString *token, NSError *error) {
+            if (token) {
+                self.authToken = token;
+            }
+            completion(error);
+        }];
     }];
 }
 
@@ -144,10 +151,10 @@ NSString * YYUniqueIdentifier() {
     return general;
 }
 
-- (NSDictionary *)generalHeaders {
-    return @{};
-//    return @{@"User-Agent": kUserAgent,};
-    //             @"X-ThePantsThief-Header": @"1"};
+- (NSDictionary *)graphQLHeaders {
+    return @{
+        @"Authorization": self.authToken
+    };
 }
 
 #pragma mark Requests / error handling
@@ -188,7 +195,6 @@ NSString * YYUniqueIdentifier() {
     NSParameterAssert(self.userIdentifier);
     
     TBURLRequestProxy *proxy = [TBURLRequestBuilder make:^(TBURLRequestBuilder *make) {
-        make.baseURL(self.baseURLForRegion).headers(self.generalHeaders).queries([self generalQuery:nil]);
         configurationHandler(make);
     }];
     
@@ -220,7 +226,10 @@ NSString * YYUniqueIdentifier() {
 }
 
 - (void)graphQL:(NSString *)query variables:(NSDictionary<NSString *,id> *)variables callback:(TBResponseBlock)callback {
-    
+    [self unsignedPost:^(TBURLRequestBuilder * _Nonnull make) {
+        make.baseURL(kBaseAPIURL).headers(self.graphQLHeaders);
+        make.bodyJSON(@{ @"query": query, @"variables": variables });
+    } callback:callback];
 }
 
 @end

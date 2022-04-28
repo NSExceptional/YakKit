@@ -32,6 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable) CLLocation       *location;
 @property (nonatomic, nullable) NSString         *userIdentifier;
 
+@property (nonatomic) NSString *authToken;
+@property (nonatomic) NSString *refreshToken;
+
 #pragma mark General
 - (void)startSignInWithPhone:(NSString *)phoneNumber verify:(YYStringBlock)verificationCallback;
 - (void)verifyPhone:(NSString *)code identifier:(NSString *)verificationID completion:(YYErrorBlock)completion;
@@ -39,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)updateUser:(nullable YYErrorBlock)completion;
 
 #pragma mark Making requests
-@property (nonatomic, readonly) NSDictionary *generalHeaders;
+@property (nonatomic, readonly) NSDictionary *graphQLHeaders;
 
 - (NSDictionary *)generalQuery:(nullable NSDictionary *)additional;
 

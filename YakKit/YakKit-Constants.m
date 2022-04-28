@@ -17,7 +17,7 @@ NSString * const kYYDidLoadNotificationsNotification   = @"kYYDidLoadNotificatio
 #pragma mark Misc
 
 #pragma mark Base URLs
-NSString * const kBaseAPIURL                = @"https://prod-api-z47drjcvya-uc.a.run.app";
+NSString * const kBaseAPIURL                = @"https://prod-api-z47drjcvya-uc.a.run.app/graphql/";
 // Must not have a trailing / or it will screw up one of my macros
 NSString * const kHostRegexPattern          = @"https?://((?:[\\w-]+.)?[\\w-]+.\\w{2,3})";
 
