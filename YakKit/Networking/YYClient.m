@@ -123,7 +123,7 @@ NSString * YYUniqueIdentifier() {
         verificationCode:code
     ];
     [FIRAuth.auth signInWithCredential:cred completion:^(FIRAuthDataResult *authResult, NSError *error) {
-        _currentUser = authResult.user;
+        _currentUser = (id)authResult.user;
         completion(error);
     }];
 }

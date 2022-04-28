@@ -15,7 +15,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly          ) NSString *title;
 @property (nonatomic, readonly, nullable) NSString *handle;
-@property (nonatomic, readonly, nullable) NSString *personaIdentifier;
 @property (nonatomic, readonly          ) NSString *authorIdentifier;
 
 @property (nonatomic, readonly) BOOL      canUpvote;

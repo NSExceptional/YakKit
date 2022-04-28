@@ -47,9 +47,9 @@
         callback(collection, error);
     };
     
-    NSString *endpoint = [NSString stringWithFormat:kepGetNotifications_user, self.userIdentifier];
+//    NSString *endpoint = [NSString stringWithFormat:kepGetNotifications_user, self.userIdentifier];
     [self get:^(TBURLRequestBuilder *make) {
-        make.baseURL(kBaseNotifyURL).endpoint(endpoint);
+//        make.baseURL(kBaseNotifyURL).endpoint(endpoint);
     } callback:^(TBResponseParser *parser) {
         [self completeWithClass:[YYNotification class] jsonArray:parser.JSON[@"data"] error:parser.error completion:completion];
     }];
@@ -77,7 +77,7 @@
 
 - (void)sendNotifyBodyJSON:(NSDictionary *)bodyJSON endpoint:(NSString *)endpoint callback:(nullable YYErrorBlock)completion {
     [self post:^(TBURLRequestBuilder *make) {
-        make.baseURL(kBaseNotifyURL).endpoint(endpoint).bodyJSON(bodyJSON);
+//        make.baseURL(kBaseNotifyURL).endpoint(endpoint).bodyJSON(bodyJSON);
     } callback:^(TBResponseParser *parser) {
         if (parser.error) {
             YYRunBlockP(completion, parser.error);
