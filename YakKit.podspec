@@ -2,11 +2,11 @@ Pod::Spec.new do |s|
   s.name             = "YakKit"
   s.version          = "0.2.2"
   s.summary          = "An Objective-C implementation of Yik Yak's private API." 
-  s.homepage         = "https://github.com/ThePantsThief/YakKit"
+  s.homepage         = "https://github.com/NSExceptional/YakKit"
   s.license          = 'MIT'
-  s.author           = { "ThePantsThief" => "tannerbennett@me.com" }
-  s.source           = { :git => "https://github.com/ThePantsThief/YakKit.git", :tag => s.version.to_s }
-  s.social_media_url = 'https://twitter.com/ThePantsThief'
+  s.author           = { "NSExceptional" => "tannerbennett@me.com" }
+  s.source           = { :git => "https://github.com/NSExceptional/YakKit.git", :tag => s.version.to_s }
+  s.social_media_url = 'https://twitter.com/NSExceptional'
 
   s.requires_arc = true
   s.ios.deployment_target = '7.0'
