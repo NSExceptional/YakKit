@@ -1,0 +1,471 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 52;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C357BAC7281A6CBB00FFFC96 /* YakKit.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = C357BAC4281A6CBB00FFFC96 /* YakKit.h */; };
+		C357BAF5281A6D4C00FFFC96 /* YakKit-Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BACF281A6D4C00FFFC96 /* YakKit-Constants.m */; };
+		C357BAF6281A6D4C00FFFC96 /* YYUser.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAD2281A6D4C00FFFC96 /* YYUser.m */; };
+		C357BAF7281A6D4C00FFFC96 /* YYThreatCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAD3281A6D4C00FFFC96 /* YYThreatCheck.m */; };
+		C357BAF8281A6D4C00FFFC96 /* YYPeekLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAD4281A6D4C00FFFC96 /* YYPeekLocation.m */; };
+		C357BAF9281A6D4C00FFFC96 /* YYVotable.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAD7281A6D4C00FFFC96 /* YYVotable.m */; };
+		C357BAFA281A6D4C00FFFC96 /* YYNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BADB281A6D4C00FFFC96 /* YYNotification.m */; };
+		C357BAFB281A6D4C00FFFC96 /* YYConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAE0281A6D4C00FFFC96 /* YYConfiguration.m */; };
+		C357BAFC281A6D4C00FFFC96 /* YYThing.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAE1281A6D4C00FFFC96 /* YYThing.m */; };
+		C357BAFD281A6D4C00FFFC96 /* YYPersona.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAE2281A6D4C00FFFC96 /* YYPersona.m */; };
+		C357BAFE281A6D4C00FFFC96 /* YYYak.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAE4281A6D4C00FFFC96 /* YYYak.m */; };
+		C357BAFF281A6D4C00FFFC96 /* YYComment.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAE5281A6D4C00FFFC96 /* YYComment.m */; };
+		C357BB00281A6D4C00FFFC96 /* YYClient+Yakking.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAEA281A6D4C00FFFC96 /* YYClient+Yakking.m */; };
+		C357BB01281A6D4C00FFFC96 /* YYClient.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAED281A6D4C00FFFC96 /* YYClient.m */; };
+		C357BB02281A6D4C00FFFC96 /* YYClient+Registration.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAEE281A6D4C00FFFC96 /* YYClient+Registration.m */; };
+		C357BB03281A6D4C00FFFC96 /* YYClient+Personal.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAEF281A6D4C00FFFC96 /* YYClient+Personal.m */; };
+		C357BB04281A6D4C00FFFC96 /* YYClient+Yaks.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAF0281A6D4C00FFFC96 /* YYClient+Yaks.m */; };
+		C357BB06281A6D4C00FFFC96 /* YYClient+Misc.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAF4281A6D4C00FFFC96 /* YYClient+Misc.m */; };
+		C357BB0C281A6DA500FFFC96 /* Mantle in Frameworks */ = {isa = PBXBuildFile; productRef = C357BB0B281A6DA500FFFC96 /* Mantle */; };
+		C357BB13281A6F0500FFFC96 /* TBURLRequestOptions in Frameworks */ = {isa = PBXBuildFile; productRef = C357BB12281A6F0500FFFC96 /* TBURLRequestOptions */; };
+		C357BB18281A706C00FFFC96 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = C357BB17281A706C00FFFC96 /* FirebaseAuth */; };
+		C357BB1A281A706C00FFFC96 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = C357BB19281A706C00FFFC96 /* FirebaseFirestore */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C357BABF281A6CBB00FFFC96 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				C357BAC7281A6CBB00FFFC96 /* YakKit.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		C357BAC1281A6CBB00FFFC96 /* libYakKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libYakKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		C357BAC4281A6CBB00FFFC96 /* YakKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YakKit.h; sourceTree = "<group>"; };
+		C357BACF281A6D4C00FFFC96 /* YakKit-Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "YakKit-Constants.m"; sourceTree = "<group>"; };
+		C357BAD0281A6D4C00FFFC96 /* YakKit-Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "YakKit-Constants.h"; sourceTree = "<group>"; };
+		C357BAD2281A6D4C00FFFC96 /* YYUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYUser.m; sourceTree = "<group>"; };
+		C357BAD3281A6D4C00FFFC96 /* YYThreatCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYThreatCheck.m; sourceTree = "<group>"; };
+		C357BAD4281A6D4C00FFFC96 /* YYPeekLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYPeekLocation.m; sourceTree = "<group>"; };
+		C357BAD5281A6D4C00FFFC96 /* YYComment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYComment.h; sourceTree = "<group>"; };
+		C357BAD6281A6D4C00FFFC96 /* YYYak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYYak.h; sourceTree = "<group>"; };
+		C357BAD7281A6D4C00FFFC96 /* YYVotable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYVotable.m; sourceTree = "<group>"; };
+		C357BAD8281A6D4C00FFFC96 /* YYPersona.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYPersona.h; sourceTree = "<group>"; };
+		C357BAD9281A6D4C00FFFC96 /* YYThing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYThing.h; sourceTree = "<group>"; };
+		C357BADA281A6D4C00FFFC96 /* YYConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYConfiguration.h; sourceTree = "<group>"; };
+		C357BADB281A6D4C00FFFC96 /* YYNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYNotification.m; sourceTree = "<group>"; };
+		C357BADC281A6D4C00FFFC96 /* YYThreatCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYThreatCheck.h; sourceTree = "<group>"; };
+		C357BADD281A6D4C00FFFC96 /* YYUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYUser.h; sourceTree = "<group>"; };
+		C357BADE281A6D4C00FFFC96 /* YYPeekLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYPeekLocation.h; sourceTree = "<group>"; };
+		C357BADF281A6D4C00FFFC96 /* YYNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYNotification.h; sourceTree = "<group>"; };
+		C357BAE0281A6D4C00FFFC96 /* YYConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYConfiguration.m; sourceTree = "<group>"; };
+		C357BAE1281A6D4C00FFFC96 /* YYThing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYThing.m; sourceTree = "<group>"; };
+		C357BAE2281A6D4C00FFFC96 /* YYPersona.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYPersona.m; sourceTree = "<group>"; };
+		C357BAE3281A6D4C00FFFC96 /* YYVotable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYVotable.h; sourceTree = "<group>"; };
+		C357BAE4281A6D4C00FFFC96 /* YYYak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYYak.m; sourceTree = "<group>"; };
+		C357BAE5281A6D4C00FFFC96 /* YYComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYComment.m; sourceTree = "<group>"; };
+		C357BAE7281A6D4C00FFFC96 /* YYClient+Yaks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "YYClient+Yaks.h"; sourceTree = "<group>"; };
+		C357BAE8281A6D4C00FFFC96 /* YYClient+Personal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "YYClient+Personal.h"; sourceTree = "<group>"; };
+		C357BAE9281A6D4C00FFFC96 /* YYClient+Registration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "YYClient+Registration.h"; sourceTree = "<group>"; };
+		C357BAEA281A6D4C00FFFC96 /* YYClient+Yakking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "YYClient+Yakking.m"; sourceTree = "<group>"; };
+		C357BAEB281A6D4C00FFFC96 /* YYClient+Misc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "YYClient+Misc.h"; sourceTree = "<group>"; };
+		C357BAED281A6D4C00FFFC96 /* YYClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYClient.m; sourceTree = "<group>"; };
+		C357BAEE281A6D4C00FFFC96 /* YYClient+Registration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "YYClient+Registration.m"; sourceTree = "<group>"; };
+		C357BAEF281A6D4C00FFFC96 /* YYClient+Personal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "YYClient+Personal.m"; sourceTree = "<group>"; };
+		C357BAF0281A6D4C00FFFC96 /* YYClient+Yaks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "YYClient+Yaks.m"; sourceTree = "<group>"; };
+		C357BAF1281A6D4C00FFFC96 /* YYClient+Yakking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "YYClient+Yakking.h"; sourceTree = "<group>"; };
+		C357BAF2281A6D4C00FFFC96 /* YYClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYClient.h; sourceTree = "<group>"; };
+		C357BAF4281A6D4C00FFFC96 /* YYClient+Misc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "YYClient+Misc.m"; sourceTree = "<group>"; };
+		C357BB15281A6F7600FFFC96 /* YakKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = YakKit.podspec; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C357BABE281A6CBB00FFFC96 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C357BB0C281A6DA500FFFC96 /* Mantle in Frameworks */,
+				C357BB1A281A706C00FFFC96 /* FirebaseFirestore in Frameworks */,
+				C357BB18281A706C00FFFC96 /* FirebaseAuth in Frameworks */,
+				C357BB13281A6F0500FFFC96 /* TBURLRequestOptions in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C357BAB8281A6CBB00FFFC96 = {
+			isa = PBXGroup;
+			children = (
+				C357BB15281A6F7600FFFC96 /* YakKit.podspec */,
+				C357BAC3281A6CBB00FFFC96 /* YakKit */,
+				C357BAC2281A6CBB00FFFC96 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C357BAC2281A6CBB00FFFC96 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C357BAC1281A6CBB00FFFC96 /* libYakKit.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C357BAC3281A6CBB00FFFC96 /* YakKit */ = {
+			isa = PBXGroup;
+			children = (
+				C357BAC4281A6CBB00FFFC96 /* YakKit.h */,
+				C357BAD0281A6D4C00FFFC96 /* YakKit-Constants.h */,
+				C357BACF281A6D4C00FFFC96 /* YakKit-Constants.m */,
+				C357BAD1281A6D4C00FFFC96 /* Model */,
+				C357BAE6281A6D4C00FFFC96 /* Networking */,
+			);
+			path = YakKit;
+			sourceTree = "<group>";
+		};
+		C357BAD1281A6D4C00FFFC96 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C357BAD5281A6D4C00FFFC96 /* YYComment.h */,
+				C357BAE5281A6D4C00FFFC96 /* YYComment.m */,
+				C357BADA281A6D4C00FFFC96 /* YYConfiguration.h */,
+				C357BAE0281A6D4C00FFFC96 /* YYConfiguration.m */,
+				C357BADF281A6D4C00FFFC96 /* YYNotification.h */,
+				C357BADB281A6D4C00FFFC96 /* YYNotification.m */,
+				C357BADE281A6D4C00FFFC96 /* YYPeekLocation.h */,
+				C357BAD4281A6D4C00FFFC96 /* YYPeekLocation.m */,
+				C357BAD8281A6D4C00FFFC96 /* YYPersona.h */,
+				C357BAE2281A6D4C00FFFC96 /* YYPersona.m */,
+				C357BAD9281A6D4C00FFFC96 /* YYThing.h */,
+				C357BAE1281A6D4C00FFFC96 /* YYThing.m */,
+				C357BADC281A6D4C00FFFC96 /* YYThreatCheck.h */,
+				C357BAD3281A6D4C00FFFC96 /* YYThreatCheck.m */,
+				C357BADD281A6D4C00FFFC96 /* YYUser.h */,
+				C357BAD2281A6D4C00FFFC96 /* YYUser.m */,
+				C357BAE3281A6D4C00FFFC96 /* YYVotable.h */,
+				C357BAD7281A6D4C00FFFC96 /* YYVotable.m */,
+				C357BAD6281A6D4C00FFFC96 /* YYYak.h */,
+				C357BAE4281A6D4C00FFFC96 /* YYYak.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C357BAE6281A6D4C00FFFC96 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				C357BAF2281A6D4C00FFFC96 /* YYClient.h */,
+				C357BAED281A6D4C00FFFC96 /* YYClient.m */,
+				C357BAEB281A6D4C00FFFC96 /* YYClient+Misc.h */,
+				C357BAF4281A6D4C00FFFC96 /* YYClient+Misc.m */,
+				C357BAE8281A6D4C00FFFC96 /* YYClient+Personal.h */,
+				C357BAEF281A6D4C00FFFC96 /* YYClient+Personal.m */,
+				C357BAE9281A6D4C00FFFC96 /* YYClient+Registration.h */,
+				C357BAEE281A6D4C00FFFC96 /* YYClient+Registration.m */,
+				C357BAF1281A6D4C00FFFC96 /* YYClient+Yakking.h */,
+				C357BAEA281A6D4C00FFFC96 /* YYClient+Yakking.m */,
+				C357BAE7281A6D4C00FFFC96 /* YYClient+Yaks.h */,
+				C357BAF0281A6D4C00FFFC96 /* YYClient+Yaks.m */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C357BAC0281A6CBB00FFFC96 /* YakKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C357BACA281A6CBB00FFFC96 /* Build configuration list for PBXNativeTarget "YakKit" */;
+			buildPhases = (
+				C357BABD281A6CBB00FFFC96 /* Sources */,
+				C357BABE281A6CBB00FFFC96 /* Frameworks */,
+				C357BABF281A6CBB00FFFC96 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YakKit;
+			packageProductDependencies = (
+				C357BB0B281A6DA500FFFC96 /* Mantle */,
+				C357BB12281A6F0500FFFC96 /* TBURLRequestOptions */,
+				C357BB17281A706C00FFFC96 /* FirebaseAuth */,
+				C357BB19281A706C00FFFC96 /* FirebaseFirestore */,
+			);
+			productName = YakKit;
+			productReference = C357BAC1281A6CBB00FFFC96 /* libYakKit.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C357BAB9281A6CBB00FFFC96 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1240;
+				TargetAttributes = {
+					C357BAC0281A6CBB00FFFC96 = {
+						CreatedOnToolsVersion = 12.4;
+					};
+				};
+			};
+			buildConfigurationList = C357BABC281A6CBB00FFFC96 /* Build configuration list for PBXProject "YakKit" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C357BAB8281A6CBB00FFFC96;
+			packageReferences = (
+				C357BB0A281A6DA500FFFC96 /* XCRemoteSwiftPackageReference "Mantle" */,
+				C357BB11281A6F0500FFFC96 /* XCRemoteSwiftPackageReference "TBURLRequestOptions" */,
+				C357BB16281A706C00FFFC96 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
+			productRefGroup = C357BAC2281A6CBB00FFFC96 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C357BAC0281A6CBB00FFFC96 /* YakKit */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C357BABD281A6CBB00FFFC96 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C357BAFF281A6D4C00FFFC96 /* YYComment.m in Sources */,
+				C357BB01281A6D4C00FFFC96 /* YYClient.m in Sources */,
+				C357BAFC281A6D4C00FFFC96 /* YYThing.m in Sources */,
+				C357BB03281A6D4C00FFFC96 /* YYClient+Personal.m in Sources */,
+				C357BAF7281A6D4C00FFFC96 /* YYThreatCheck.m in Sources */,
+				C357BB00281A6D4C00FFFC96 /* YYClient+Yakking.m in Sources */,
+				C357BB06281A6D4C00FFFC96 /* YYClient+Misc.m in Sources */,
+				C357BAF6281A6D4C00FFFC96 /* YYUser.m in Sources */,
+				C357BAF5281A6D4C00FFFC96 /* YakKit-Constants.m in Sources */,
+				C357BB02281A6D4C00FFFC96 /* YYClient+Registration.m in Sources */,
+				C357BAF8281A6D4C00FFFC96 /* YYPeekLocation.m in Sources */,
+				C357BAFB281A6D4C00FFFC96 /* YYConfiguration.m in Sources */,
+				C357BAFA281A6D4C00FFFC96 /* YYNotification.m in Sources */,
+				C357BAFE281A6D4C00FFFC96 /* YYYak.m in Sources */,
+				C357BAFD281A6D4C00FFFC96 /* YYPersona.m in Sources */,
+				C357BB04281A6D4C00FFFC96 /* YYClient+Yaks.m in Sources */,
+				C357BAF9281A6D4C00FFFC96 /* YYVotable.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C357BAC8281A6CBB00FFFC96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		C357BAC9281A6CBB00FFFC96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C357BACB281A6CBB00FFFC96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C357BACC281A6CBB00FFFC96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C357BABC281A6CBB00FFFC96 /* Build configuration list for PBXProject "YakKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C357BAC8281A6CBB00FFFC96 /* Debug */,
+				C357BAC9281A6CBB00FFFC96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C357BACA281A6CBB00FFFC96 /* Build configuration list for PBXNativeTarget "YakKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C357BACB281A6CBB00FFFC96 /* Debug */,
+				C357BACC281A6CBB00FFFC96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C357BB0A281A6DA500FFFC96 /* XCRemoteSwiftPackageReference "Mantle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Mantle/Mantle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.0;
+			};
+		};
+		C357BB11281A6F0500FFFC96 /* XCRemoteSwiftPackageReference "TBURLRequestOptions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/NSExceptional/TBURLRequestOptions";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		C357BB16281A706C00FFFC96 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.15.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C357BB0B281A6DA500FFFC96 /* Mantle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C357BB0A281A6DA500FFFC96 /* XCRemoteSwiftPackageReference "Mantle" */;
+			productName = Mantle;
+		};
+		C357BB12281A6F0500FFFC96 /* TBURLRequestOptions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C357BB11281A6F0500FFFC96 /* XCRemoteSwiftPackageReference "TBURLRequestOptions" */;
+			productName = TBURLRequestOptions;
+		};
+		C357BB17281A706C00FFFC96 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C357BB16281A706C00FFFC96 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		C357BB19281A706C00FFFC96 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C357BB16281A706C00FFFC96 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = C357BAB9281A6CBB00FFFC96 /* Project object */;
+}
