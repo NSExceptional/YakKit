@@ -16,8 +16,8 @@
 @class FIRUser;
 
 
-BOOL YYIsValidPhoneNumber(NSString *phone);
-NSString * _Nullable YYExtractFormattedPhoneNumber(NSString *phone);
+BOOL YYIsValidPhoneNumber(NSString * _Nonnull phone);
+NSString * _Nullable YYExtractFormattedPhoneNumber(NSString * _Nonnull phone);
 extern NSString * _Nonnull YYUniqueIdentifier();
 
 
@@ -39,12 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark General
 - (void)startSignInWithPhone:(NSString *)phoneNumber verify:(YYStringBlock)verificationCallback;
 - (void)verifyPhone:(NSString *)code identifier:(NSString *)verificationID completion:(YYErrorBlock)completion;
-/// Updates the `configuration` object. Will post kYYDidUpdateConfigurationNotification on success before calling the completion block.
-- (void)updateConfiguration:(nullable YYErrorBlock)completion;
 /// Updates the `currentUser` object. Will post kYYDidUpdateUserNotification on success before calling the completion block.
 - (void)updateUser:(nullable YYErrorBlock)completion;
-/// Completion takes a the token as a string and the litefime of the code
-- (void)authenticateForWeb:(void(^)(NSString *code, NSInteger timeout, NSError *error))completion;
 
 #pragma mark Making requests
 @property (nonatomic, readonly) NSDictionary *generalHeaders;

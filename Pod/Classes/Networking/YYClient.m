@@ -129,23 +129,6 @@ NSString * YYUniqueIdentifier() {
     }];
 }
 
-- (void)updateConfiguration:(nullable YYErrorBlock)completion {
-    NSDictionary *params = @{@"lat": @(self.location.coordinate.longitude),
-                             @"lng": @(self.location.coordinate.latitude),
-                             @"yakkerID": self.userIdentifier};
-    [self unsignedGet:^(TBURLRequestBuilder * _Nonnull make) {
-        make.baseURL(kBaseContentURL).endpoint(kepUpdateConfiguration).queries(params);
-    } callback:^(TBResponseParser *parser) {
-        if (!parser.error) {
-            self.configuration = [[YYConfiguration alloc] initWithDictionary:parser.JSON];
-            [[NSNotificationCenter defaultCenter] postNotificationName:kYYDidUpdateConfigurationNotification object:self];
-            YYRunBlockP(completion, nil);
-        } else {
-            YYRunBlockP(completion, parser.error);
-        }
-    }];
-}
-
 - (void)updateUser:(nullable YYErrorBlock)completion {
     NSString *endpoint = [NSString stringWithFormat:kepGetUserData_user, self.userIdentifier];
     [self get:^(TBURLRequestBuilder * _Nonnull make) {
@@ -157,18 +140,6 @@ NSString * YYUniqueIdentifier() {
             YYRunBlockP(completion, nil);
         } else {
             YYRunBlockP(completion, parser.error);
-        }
-    }];
-}
-
-- (void)authenticateForWeb:(void(^)(NSString *code, NSInteger timeout, NSError *error))completion {
-    [self post:^(TBURLRequestBuilder * _Nonnull make) {
-        make.baseURL(nil).URL(kAuthForWebURL);
-    } callback:^(TBResponseParser *parser) {
-        if (!parser.error) {
-            completion(parser.JSON[@"pin"], [parser.JSON[@"ttl"] integerValue], nil);
-        } else {
-            completion(nil, 0, parser.error);
         }
     }];
 }
@@ -188,7 +159,7 @@ NSString * YYUniqueIdentifier() {
                               @"long": @(self.location.coordinate.longitude).stringValue,
                               @"userLat":  @(self.location.coordinate.latitude).stringValue,
                               @"userLong": @(self.location.coordinate.longitude).stringValue,
-                              @"version": kYikYakVersion,
+//                              @"version": kYikYakVersion,
                               @"horizontalAccuracy": @"0.000000",
                               @"verticalAccuracy": @"0.000000",
                               @"altitude": @"0.000000",
@@ -204,7 +175,8 @@ NSString * YYUniqueIdentifier() {
 }
 
 - (NSDictionary *)generalHeaders {
-    return @{@"User-Agent": kUserAgent,};
+    return @{};
+//    return @{@"User-Agent": kUserAgent,};
     //             @"X-ThePantsThief-Header": @"1"};
 }
 
@@ -214,23 +186,11 @@ NSString * YYUniqueIdentifier() {
     if (sign) {
         NSString *endpointWithQuery = Endpoint(urlString);
         NSRange r = NSMakeRange(urlString.length - endpointWithQuery.length, endpointWithQuery.length);
-        urlString = [urlString stringByReplacingCharactersInRange:r withString:[self signRequest:Endpoint(urlString)]];
+        urlString = [urlString stringByReplacingCharactersInRange:r withString:Endpoint(urlString)];
         return [NSURL URLWithString:urlString];
     } else {
         return [NSURL URLWithString:urlString];
     }
-}
-
-- (NSString *)signRequest:(NSString *)endpointWithQuery {
-    NSString *salt = [[NSString tb_timestamp] substringToIndex:10];
-    
-    NSMutableString *message = endpointWithQuery.mutableCopy;
-    
-    // Hash that bitch
-    NSString *input = [message stringByAppendingString:salt];
-    NSString *hash = [[NSString tb_hashHMacSHA1:input key:kRequestSignKey] base64EncodedStringWithOptions:0];
-    [message appendFormat:@"&salt=%@&hash=%@", salt, hash.tb_URLEncodedString];
-    return message;
 }
 
 + (NSError *)errorWithMessage:(NSString *)message code:(NSInteger)code {
