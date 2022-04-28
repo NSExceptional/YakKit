@@ -23,7 +23,7 @@ extern NSString * _Nonnull YYUniqueIdentifier();
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YYClient : NSObject <NSCopying>
+@interface YYClient : NSObject
 
 @property (nonatomic, readonly, class) YYClient *sharedClient;
 
@@ -31,8 +31,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) YYUser *currentUser;
 @property (nonatomic, nullable) CLLocation       *location;
 @property (nonatomic, nullable) NSString         *userIdentifier;
-@property (nonatomic, readonly) NSString         *baseURLForRegion;
-@property (nonatomic          ) NSString         *region;
 
 #pragma mark General
 - (void)startSignInWithPhone:(NSString *)phoneNumber verify:(YYStringBlock)verificationCallback;

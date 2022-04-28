@@ -74,30 +74,6 @@ NSString * YYUniqueIdentifier() {
     return sharedClient;
 }
 
-- (id)init {
-    self = [super init];
-    if (self) {
-        self.region = @"us-central-api";
-    }
-    
-    return self;
-}
-
-- (id)copyWithZone:(NSZone *)zone {
-    YYClient *new      = [YYClient new];
-    new.currentUser    = self.currentUser;
-    new.location       = self.location;
-    new.userIdentifier = self.userIdentifier;
-    new.region         = self.region;
-    return new;
-}
-
-- (void)setRegion:(NSString *)region {
-    NSParameterAssert(region);
-    _region = region;
-    _baseURLForRegion = [NSString stringWithFormat:@"https://%@.yikyakapi.net", region];
-}
-
 - (void)setCurrentUser:(YYUser *)currentUser {
     _currentUser = currentUser;
 }
