@@ -6,7 +6,7 @@
 //
 //
 
-#import <Mantle/Mantle.h>
+#import <Mantle.h>
 
 
 NS_ASSUME_NONNULL_BEGIN

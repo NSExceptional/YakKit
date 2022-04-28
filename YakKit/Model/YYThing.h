@@ -6,7 +6,7 @@
 //
 //
 
-#import <Mantle/Mantle.h>
+#import <Mantle.h>
 
 
 #define MTLStringToNumberJSONTransformer(property) + (NSValueTransformer *) property##JSONTransformer { \

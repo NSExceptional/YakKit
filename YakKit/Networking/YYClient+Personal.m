@@ -9,7 +9,7 @@
 #import "YYClient+Personal.h"
 #import "YYNotification.h"
 #import "YYYak.h"
-#import "NSArray+Networking.h"
+@import TBURLRequestOptions;
 
 
 @implementation YYClient (Personal)

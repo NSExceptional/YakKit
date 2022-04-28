@@ -7,7 +7,7 @@
 //
 
 #import "YYClient+Misc.h"
-#import <Firebase/Firebase.h>
+#import <Firebase.h>
 
 @implementation YYClient (Misc)
 

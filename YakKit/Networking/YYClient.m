@@ -10,10 +10,9 @@
 #import "YYThing.h"
 #import "YYUser.h"
 #import "YYConfiguration.h"
-#import "NSString+Networking.h"
-#import "NSDictionary+Networking.h"
 #import <SystemConfiguration/SCNetworkReachability.h>
-#import <Firebase/Firebase.h>
+#import <Firebase.h>
+@import TBURLRequestOptions;
 
 #define Host(string) [string matchGroupAtIndex:1 forRegex:kHostRegexPattern]
 // Relies on the fact that kHostRegexPattern does not end in a '/'

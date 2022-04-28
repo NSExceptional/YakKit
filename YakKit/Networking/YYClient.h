@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "YakKit-Constants.h"
-#import <TBURLRequestOptions/TBURLRequestBuilder.h>
+@import TBURLRequestOptions;
 
 @import CoreLocation;
 @class YYConfiguration, YYUser, YYPeekLocation;

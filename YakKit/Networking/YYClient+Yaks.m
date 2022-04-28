@@ -11,7 +11,7 @@
 #import "YYComment.h"
 #import "YYPeekLocation.h"
 #import "YYNotification.h"
-#import "NSDictionary+Networking.h"
+@import TBURLRequestOptions;
 
 
 @implementation YYClient (Yaks)
@@ -20,7 +20,7 @@
 
 - (void)getLocalYaks:(YYArrayBlock)completion {
     [self get:^(TBURLRequestBuilder *make) {
-        make.baseURL(kBaseFeedURL).endpoint(kepGetYaksAndLocations);
+//        make.baseURL(kBaseFeedURL).endpoint(kepGetYaksAndLocations);
         make.queries([self generalQuery:@{@"loc": @"false"}]);
     } callback:^(TBResponseParser *parser) {
         [self completeWithClass:[YYYak class] jsonArray:parser.JSON[@"messages"] error:parser.error completion:completion];
