@@ -14,7 +14,6 @@
 		C357BAF8281A6D4C00FFFC96 /* YYPeekLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAD4281A6D4C00FFFC96 /* YYPeekLocation.m */; };
 		C357BAF9281A6D4C00FFFC96 /* YYVotable.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAD7281A6D4C00FFFC96 /* YYVotable.m */; };
 		C357BAFA281A6D4C00FFFC96 /* YYNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BADB281A6D4C00FFFC96 /* YYNotification.m */; };
-		C357BAFB281A6D4C00FFFC96 /* YYConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAE0281A6D4C00FFFC96 /* YYConfiguration.m */; };
 		C357BAFC281A6D4C00FFFC96 /* YYThing.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAE1281A6D4C00FFFC96 /* YYThing.m */; };
 		C357BAFD281A6D4C00FFFC96 /* YYPersona.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAE2281A6D4C00FFFC96 /* YYPersona.m */; };
 		C357BAFE281A6D4C00FFFC96 /* YYYak.m in Sources */ = {isa = PBXBuildFile; fileRef = C357BAE4281A6D4C00FFFC96 /* YYYak.m */; };
@@ -57,13 +56,11 @@
 		C357BAD7281A6D4C00FFFC96 /* YYVotable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYVotable.m; sourceTree = "<group>"; };
 		C357BAD8281A6D4C00FFFC96 /* YYPersona.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYPersona.h; sourceTree = "<group>"; };
 		C357BAD9281A6D4C00FFFC96 /* YYThing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYThing.h; sourceTree = "<group>"; };
-		C357BADA281A6D4C00FFFC96 /* YYConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYConfiguration.h; sourceTree = "<group>"; };
 		C357BADB281A6D4C00FFFC96 /* YYNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYNotification.m; sourceTree = "<group>"; };
 		C357BADC281A6D4C00FFFC96 /* YYThreatCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYThreatCheck.h; sourceTree = "<group>"; };
 		C357BADD281A6D4C00FFFC96 /* YYUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYUser.h; sourceTree = "<group>"; };
 		C357BADE281A6D4C00FFFC96 /* YYPeekLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYPeekLocation.h; sourceTree = "<group>"; };
 		C357BADF281A6D4C00FFFC96 /* YYNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYNotification.h; sourceTree = "<group>"; };
-		C357BAE0281A6D4C00FFFC96 /* YYConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYConfiguration.m; sourceTree = "<group>"; };
 		C357BAE1281A6D4C00FFFC96 /* YYThing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYThing.m; sourceTree = "<group>"; };
 		C357BAE2281A6D4C00FFFC96 /* YYPersona.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYPersona.m; sourceTree = "<group>"; };
 		C357BAE3281A6D4C00FFFC96 /* YYVotable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYVotable.h; sourceTree = "<group>"; };
@@ -133,8 +130,6 @@
 			children = (
 				C357BAD5281A6D4C00FFFC96 /* YYComment.h */,
 				C357BAE5281A6D4C00FFFC96 /* YYComment.m */,
-				C357BADA281A6D4C00FFFC96 /* YYConfiguration.h */,
-				C357BAE0281A6D4C00FFFC96 /* YYConfiguration.m */,
 				C357BADF281A6D4C00FFFC96 /* YYNotification.h */,
 				C357BADB281A6D4C00FFFC96 /* YYNotification.m */,
 				C357BADE281A6D4C00FFFC96 /* YYPeekLocation.h */,
@@ -252,7 +247,6 @@
 				C357BAF5281A6D4C00FFFC96 /* YakKit-Constants.m in Sources */,
 				C357BB02281A6D4C00FFFC96 /* YYClient+Registration.m in Sources */,
 				C357BAF8281A6D4C00FFFC96 /* YYPeekLocation.m in Sources */,
-				C357BAFB281A6D4C00FFFC96 /* YYConfiguration.m in Sources */,
 				C357BAFA281A6D4C00FFFC96 /* YYNotification.m in Sources */,
 				C357BAFE281A6D4C00FFFC96 /* YYYak.m in Sources */,
 				C357BAFD281A6D4C00FFFC96 /* YYPersona.m in Sources */,

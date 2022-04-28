@@ -9,7 +9,6 @@
 #import "YYClient.h"
 #import "YYThing.h"
 #import "YYUser.h"
-#import "YYConfiguration.h"
 #import <SystemConfiguration/SCNetworkReachability.h>
 #import <Firebase.h>
 @import TBURLRequestOptions;
@@ -101,10 +100,6 @@ NSString * YYUniqueIdentifier() {
 
 - (void)setCurrentUser:(YYUser *)currentUser {
     _currentUser = currentUser;
-}
-
-- (void)setConfiguration:(YYConfiguration *)configuration {
-    _configuration = configuration;
 }
 
 #pragma mark General

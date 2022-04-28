@@ -11,7 +11,7 @@
 @import TBURLRequestOptions;
 
 @import CoreLocation;
-@class YYConfiguration, YYUser, YYPeekLocation;
+@class YYUser, YYPeekLocation;
 @class YYYak, YYComment, YYNotification, YYVotable;
 @class FIRUser;
 
@@ -27,8 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly, class) YYClient *sharedClient;
 
-/// KVO compliant.
-@property (nonatomic, readonly, nullable) YYConfiguration *configuration;
 /// KVO compliant.
 @property (nonatomic, readonly, nullable) YYUser *currentUser;
 @property (nonatomic, nullable) CLLocation       *location;
