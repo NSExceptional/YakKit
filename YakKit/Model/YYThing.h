@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (id)initWithDictionary:(NSDictionary *)json;
 
++ (instancetype)fromJSON:(NSDictionary *)json;
 + (NSArray *)arrayOfModelsFromJSONArray:(NSArray *)json;
 
 + (NSValueTransformer *)yy_stringToNumberTransformer;

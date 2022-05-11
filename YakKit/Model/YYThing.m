@@ -26,8 +26,9 @@
 }
 
 - (BOOL)isEqual:(id)object {
-    if ([object class] == [self class])
+    if ([object class] == [self class]) {
         return [self isEqualToThing:object];
+    }
     
     return [super isEqual:object];
 }
@@ -40,12 +41,17 @@
     return self.identifier.hash;
 }
 
++ (instancetype)fromJSON:(NSDictionary *)json {
+    return [[self alloc] initWithDictionary:json];
+}
+
 + (NSArray *)arrayOfModelsFromJSONArray:(NSArray *)json {
     NSParameterAssert(json);
     
     NSMutableArray *things = [NSMutableArray array];
-    for (NSDictionary *obj in json)
-        [things addObject:[[[self class] alloc] initWithDictionary:obj]];
+    for (NSDictionary *obj in json) {
+        [things addObject:[self fromJSON:obj]];
+    }
     
     return things.copy;
 }
