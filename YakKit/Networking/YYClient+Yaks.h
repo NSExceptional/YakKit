@@ -17,11 +17,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)getLocalYaks:(YYArrayBlock)completion;
 - (void)getLocalHotYaks:(YYArrayBlock)completion;
 - (void)getLocalTopYaks:(YYArrayBlock)completion;
-- (void)getYaksInPeek:(YYPeekLocation *)location hot:(BOOL)hot completion:(YYArrayBlock)completion;
+
+- (void)getFeed:(NSString *)type order:(NSString *)order
+          limit:(NSInteger)limit after:(nullable NSString *)lastYak
+       callback:(YYArrayBlock)completion;
 
 #pragma mark Getting info about a yak
 - (void)getYak:(YYNotification *)notification completion:(YYResponseBlock)completion;
-- (void)getCommentsForYak:(YYYak *)yak completion:(YYArrayBlock)completion;
 
 @end
 
