@@ -7,8 +7,10 @@
 //
 
 #import "YYClient+Personal.h"
+#import "YYClient+Yaks.h"
 #import "YYNotification.h"
 #import "YYYak.h"
+#import "YYComment.h"
 @import TBURLRequestOptions;
 
 
@@ -16,42 +18,105 @@
 
 #pragma mark Helper methods
 
-- (void)getUserData:(NSString *)endpoint callback:(YYArrayBlock)completion {
-    [self get:^(TBURLRequestBuilder *make) { make.endpoint(endpoint); }
-     callback:^(TBResponseParser *parser) {
-         [self completeWithClass:[YYYak class] jsonArray:parser.JSON[@"messages"] error:parser.error completion:completion];
-     }];
+- (void)getSelfYaks:(NSString *)sort callback:(YYArrayBlock)completion {
+    [self getFeed:@"SELF" order:sort limit:0 after:nil callback:completion];
 }
 
 #pragma mark User data
 
 - (void)getMyRecentYaks:(YYArrayBlock)completion {
-    [self getUserData:kepGetMyRecentYaks callback:completion];
+    [self getSelfYaks:@"NEW" callback:completion];
 }
 
 - (void)getMyTopYaks:(YYArrayBlock)completion {
-    [self getUserData:kepGetMyTopYaks callback:completion];
+    [self getSelfYaks:@"TOP" callback:completion];
 }
 
 - (void)getMyRecentReplies:(YYArrayBlock)completion {
-    [self getUserData:kepGetMyRecentReplies callback:completion];
+    NSString *query = ({ @" \
+        query MyComments($pageLimit: Int, $cursor: String) { \
+            me { \
+                __typename \
+                comments(first: $pageLimit, after: $cursor) { \
+                    __typename \
+                    edges { \
+                        __typename \
+                        node { \
+                            __typename \
+                            id \
+                            text \
+                            userId \
+                            userEmoji \
+                            userColor \
+                            secondaryUserColor \
+                            yak { \
+                                __typename \
+                                id \
+                                text \
+                                userId \
+                            } \
+                            point \
+                            geohash \
+                            interestAreas \
+                            createdAt \
+                            voteCount \
+                            isOp \
+                        } \
+                    } \
+                    pageInfo { \
+                        __typename \
+                        endCursor \
+                        hasNextPage \
+                    } \
+                } \
+            } \
+        } \
+    "; });
+    
+    [self graphQL:query variables:@{ @"cursor": NSNull.null, @"pageLimit": @50 } callback:^(TBResponseParser *parser) {
+        NSString *path = @"data.me.comments.edges";
+        [self completeWithClass:[YYComment class] array:path response:parser completion:completion];
+    }];
 }
 
 #pragma mark Notifications
 
+// TODO: Support pagination
 - (void)getNotifications:(YYArrayBlock)completion {
     // For posting the notification
     YYVoidBlock callback = completion;
     completion = ^(NSArray *collection, NSError *error) {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kYYDidLoadNotificationsNotification object:self];
+        [NSNotificationCenter.defaultCenter postNotificationName:kYYDidLoadNotificationsNotification object:self];
         callback(collection, error);
     };
     
-//    NSString *endpoint = [NSString stringWithFormat:kepGetNotifications_user, self.userIdentifier];
-    [self get:^(TBURLRequestBuilder *make) {
-//        make.baseURL(kBaseNotifyURL).endpoint(endpoint);
-    } callback:^(TBResponseParser *parser) {
-        [self completeWithClass:[YYNotification class] jsonArray:parser.JSON[@"data"] error:parser.error completion:completion];
+    NSString *query = ({ @" \
+        query AllNotifications($pageLimit: Int, $cursor: String) { \
+            notifications(first: $pageLimit, after: $cursor) { \
+                edges { \
+                    node { \
+                        id \
+                        isRead \
+                        message \
+                        url \
+                        objectType \
+                        createdAt \
+                        objectId \
+                        attributes \
+                        notificationType \
+                    } \
+                } \
+                pageInfo { \
+                    __typename \
+                    endCursor \
+                    hasNextPage \
+                } \
+            } \
+        } \
+    "; });
+    
+    [self graphQL:query variables:@{ @"cursor": NSNull.null, @"pageLimit": @30 } callback:^(TBResponseParser *parser) {
+        [self completeWithClass:[YYNotification class] array:@"data" response:parser completion:completion];
     }];
 }
 

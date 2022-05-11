@@ -34,9 +34,6 @@ NSString * const kepGetNotifications_user   = @"/api/getAllForUser/%@";
 NSString * const kepGetUserData_user        = @"/v1/user/%@";
 NSString * const kepGetNicknamePolicy_user  = @"/v1/user/%@/nicknamepolicy";
 NSString * const kepHandle_user_handle      = @"/v1/user/%@/nickname/%@";
-NSString * const kepGetMyRecentYaks         = @"/api/getMyRecentYaks";
-NSString * const kepGetMyRecentReplies      = @"/api/getMyRecentReplies";
-NSString * const kepGetMyTopYaks            = @"/api/getMyTops";
 
 #pragma mark Modifying yaks and comments
 NSString * const kepPostYak                 = @"/api/sendMessage";
