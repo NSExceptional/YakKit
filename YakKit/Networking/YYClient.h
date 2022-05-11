@@ -54,7 +54,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)graphQL:(NSString *)query variables:(NSDictionary<NSString *, id> *)variables callback:(TBResponseBlock)callback;
 
 #pragma mark Internal
-- (void)completeWithClass:(Class)cls jsonArray:(NSArray *)objects error:(NSError *)error completion:(YYArrayBlock)completion;
+- (void)completeWithClass:(Class)cls object:(NSString *)keyPath response:(TBResponseParser *)parser completion:(YYArrayBlock)completion;
+- (void)completeWithClass:(Class)cls array:(NSString *)keyPath response:(TBResponseParser *)parser completion:(YYArrayBlock)completion;
 + (NSError *)errorWithMessage:(NSString *)message code:(NSInteger)code;
 - (void)handleStatus:(NSDictionary *)json callback:(nullable YYErrorBlock)completion;
 

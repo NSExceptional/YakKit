@@ -122,9 +122,14 @@ NSString * YYUniqueIdentifier() {
 }
 
 #pragma mark Helper methods
+- (void)completeWithClass:(Class)cls object:(NSString *)keyPath response:(TBResponseParser *)parser completion:(YYArrayBlock)completion {
+    NSDictionary *object = [parser.JSON valueForKeyPath:keyPath];
+    completion(parser.error ? nil : [cls fromJSON:object], parser.error);
+}
 
-- (void)completeWithClass:(Class)cls jsonArray:(NSArray *)objects error:(NSError *)error completion:(YYArrayBlock)completion {
-    completion(error ? nil : [[cls class] arrayOfModelsFromJSONArray:objects], error);
+- (void)completeWithClass:(Class)cls array:(NSString *)keyPath response:(TBResponseParser *)parser completion:(YYArrayBlock)completion {
+    NSArray *objects = [parser.JSON valueForKeyPath:keyPath];
+    completion(parser.error ? nil : [cls arrayOfModelsFromJSONArray:objects], parser.error);
 }
 
 - (NSDictionary *)generalQuery:(NSDictionary *)additional {
