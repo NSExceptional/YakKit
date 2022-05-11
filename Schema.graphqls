@@ -1,0 +1,639 @@
+type Query {
+  # Get yak by ID.
+  yak(
+    # The ID of the object
+    id: ID!
+  ): Yak
+
+  # Get filterable list of yaks.
+  allYaks(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    isClaimed: Boolean
+  ): YakConnection
+  feed(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    name: FeedNames
+    feedType: FeedType
+    feedOrder: FeedOrder
+    point: FixedPointScalar
+  ): YakConnection
+  me: Me
+  user(
+    # The ID of the object
+    id: ID!
+  ): User
+  notifications(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): NotificationConnection
+  node(
+    # The ID of the object
+    id: ID!
+  ): Node
+}
+
+type Yak implements Node & UserInterface & DistanceInterface {
+  #
+  createdAt: DateTime!
+
+  #
+  geohash: String!
+
+  # Available when claimed.
+  user: User
+
+  # When `true`, user information is available.
+  isClaimed: Boolean!
+
+  #
+  interestAreas: [String!]
+  point: FixedPointScalar!
+
+  #
+  userEmoji: String
+
+  #
+  userColor: String
+
+  #
+  secondaryUserColor: String
+
+  #
+  text: String!
+
+  # When creating a Yak in incognito mode, `user_color`, `secondary_user_color` and `user_emoji` will be ignored.
+  isIncognito: Boolean!
+  comments(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    isClaimed: Boolean
+  ): CommentConnection
+
+  # The ID of the object.
+  id: ID!
+
+  # When `true`, the yak belongs to the authenticated user.
+  isMine: Boolean!
+  userId: String! @deprecated(reason: "Field no longer used.")
+  distance: Int
+
+  # When `true`, the content was reported by the authenticated user.
+  isReported: Boolean!
+  myVote: VoteChoice!
+  voteCount: Int!
+  commentCount: Int!
+}
+
+# An object with an ID
+interface Node {
+  # The ID of the object.
+  id: ID!
+}
+
+# Interface providing user ownership of an object.
+#
+# This class is intended for use with `Yak` and `Comment`
+# models.
+interface UserInterface {
+  # When `true`, the yak belongs to the authenticated user.
+  isMine: Boolean!
+
+  # Available when claimed.
+  user: User
+
+  # When `true`, user information is available.
+  isClaimed: Boolean!
+  userId: String! @deprecated(reason: "Field no longer used.")
+}
+
+type User implements Node {
+  #
+  dateJoined: DateTime!
+
+  # The ID of the object.
+  id: ID!
+
+  #
+  username: String!
+
+  #
+  yakarmaScore: Int!
+}
+
+# The `DateTime` scalar type represents a DateTime
+# value as specified by
+# [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+scalar DateTime
+
+# Interface providing distance calculation for content types such as Yak or Comment.
+interface DistanceInterface {
+  distance: Int
+}
+
+# This field was originally defined in `graphene-gis` but had several
+# bugs, like:
+#
+#     https://github.com/EverWinter23/graphene-gis/issues/9#issuecomment-1035237739
+#
+# Validation & de-serialization is performed by serializer and form
+# fields.
+scalar FixedPointScalar
+
+type CommentConnection {
+  # Pagination data for this connection.
+  pageInfo: PageInfo!
+
+  # Contains the nodes in this connection.
+  edges: [CommentEdge]!
+}
+
+# The Relay compliant `PageInfo` type, containing data necessary to paginate this connection.
+type PageInfo {
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+}
+
+# A Relay edge containing a `Comment` and its cursor.
+type CommentEdge {
+  # The item at the end of the edge
+  node: Comment
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+type Comment implements Node & UserInterface & DistanceInterface {
+  #
+  createdAt: DateTime!
+  point: FixedPointScalar!
+
+  #
+  geohash: String!
+
+  #
+  yak: Yak
+
+  # When `true`, user information is available.
+  isClaimed: Boolean!
+
+  #
+  interestAreas: [String!]
+
+  #
+  userEmoji: String
+
+  #
+  userColor: String
+
+  #
+  secondaryUserColor: String
+
+  #
+  text: String!
+
+  # The ID of the object.
+  id: ID!
+
+  # When `true`, the comment belongs to the authenticated user.
+  isMine: Boolean!
+
+  # Available when claimed.
+  user: User
+  userId: String! @deprecated(reason: "Field no longer used.")
+  distance: Int
+
+  # When `true`, the content was reported by the authenticated user.
+  isReported: Boolean!
+  myVote: VoteChoice!
+  voteCount: Int!
+
+  # Set to `true` if the comment is performed by the original poster
+  isOp: Boolean!
+}
+
+#
+#     Vote choices exposed through the GraphQL API.
+#
+enum VoteChoice {
+  UP
+  NONE
+  DOWN
+}
+
+type YakConnection {
+  # Pagination data for this connection.
+  pageInfo: PageInfo!
+
+  # Contains the nodes in this connection.
+  edges: [YakEdge]!
+}
+
+# A Relay edge containing a `Yak` and its cursor.
+type YakEdge {
+  # The item at the end of the edge
+  node: Yak
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+# An enumeration.
+enum FeedNames {
+  SPRING_BREAK
+}
+
+# An enumeration.
+enum FeedType {
+  LOCAL
+  NATIONWIDE
+  NAMED
+  SELF
+}
+
+# An enumeration.
+enum FeedOrder {
+  HOT
+  NEW
+  TOP
+}
+
+type Me {
+  #
+  dateJoined: DateTime!
+  id: ID
+
+  #
+  username: String!
+
+  #
+  yakarmaScore: Int!
+  comments(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    isClaimed: Boolean
+  ): CommentConnection
+
+  # The total count of users I have blocked
+  usersBlockedCount: Int!
+  yaks(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    isClaimed: Boolean
+  ): YakConnection
+}
+
+type NotificationConnection {
+  # Pagination data for this connection.
+  pageInfo: PageInfo!
+
+  # Contains the nodes in this connection.
+  edges: [NotificationEdge]!
+}
+
+# A Relay edge containing a `Notification` and its cursor.
+type NotificationEdge {
+  # The item at the end of the edge
+  node: Notification
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+type Notification implements Node {
+  #
+  createdAt: DateTime!
+
+  #
+  modifiedAt: DateTime!
+
+  # The ID of the object.
+  id: ID!
+
+  # The type of object related to this notification.
+  objectType: ObjectTypeChoices
+
+  #
+  objectId: UUID
+
+  #
+  url: String
+
+  #
+  message: String!
+
+  #
+  isRead: Boolean!
+
+  # The type of notification.
+  notificationType: NotificationTypeChoices!
+
+  #
+  abbreviatedMessage: String!
+
+  #
+  yakarmaValue: Int!
+
+  #
+  attributes: JSONString
+}
+
+# An enumeration.
+enum ObjectTypeChoices {
+  # Yak
+  YAK
+
+  # Comment
+  COMMENT
+}
+
+# Leverages the internal Python implmeentation of UUID (uuid.UUID) to provide native UUID objects
+# in fields, resolvers and input.
+scalar UUID
+
+# An enumeration.
+enum NotificationTypeChoices {
+  # Informational
+  INFORMATIONAL
+
+  # Removal
+  REMOVAL
+
+  # Also Interacted
+  ALSO_INTERACTED
+
+  # Your Yak
+  YOUR_YAK
+}
+
+# Allows use of a JSON String for input / output from the GraphQL schema.
+#
+# Use of this type is *not recommended* as you lose the benefits of having a defined, static
+# schema (one of the key benefits of GraphQL).
+scalar JSONString
+
+type Mutation {
+  createYak(input: CreateYakInput!): CreateYakPayload
+  updateYak(input: UpdateYakInput!): UpdateYakPayload
+  removeYak(input: RemoveYakInput!): RemoveYakPayload
+  vote(input: VoteInput!): VotePayload
+
+  # Blocks the author of instance.
+  block(input: BlockInput!): BlockPayload
+
+  # Clears all blocks made by user.
+  unblockAll(input: UnblockAllInput): UnblockAll
+  updateMe(input: UpdateMeInput!): UpdateMePayload
+  report(input: ReportInput!): ReportPayload
+  markAllNotificationsAsRead: MarkAllNotificationsAsRead
+  createComment(input: CreateCommentInput!): CreateCommentPayload
+  removeComment(input: RemoveCommentInput!): RemoveCommentPayload
+  updateComment(input: UpdateCommentInput!): UpdateCommentPayload
+}
+
+type CreateYakPayload {
+  id: ID
+  errors: [ValidationErrorType!]
+  yak: Yak
+  interestAreas: [String] @deprecated(reason: "Replaced by yak object.")
+  text: String @deprecated(reason: "Replaced by yak object.")
+  userColor: String @deprecated(reason: "Replaced by yak object.")
+  secondaryUserColor: String @deprecated(reason: "Replaced by yak object.")
+  userEmoji: String @deprecated(reason: "Replaced by yak object.")
+  point: String @deprecated(reason: "Replaced by yak object.")
+  isIncognito: Boolean @deprecated(reason: "Replaced by yak object.")
+  clientMutationId: String
+}
+
+# `ValidationErrorType` is a GraphQL object meant to represent
+# user-facing errors, specifically related to data validation. In
+# most cases, these should be avoided through client-side validation.
+#
+# Unlike syntax errors and top-level GraphQL errors, these errors are
+# returned in the payload and must be requested by the client.
+#
+# When `errors` is `None` in a response, it means the request was successful.
+#
+# These errors are based on DRF ValidationErrors.
+type ValidationErrorType {
+  # The field which emitted the error
+  field: String
+
+  # User-facing error message
+  message: String!
+
+  # An internal error code (e.g. `max_length`). The error codes are defined by DRF serializers, but can be extended to include custom codes.
+  code: String
+}
+
+input CreateYakInput {
+  isClaimed: Boolean
+  interestAreas: [String]
+
+  # When creating a Yak in incognito mode, `user_color`, `secondary_user_color` and `user_emoji` will be ignored.
+  isIncognito: Boolean
+  secondaryUserColor: String
+  text: String!
+
+  # String representing a Point geometry in either WKT/EWKT or HEX/HEXEWBKB formats. E.g. `POINT(39 -42)` or `0101000000000000000080434000000000000045C0`
+  point: String!
+  userColor: String
+  userEmoji: String
+  clientMutationId: String
+}
+
+type UpdateYakPayload {
+  errors: [ValidationErrorType!]
+  yak: Yak
+  clientMutationId: String
+}
+
+input UpdateYakInput {
+  id: ID!
+  isClaimed: Boolean
+  clientMutationId: String
+}
+
+type RemoveYakPayload {
+  # The firestore `RemoveRequests` document ID
+  remoteRequestId: String
+  errors: [ValidationErrorType!]
+  clientMutationId: String
+}
+
+input RemoveYakInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type VotePayload {
+  instance: ID
+  vote: VoteChoice
+  voteCount: Int
+  errors: [ValidationErrorType!]
+  clientMutationId: String
+}
+
+input VoteInput {
+  instance: ID!
+  vote: VoteChoice!
+  clientMutationId: String
+}
+
+type BlockPayload {
+  id: ID
+  errors: [ValidationErrorType!]
+  count: Int!
+  clientMutationId: String
+}
+
+input BlockInput {
+  instance: ID!
+  clientMutationId: String
+}
+
+type UnblockAll {
+  # Number of users that were successfully unblocked.
+  count: Int!
+  errors: [ValidationErrorType!]
+}
+
+input UnblockAllInput {
+  clientMutationId: String
+}
+
+type UpdateMePayload {
+  username: String
+  errors: [ValidationErrorType!]
+  me: Me!
+  clientMutationId: String
+}
+
+input UpdateMeInput {
+  username: String
+  clientMutationId: String
+}
+
+type ReportPayload {
+  instance: ID
+  reason: ReasonChoice
+  errors: [ValidationErrorType!]
+  clientMutationId: String
+}
+
+# An enumeration.
+enum ReasonChoice {
+  # Bullying
+  BULLYING
+
+  # Threatening
+  THREATENING
+
+  # Explicit Sexual Content
+  EXPLICIT_SEXUAL_CONTENT
+
+  # Hate Speech
+  HATE_SPEECH
+
+  # Real Names
+  REAL_NAMES
+
+  # Other
+  OTHER
+}
+
+input ReportInput {
+  instance: ID!
+  reason: ReasonChoice!
+  clientMutationId: String
+}
+
+type MarkAllNotificationsAsRead {
+  notifications(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): NotificationConnection
+}
+
+type CreateCommentPayload {
+  id: ID
+  yakId: ID
+  interestAreas: [String]
+
+  # String representing a Point geometry in either WKT/EWKT or HEX/HEXEWBKB formats. E.g. `POINT(39 -42)` or `0101000000000000000080434000000000000045C0`
+  point: String
+  secondaryUserColor: String
+  text: String
+  userColor: String
+  userEmoji: String
+  errors: [ValidationErrorType!]
+  clientMutationId: String
+}
+
+input CreateCommentInput {
+  yakId: ID!
+  interestAreas: [String]
+
+  # String representing a Point geometry in either WKT/EWKT or HEX/HEXEWBKB formats. E.g. `POINT(39 -42)` or `0101000000000000000080434000000000000045C0`
+  point: String!
+  secondaryUserColor: String
+  text: String!
+  userColor: String
+  userEmoji: String
+  clientMutationId: String
+}
+
+type RemoveCommentPayload {
+  remoteRequestId: String
+  errors: [ValidationErrorType!]
+  clientMutationId: String
+}
+
+input RemoveCommentInput {
+  id: ID!
+  yakId: ID!
+  clientMutationId: String
+}
+
+type UpdateCommentPayload {
+  errors: [ValidationErrorType!]
+  comment: Comment
+  clientMutationId: String
+}
+
+input UpdateCommentInput {
+  id: ID!
+  isClaimed: Boolean
+  clientMutationId: String
+}
