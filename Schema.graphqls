@@ -44,36 +44,28 @@ type Query {
 }
 
 type Yak implements Node & UserInterface & DistanceInterface {
-  #
+
+  id: ID! # The ID of the object.
+  userId: String! @deprecated(reason: "Field no longer used.")
   createdAt: DateTime!
-
-  #
-  geohash: String!
-
-  # Available when claimed.
-  user: User
-
-  # When `true`, user information is available.
-  isClaimed: Boolean!
-
-  #
-  interestAreas: [String!]
-  point: FixedPointScalar!
-
-  #
-  userEmoji: String
-
-  #
-  userColor: String
-
-  #
-  secondaryUserColor: String
-
-  #
   text: String!
-
-  # When creating a Yak in incognito mode, `user_color`, `secondary_user_color` and `user_emoji` will be ignored.
-  isIncognito: Boolean!
+  
+  distance: Int
+  geohash: String!
+  interestAreas: [String!]
+  isClaimed: Boolean! # When `true`, user information is available.
+  isIncognito: Boolean! # When creating a Yak in incognito mode, `user_color`, `secondary_user_color` and `user_emoji` will be ignored.
+  isMine: Boolean! # When `true`, the yak belongs to the authenticated user.
+  isReported: Boolean! # When `true`, the content was reported by the authenticated user.
+  myVote: VoteChoice!
+  point: FixedPointScalar!
+  user: User # Available when claimed.
+  userEmoji: String
+  userColor: String
+  secondaryUserColor: String
+  voteCount: Int!
+  
+  commentCount: Int!
   comments(
     offset: Int
     before: String
@@ -82,20 +74,6 @@ type Yak implements Node & UserInterface & DistanceInterface {
     last: Int
     isClaimed: Boolean
   ): CommentConnection
-
-  # The ID of the object.
-  id: ID!
-
-  # When `true`, the yak belongs to the authenticated user.
-  isMine: Boolean!
-  userId: String! @deprecated(reason: "Field no longer used.")
-  distance: Int
-
-  # When `true`, the content was reported by the authenticated user.
-  isReported: Boolean!
-  myVote: VoteChoice!
-  voteCount: Int!
-  commentCount: Int!
 }
 
 # An object with an ID
@@ -186,52 +164,28 @@ type CommentEdge {
 }
 
 type Comment implements Node & UserInterface & DistanceInterface {
-  #
-  createdAt: DateTime!
-  point: FixedPointScalar!
-
-  #
-  geohash: String!
-
-  #
-  yak: Yak
-
-  # When `true`, user information is available.
-  isClaimed: Boolean!
-
-  #
-  interestAreas: [String!]
-
-  #
-  userEmoji: String
-
-  #
-  userColor: String
-
-  #
-  secondaryUserColor: String
-
-  #
-  text: String!
-
-  # The ID of the object.
-  id: ID!
-
-  # When `true`, the comment belongs to the authenticated user.
-  isMine: Boolean!
-
-  # Available when claimed.
-  user: User
+  
+  id: ID! # The ID of the object.
   userId: String! @deprecated(reason: "Field no longer used.")
+  createdAt: DateTime!
+  text: String!
+  
   distance: Int
-
-  # When `true`, the content was reported by the authenticated user.
-  isReported: Boolean!
+  geohash: String!
+  interestAreas: [String!]
+  isClaimed: Boolean! # When `true`, user information is available.
+  isMine: Boolean! # When `true`, the comment belongs to the authenticated user.
+  isOp: Boolean! # Set to `true` if the comment is performed by the original poster
+  isReported: Boolean! # When `true`, the content was reported by the authenticated user.
   myVote: VoteChoice!
+  point: FixedPointScalar!
+  user: User # Available when claimed.
+  userEmoji: String
+  userColor: String
+  secondaryUserColor: String
   voteCount: Int!
-
-  # Set to `true` if the comment is performed by the original poster
-  isOp: Boolean!
+  
+  yak: Yak
 }
 
 #
@@ -329,40 +283,17 @@ type NotificationEdge {
 }
 
 type Notification implements Node {
-  #
   createdAt: DateTime!
-
-  #
   modifiedAt: DateTime!
-
-  # The ID of the object.
-  id: ID!
-
-  # The type of object related to this notification.
-  objectType: ObjectTypeChoices
-
-  #
+  id: ID! # The ID of the object.
+  objectType: ObjectTypeChoices # The type of object related to this notification.
   objectId: UUID
-
-  #
   url: String
-
-  #
   message: String!
-
-  #
   isRead: Boolean!
-
-  # The type of notification.
-  notificationType: NotificationTypeChoices!
-
-  #
+  notificationType: NotificationTypeChoices! # The type of notification.
   abbreviatedMessage: String!
-
-  #
   yakarmaValue: Int!
-
-  #
   attributes: JSONString
 }
 
