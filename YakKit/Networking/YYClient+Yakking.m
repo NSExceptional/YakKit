@@ -84,7 +84,6 @@
     [self get:^(TBURLRequestBuilder *make) {
         make.endpoint(endpoint).queries(query);
     } callback:^(TBResponseParser *parser) {
-        if (!parser.error) { [thing setValue:@(YYVoteStatusUpvoted) forKey:@"voteStatus"]; }
         YYRunBlockP(completion, parser.error);
     }];
 }
@@ -105,7 +104,6 @@
     [self get:^(TBURLRequestBuilder *make) {
         make.endpoint(endpoint).queries(query);
     } callback:^(TBResponseParser *parser) {
-        if (!parser.error) { [thing setValue:@(YYVoteStatusDownvoted) forKey:@"voteStatus"]; }
         YYRunBlockP(completion, parser.error);
     }];
 }
@@ -146,7 +144,6 @@
     [self get:^(TBURLRequestBuilder *make) {
         make.endpoint(endpoint).queries([self generalQuery:@{idName: thing.identifier}]);
     } callback:^(TBResponseParser *parser) {
-        if (!parser.error) { [thing setValue:@(YYVoteStatusDownvoted) forKey:@"voteStatus"]; }
         YYRunBlockP(completion, parser.error);
     }];
 }
