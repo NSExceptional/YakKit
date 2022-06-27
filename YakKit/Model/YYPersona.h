@@ -11,6 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// These were profiles on old YY
 @interface YYPersona : YYThing
 
 @property (nonatomic, readonly, nullable) NSString  *bio;
