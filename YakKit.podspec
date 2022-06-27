@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '7.0'
   s.osx.deployment_target = '10.8'
 
-  s.source_files = 'Pod/Classes/*', 'Pod/Classes/**/*'
+  s.source_files = 'YakKit/*', 'YakKit/**/*'
   s.dependency 'Mantle'
   s.dependency 'TBURLRequestOptions'
   s.dependency 'Firebase/Auth'
