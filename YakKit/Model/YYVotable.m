@@ -7,72 +7,72 @@
 //
 
 #import "YYVotable.h"
+#import "YYModel+Private.h"
+
+struct CLLocationCoordinate2D {
+    double latitude;
+    double longitude;
+};
+typedef struct CLLocationCoordinate2D CLLocationCoordinate2D;
+
+@interface CLLocation : NSObject <NSCopying, NSSecureCoding>
+- (instancetype)initWithLatitude:(double)latitude longitude:(double)longitude;
+@property(readonly, nonatomic) CLLocationCoordinate2D coordinate;
+@end
 
 @implementation YYVotable
 
-- (id)initWithDictionary:(NSDictionary *)json {
-    self = [super initWithDictionary:json];
-    if (self) {
-        if (self.created.timeIntervalSinceReferenceDate == 25261) {
-            _created = self.gmt;
-        }
++ (NSDictionary *)JSONKeyPathsByPropertyKey { SetCoder(YYVotable)
+    return [[super JSONKeyPathsByPropertyKey] mtl_dictionaryByAddingEntriesFromDictionary:@{
+        @codingKey(identifier): @"id",
+        @codingKey(authorIdentifier): @"userId",
+        @codingKey(created): @"createdAt",
         
-        if (!_username.length) {
-            _username = nil;
-        }
-        if (!_personaIdentifier.length) {
-            _personaIdentifier = nil;
-        }
-    }
-    
-    return self;
-}
-
-+ (NSDictionary *)JSONKeyPathsByPropertyKey {
-    return @{@"score": @"numberOfLikes",
-             @"voteStatus": @"liked",
-             @"created": @"gmt", // "time" is deprecated
-             @"gmt": @"gmt",
-             @"username": @"nickname",
-             @"deliveryIdentifier": @"deliveryID",
-             @"personaIdentifier": @"personaID"};
-}
-
-+ (NSDateFormatter *)dateFormatter {
-    static NSDateFormatter *sharedFormatter = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        sharedFormatter = [NSDateFormatter new];
-        sharedFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
-        sharedFormatter.timeZone = [NSTimeZone timeZoneWithAbbreviation:@"EST"];
-    });
-    
-    return sharedFormatter;
-}
-
-+ (NSValueTransformer *)yy_stringDateTransformer {
-    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *dateString, BOOL *success, NSError **error) {
-        return [[self dateFormatter] dateFromString:dateString];
-    } reverseBlock:^id(NSDate *date, BOOL *success, NSError **error) {
-        return [[self dateFormatter] stringFromDate:date];
+        @codingKey(location): @"point",
+        
+        @codingKey(score): @"voteCount",
+        @codingKey(voteStatus): @"myVote",
+        
+        @codingKey(emoji): @"userEmoji",
+        @codingKey(colorHex): @"userColor",
+        @codingKey(colorSecondaryHex): @"secondaryUserColor",
     }];
 }
 
-MTLStringToNumberJSONTransformer(voteStatus)
-+ (NSValueTransformer *)createdJSONTransformer { return [self gmtJSONTransformer]; }//yy_stringDateTransformer]; }
-+ (NSValueTransformer *)gmtJSONTransformer { return [self yy_UTCDateTransformer]; }
+- (NSString *)locationName {
+    return self.interestAreas.firstObject;
+}
 
-//+ (NSValueTransformer *)deliveryIdentifierJSONTransformer {
-//    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSNumber *value, BOOL *success, NSError *__autoreleasing *error) {
-//        if ([value isKindOfClass:[NSNumber class]]) {
-//            return value.stringValue;
-//        } else {
-//            return value;
-//        }
-//    } reverseBlock:^id(id value, BOOL *success, NSError *__autoreleasing *error) {
-//        return value;
-//    }];
-//}
++ (NSValueTransformer *)voteStatusJSONTransformer {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString *status, BOOL *success, NSError **error) {
+        return @{
+            @"DOWN": @(YYVoteStatusDownvoted),
+            @"NONE": @(YYVoteStatusNone),
+            @"UP":   @(YYVoteStatusUpvoted),
+        }[status];
+    } reverseBlock:^id(NSNumber *status, BOOL *success, NSError **error) {
+        return @{
+            @(YYVoteStatusDownvoted): @"DOWN",
+            @(YYVoteStatusNone):      @"NONE",
+            @(YYVoteStatusUpvoted):   @"UP",
+        }[status];
+    }];
+}
+
++ (NSValueTransformer *)locationJSONTransformer {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSDictionary *point, BOOL *success, NSError **error) {
+        NSArray<NSNumber *> *coordinates = point[@"coordinates"];
+        return [[NSClassFromString(@"CLLocation") alloc]
+            initWithLatitude:coordinates[1].doubleValue longitude:coordinates[0].doubleValue
+        ];
+    }
+    reverseBlock:^id(CLLocation *location, BOOL *success, NSError **error) {
+        // Longitude first, then latitude
+        return @{ @"coordinates": @[@(location.coordinate.latitude), @(location.coordinate.longitude)] };
+    }];
+}
+
++ (NSValueTransformer *)createdJSONTransformer { return [self yy_stringDateTransformer]; }
 
 - (NSComparisonResult)compareScore:(YYVotable *)votable {
     if (self.score < votable.score) {

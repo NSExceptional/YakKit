@@ -7,20 +7,24 @@
 //
 
 #import "YYUser.h"
-
+#import "YYModel+Private.h"
 
 @implementation YYUser
 
-+ (NSDictionary *)JSONKeyPathsByPropertyKey {
-    return @{@"karma": @"yakarma",
-             @"handle": @"nickname",
-             @"created": @"created",
-             @"isVerified": @"isVerified",
-             @"isSuspended": @"IsSuspended",
-             @"forceVerification": @"forceVerification",
-             @"basecamp": @"basecamp",
-             @"identifier": @"id",
-             @"personaIdentifier": @"personaID"};
++ (NSDictionary *)JSONKeyPathsByPropertyKey { SetCoder(YYUser)
+    return @{
+        @codingKey(identifier): @"id",
+        @codingKey(karma): @"yakarma",
+        @codingKey(created): @"created",
+        @codingKey(isVerified): @"isVerified",
+        @codingKey(isSuspended): @"IsSuspended",
+        @codingKey(forceVerification): @"forceVerification",
+        @codingKey(basecamp): @"basecamp",
+    };
+}
+
+- (NSString *)handle {
+    return self.identifier;
 }
 
 + (NSValueTransformer *)createdJSONTransformer { return [self yy_UTCDateTransformer]; }

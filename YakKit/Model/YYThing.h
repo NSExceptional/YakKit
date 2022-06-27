@@ -6,7 +6,7 @@
 //
 //
 
-#import <Mantle.h>
+@import Mantle;
 
 
 #define MTLStringToNumberJSONTransformer(property) + (NSValueTransformer *) property##JSONTransformer { \
@@ -21,8 +21,16 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)fromJSON:(NSDictionary *)json;
 + (NSArray *)arrayOfModelsFromJSONArray:(NSArray *)json;
 
+/// Subclasses may override. Nil by default.
+///
+/// A key path to use to initialize self from the given JSON. Useful if
+/// your array contains a single level abstraction before all the data, i.e.
+/// maybe you would want to skip 'node' here: { "node": { "id": 5, "foo": "bar" } }
+@property (nonatomic, readonly, nullable, class) NSString *selfJSONKeyPath;
+
 + (NSValueTransformer *)yy_stringToNumberTransformer;
 + (NSValueTransformer *)yy_UTCDateTransformer;
++ (NSValueTransformer *)yy_stringDateTransformer;
 
 @property (nonatomic, readonly) NSString *identifier;
 

@@ -21,10 +21,10 @@
           limit:(NSInteger)limit after:(NSString *)lastYak
        callback:(YYArrayBlock)completion {
     NSString *query = ({ @" \
-        query Feed($feedType: FeedType, $order: order, $pageLimit: Int, $cursor: String, $point: FixedPointScalar) { \
+        query Feed($feedType: FeedType, $order: FeedOrder, $pageLimit: Int, $cursor: String, $point: FixedPointScalar) { \
             feed( \
                 feedType: $feedType \
-                order: $order \
+                feedOrder: $order \
                 first: $pageLimit \
                 after: $cursor \
                 point: $point \
@@ -62,7 +62,7 @@
     if (!limit) limit = 50;
     
     CLLocationCoordinate2D location = self.location.coordinate;
-    NSString *point = [NSString stringWithFormat:@"POINT(%@, %@)", @(location.latitude), @(location.longitude)];
+    NSString *point = [NSString stringWithFormat:@"POINT(%@ %@)", @(location.longitude), @(location.latitude)];
     NSDictionary *variables = @{
         @"feedType": type,
         @"order": order,
@@ -72,7 +72,7 @@
     };
     
     return [self graphQL:query variables:variables callback:^(TBResponseParser *parser) {
-        [self completeWithClass:[YYYak class] array:@"messages.feed.edges" response:parser completion:completion];
+        [self completeWithClass:[YYYak class] array:@"data.feed.edges" response:parser completion:completion];
     }];
 }
 
@@ -142,6 +142,7 @@
                             createdAt \
                             voteCount \
                             isOp \
+                            yak { id } \
                         } \
                     } \
                     pageInfo { \

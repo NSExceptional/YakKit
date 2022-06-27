@@ -7,31 +7,45 @@
 //
 
 #import "YYComment.h"
-
+#import "YYModel+Private.h"
 
 @implementation YYComment
 
-- (id)initWithDictionary:(NSDictionary *)json {
-    self = [super initWithDictionary:json];
-    if (self) {
-        _isOP = [self.yakkerUID isEqualToString:self.relevantAuthorIdentifier];
-    }
-    
-    return self;
-}
+//- (id)initWithDictionary:(NSDictionary *)json {
+//    self = [super initWithDictionary:json];
+//    if (self) {
+//        _isOP = [self.authorIdentifier isEqualToString:self.yakkerIdentifier];
+//    }
+//    
+//    return self;
+//}
 
-+ (NSDictionary *)JSONKeyPathsByPropertyKey {
-    return [@{
-        @"body": @"text",
-        @"relevantAuthorIdentifier": @"commenterUID",
-        @"yakIdentifier": @"yakID",
-    } mtl_dictionaryByAddingEntriesFromDictionary:[super JSONKeyPathsByPropertyKey]];
-}
++ (NSString *)selfJSONKeyPath { return @"node"; };
 
-+ (NSValueTransformer *)isOPJSONTransformer {
-    return [MTLValueTransformer transformerUsingForwardBlock:^id(id value, BOOL *success, NSError **error) {
-        return @([value isEqualToString:@"OP"]);
++ (NSDictionary *)JSONKeyPathsByPropertyKey { SetCoder(YYComment)
+    return [[super JSONKeyPathsByPropertyKey] mtl_dictionaryByAddingEntriesFromDictionary:@{
+        @codingKey(body): @"text",
+        @codingKey(isOP): @"isOp",
+        @codingKey(yakIdentifier): @"yak.id",
     }];
+}
+
+//+ (NSValueTransformer *)isOPJSONTransformer {
+//    return [MTLValueTransformer transformerUsingForwardBlock:^id(id value, BOOL *success, NSError **error) {
+//        return @([value isEqualToString:@"OP"]);
+//    }];
+//}
+
+- (NSString *)commentID {
+    return self.identifier;
+}
+
+- (NSString *)relevantAuthorIdentifier {
+    return self.authorIdentifier;
+}
+
+- (NSString *)body {
+    return self.text;
 }
 
 @end

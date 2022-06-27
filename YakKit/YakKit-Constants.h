@@ -33,6 +33,7 @@ extern NSString * const kYYDidLoadNotificationsNotification;
 
 #pragma mark Base URLs
 extern NSString * const kBaseAPIURL;
+extern NSString * const kepGraphQL;
 extern NSString * const kHostRegexPattern;
 
 #pragma mark - Endpoints

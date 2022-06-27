@@ -10,7 +10,7 @@
 #import "YYThing.h"
 #import "YYUser.h"
 #import <SystemConfiguration/SCNetworkReachability.h>
-#import <Firebase.h>
+@import FirebaseAuth;
 @import TBURLRequestOptions;
 
 #define Host(string) [string matchGroupAtIndex:1 forRegex:kHostRegexPattern]
@@ -197,7 +197,7 @@ NSString * YYUniqueIdentifier() {
 }
 
 - (TBURLRequestProxy *)request:(void(^)(TBURLRequestBuilder *))configurationHandler sign:(BOOL)sign {
-    NSParameterAssert(self.userIdentifier);
+    NSParameterAssert(self.authToken);
     
     TBURLRequestProxy *proxy = [TBURLRequestBuilder make:^(TBURLRequestBuilder *make) {
         configurationHandler(make);
@@ -232,7 +232,7 @@ NSString * YYUniqueIdentifier() {
 
 - (void)graphQL:(NSString *)query variables:(NSDictionary<NSString *,id> *)variables callback:(TBResponseBlock)callback {
     [self unsignedPost:^(TBURLRequestBuilder * _Nonnull make) {
-        make.baseURL(kBaseAPIURL).headers(self.graphQLHeaders);
+        make.baseURL(kBaseAPIURL).endpoint(kepGraphQL).headers(self.graphQLHeaders);
         make.bodyJSON(@{ @"query": query, @"variables": variables });
     } callback:callback];
 }

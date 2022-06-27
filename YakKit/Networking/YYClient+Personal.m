@@ -116,7 +116,8 @@
     "; });
     
     [self graphQL:query variables:@{ @"cursor": NSNull.null, @"pageLimit": @30 } callback:^(TBResponseParser *parser) {
-        [self completeWithClass:[YYNotification class] array:@"data" response:parser completion:completion];
+        NSString *path = @"data.notifications.edges";
+        [self completeWithClass:[YYNotification class] array:path response:parser completion:completion];
     }];
 }
 
@@ -131,7 +132,7 @@
 
 - (void)markEach:(NSArray<YYNotification *> *)notifications read:(BOOL)read completion:(nullable YYErrorBlock)completion {
     notifications = [notifications filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(YYNotification *n, id bindings) {
-        return n.unread != read;
+        return n.read != read;
     }]];
     NSDictionary *body = @{@"notificationIDs[]": [[notifications valueForKeyPath:@"@unionOfObjects.identifier"] componentsJoinedByString:@","],
                            @"status": read ? @"read" : @"unread",

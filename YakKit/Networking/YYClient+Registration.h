@@ -7,7 +7,7 @@
 //
 
 #import "YYClient.h"
-#import <Mantle.h>
+@import Mantle;
 
 NS_ASSUME_NONNULL_BEGIN
 

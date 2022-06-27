@@ -7,47 +7,37 @@
 //
 
 #import "YYYak.h"
-
+#import "YYModel+Private.h"
 
 @implementation YYYak
 
-+ (NSDictionary *)JSONKeyPathsByPropertyKey {
-    return [@{@"title": @"message",
-              @"canUpvote": @"canUpvote",
-              @"canDownvote": @"canDownvote",
-              @"canReply": @"canReply",
-              @"replyCount": @"comments",
-              @"handle": @"handle",
-              @"hideLocationPin": @"hidePin",
-              @"mediaWidth": @"imageWidth",
-              @"mediaHeight": @"imageHeight",
-              @"latitude": @"latitude",
-              @"longitude": @"longitude",
-              @"location": @"location",
-              @"locationDisplayStyle": @"locationDisplayStyle",
-              @"locationName": @"locationName",
-              @"authorIdentifier": @"posterID",
-              @"isReadOnly": @"readOnly",
-              @"isReyaked": @"reyaked",
-              @"thumbnailURL": @"thumbnailUrl",
-              @"mediaURL": @"url",
-              @"type": @"type",
-              @"identifier": @"messageID"} mtl_dictionaryByAddingEntriesFromDictionary:[super JSONKeyPathsByPropertyKey]];
++ (NSString *)selfJSONKeyPath { return @"node"; };
+
++ (NSDictionary *)JSONKeyPathsByPropertyKey { SetCoder(YYYak)
+    return [[super JSONKeyPathsByPropertyKey] mtl_dictionaryByAddingEntriesFromDictionary:@{
+        @codingKey(replyCount): @"commentCount",
+        @codingKey(anonymous): @"isIncognito",
+    }];
 }
 
-MTLStringToNumberJSONTransformer(hideLocationPin)
-MTLStringToNumberJSONTransformer(type)
-MTLStringToNumberJSONTransformer(replyCount)
+//MTLStringToNumberJSONTransformer(hideLocationPin)
+//MTLStringToNumberJSONTransformer(type)
+//MTLStringToNumberJSONTransformer(replyCount)
 
-+ (NSValueTransformer *)thumbnailURLJSONTransformer { return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName]; }
-+ (NSValueTransformer *)mediaURLJSONTransformer { return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName]; }
-
-- (BOOL)hasMedia {
-    return self.type == 6;
-//    if (self.type == 6 && (!self.mediaURL || !self.thumbnailURL))
-//        [NSException raise:NSInternalInconsistencyException format:@"Yak media type is 6 but is missing media info"];
-//    return self.type == 6 && self.mediaURL && self.thumbnailURL;
+- (NSString *)handle {
+    if (self.emoji) {
+        return [NSString stringWithFormat:@"%@ %@ %@", self.emoji, self.color, self.colorSecondary];
+    }
+    
+    return self.authorIdentifier;
 }
 
+- (NSString *)title {
+    return self.text;
+}
+
+- (BOOL)isReadOnly {
+    return NO;
+}
 
 @end

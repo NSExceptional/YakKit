@@ -8,6 +8,11 @@
 
 #import "YYThing.h"
 
+#ifndef UIKIT_EXTERN
+    #define UIColor NSObject
+#endif
+
+@class CLLocation;
 
 typedef NS_ENUM(NSInteger, YYVoteStatus)
 {
@@ -24,19 +29,35 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSComparisonResult)compareScore:(YYVotable *)votable;
 - (NSComparisonResult)compareCreated:(YYVotable *)votable;
 
-@property (nonatomic, readonly, nullable) NSString *personaIdentifier;
-@property (nonatomic, readonly, nullable) NSString *username;
+@property (nonatomic, readonly          ) NSString *text;
+@property (nonatomic, readonly          ) NSString *authorIdentifier;
+@property (nonatomic, readonly, nullable) NSString *emoji;
+@property (nonatomic, readonly, nullable) UIColor *color;
+@property (nonatomic, readonly, nullable) UIColor *colorSecondary;
 
-@property (nonatomic, readonly) NSInteger    score;
-@property (nonatomic, readonly) YYVoteStatus voteStatus;
+@property (nonatomic, readonly, nullable) NSString *colorHex;
+@property (nonatomic, readonly, nullable) NSString *colorSecondaryHex;
+
+@property (nonatomic) NSInteger    score;
+@property (nonatomic) YYVoteStatus voteStatus;
 
 @property (nonatomic, readonly) NSDate *created;
-@property (nonatomic, readonly) NSDate *gmt;
 
-@property (nonatomic, readonly) id deliveryIdentifier;
+@property (nonatomic, readonly) CLLocation *location;
+@property (nonatomic, readonly) NSString *geohash;
+@property (nonatomic, readonly) NSString *locationName;
+@property (nonatomic, readonly) NSArray<NSString *> *interestAreas;
+
+@property (nonatomic, readonly) BOOL isClaimed;
+@property (nonatomic, readonly) BOOL isIncognito;
+@property (nonatomic, readonly) BOOL isMine;
+@property (nonatomic, readonly) BOOL isReported;
 
 /// Use this however you want to flag or identify objects.
 @property (nonatomic) NSInteger tag;
+
+#pragma mark Deprecated
+@property (nonatomic, readonly          ) NSString *username;
 
 @end
 

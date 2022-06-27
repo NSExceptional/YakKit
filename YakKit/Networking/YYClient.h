@@ -32,8 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, nullable) CLLocation       *location;
 @property (nonatomic, nullable) NSString         *userIdentifier;
 
-@property (nonatomic) NSString *authToken;
-@property (nonatomic) NSString *refreshToken;
+@property (nonatomic, nullable) NSString *authToken;
+@property (nonatomic, nullable) NSString *refreshToken;
 
 #pragma mark General
 - (void)startSignInWithPhone:(NSString *)phoneNumber verify:(YYStringBlock)verificationCallback;
