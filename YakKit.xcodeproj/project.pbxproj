@@ -78,7 +78,9 @@
 		C357BAF1281A6D4C00FFFC96 /* YYClient+Yakking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "YYClient+Yakking.h"; sourceTree = "<group>"; };
 		C357BAF2281A6D4C00FFFC96 /* YYClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYClient.h; sourceTree = "<group>"; };
 		C357BAF4281A6D4C00FFFC96 /* YYClient+Misc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "YYClient+Misc.m"; sourceTree = "<group>"; };
-		C357BB15281A6F7600FFFC96 /* YakKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = YakKit.podspec; sourceTree = "<group>"; };
+		C357BB15281A6F7600FFFC96 /* YakKit.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = YakKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		C3C30E3E282F081E00AC586A /* YYModel+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YYModel+Private.h"; sourceTree = "<group>"; };
+		C3C30E3F282F087000AC586A /* metamacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +148,8 @@
 				C357BAD7281A6D4C00FFFC96 /* YYVotable.m */,
 				C357BAD6281A6D4C00FFFC96 /* YYYak.h */,
 				C357BAE4281A6D4C00FFFC96 /* YYYak.m */,
+				C3C30E3E282F081E00AC586A /* YYModel+Private.h */,
+				C3C30E3F282F087000AC586A /* metamacros.h */,
 			);
 			path = Model;
 			sourceTree = "<group>";
