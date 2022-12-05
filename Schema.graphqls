@@ -13,6 +13,7 @@ type Query {
     first: Int
     last: Int
     isClaimed: Boolean
+    user: ID
   ): YakConnection
   feed(
     offset: Int
@@ -30,6 +31,22 @@ type Query {
     # The ID of the object
     id: ID!
   ): User
+  usernameAvailability(username: String!): UsernameAvailabilityType
+
+  # Get thread by ID.
+  thread(
+    # The ID of the object
+    id: ID!
+  ): Thread
+
+  # Get a list of direct reply threads
+  threads(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): ThreadConnection
   notifications(
     offset: Int
     before: String
@@ -50,8 +67,15 @@ type Yak implements Node & UserInterface & DistanceInterface {
   createdAt: DateTime!
   text: String!
   
+  videoId: String!
+  videoState: VideoStateChoice!
+  videoPlaybackDashUrl: String! # Populated if the video is ready.
+  videoPlaybackHlsUrl: String! # Populated if the video is ready.
+  videoThumbnailUrl: String! # Populated if the video is ready.
+  
   distance: Int
   geohash: String!
+  isReplyable: Boolean!
   interestAreas: [String!]
   isClaimed: Boolean! # When `true`, user information is available.
   isIncognito: Boolean! # When creating a Yak in incognito mode, `user_color`, `secondary_user_color` and `user_emoji` will be ignored.
@@ -65,6 +89,7 @@ type Yak implements Node & UserInterface & DistanceInterface {
   secondaryUserColor: String
   voteCount: Int!
   
+  threadId: String
   commentCount: Int!
   comments(
     offset: Int
@@ -102,7 +127,19 @@ type User implements Node {
   id: ID!
   dateJoined: DateTime!
   username: String!
+  emoji: String!
+  
+  color: String! # Hex color code
+  secondaryColor: String! # Hex color code
+  
   yakarmaScore: Int!
+  claimedYaks(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): YakConnection
 }
 
 # The `DateTime` scalar type represents a DateTime
@@ -112,6 +149,7 @@ scalar DateTime
 
 # Interface providing distance calculation for content types such as Yak or Comment.
 interface DistanceInterface {
+  point: FixedPointScalar!
   distance: Int
 }
 
@@ -124,12 +162,12 @@ interface DistanceInterface {
 # fields.
 scalar FixedPointScalar
 
-type CommentConnection {
-  # Pagination data for this connection.
-  pageInfo: PageInfo!
-
-  # Contains the nodes in this connection.
-  edges: [CommentEdge]!
+# An enumeration.
+enum VideoStateChoice {
+  NONE
+  IN_PROGRESS
+  READY
+  ERROR
 }
 
 # The Relay compliant `PageInfo` type, containing data necessary to paginate this connection.
@@ -145,6 +183,14 @@ type PageInfo {
 
   # When paginating forwards, the cursor to continue.
   endCursor: String
+}
+
+type CommentConnection {
+  # Pagination data for this connection.
+  pageInfo: PageInfo!
+
+  # Contains the nodes in this connection.
+  edges: [CommentEdge]!
 }
 
 # A Relay edge containing a `Comment` and its cursor.
@@ -165,6 +211,7 @@ type Comment implements Node & UserInterface & DistanceInterface {
   
   distance: Int
   geohash: String!
+  isReplyable: Boolean!
   interestAreas: [String!]
   isClaimed: Boolean! # When `true`, user information is available.
   isMine: Boolean! # When `true`, the comment belongs to the authenticated user.
@@ -176,6 +223,7 @@ type Comment implements Node & UserInterface & DistanceInterface {
   userEmoji: String
   userColor: String
   secondaryUserColor: String
+  threadId: String
   voteCount: Int!
   
   yak: Yak
@@ -194,7 +242,7 @@ type YakConnection {
   # Pagination data for this connection.
   pageInfo: PageInfo!
 
-  # Contains the nodes in this connection.
+  # Contains the nodes in this connectionPageInfo.
   edges: [YakEdge]!
 }
 
@@ -232,6 +280,17 @@ type Me {
   dateJoined: DateTime!
   username: String!
   yakarmaScore: Int!
+  
+  emoji: String!
+  color: String! # Hex color code
+  secondaryColor: String! # Hex color code
+  
+  # The total count of users I have blocked
+  usersBlockedCount: Int!
+  
+  completedTutorial: Boolean!
+  isMuted: IsMutedType
+  
   comments(
     offset: Int
     before: String
@@ -241,8 +300,6 @@ type Me {
     isClaimed: Boolean
   ): CommentConnection
 
-  # The total count of users I have blocked
-  usersBlockedCount: Int!
   yaks(
     offset: Int
     before: String
@@ -250,7 +307,147 @@ type Me {
     first: Int
     last: Int
     isClaimed: Boolean
+    user: ID
   ): YakConnection
+}
+
+type IsMutedType {
+  # When `true`, the user is muted.
+  isMuted: Boolean!
+  expiration: Int
+  text: String
+}
+
+type UsernameAvailabilityType {
+  errors: [ValidationErrorType!]
+  username: String!
+  isAvailable: Boolean!
+}
+
+# `ValidationErrorType` is a GraphQL object meant to represent
+# user-facing errors, specifically related to data validation. In
+# most cases, these should be avoided through client-side validation.
+#
+# Unlike syntax errors and top-level GraphQL errors, these errors are
+# returned in the payload and must be requested by the client.
+#
+# When `errors` is `None` in a response, it means the request was successful.
+#
+# These errors are based on DRF ValidationErrors.
+type ValidationErrorType {
+  # The field which emitted the error
+  field: String
+
+  # User-facing error message
+  message: String!
+
+  # An internal error code (e.g. `max_length`). The error codes are defined by DRF serializers, but can be extended to include custom codes.
+  code: String
+}
+
+type Thread implements Node {
+  id: ID!
+  createdAt: DateTime!
+  isDisabled: Boolean!
+  isDraft: Boolean!
+  lastActiveAt: DateTime!
+  
+  instance: String
+  instanceDisplayType: String
+  title: String
+  
+  participants(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): ParticipantConnection
+  
+  messages(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): MessageConnection
+}
+
+type ParticipantConnection {
+  # Pagination data for this connection.
+  pageInfo: PageInfo!
+
+  # Contains the nodes in this connection.
+  edges: [ParticipantEdge]!
+}
+
+# A Relay edge containing a `Participant` and its cursor.
+type ParticipantEdge {
+  # The item at the end of the edge
+  node: Participant
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+type Participant implements Node {
+  id: ID!
+  emoji: String
+  color: String
+  secondaryColor: String
+
+  # Set to `true` if the participant started the thread
+  isOp: Boolean
+
+  # Set to `true` if the participant is the user making the query
+  isSelf: Boolean
+}
+
+type MessageConnection {
+  # Pagination data for this connection.
+  pageInfo: PageInfo!
+
+  # Contains the nodes in this connection.
+  edges: [MessageEdge]!
+}
+
+# A Relay edge containing a `Message` and its cursor.
+type MessageEdge {
+  # The item at the end of the edge
+  node: Message
+
+  # A cursor for use in pagination
+  cursor: String!
+}
+
+type Message implements Node {
+  id: ID!
+  createdAt: DateTime!
+  text: String!
+  participantId: ID
+
+  # When `true`, the message belongs to the authenticated user.
+  isMine: Boolean!
+
+  # When `true`, the message is from the thread creator
+  isOp: Boolean!
+}
+
+type ThreadConnection {
+  # Pagination data for this connection.
+  pageInfo: PageInfo!
+
+  # Contains the nodes in this connection.
+  edges: [ThreadEdge]!
+}
+
+# A Relay edge containing a `Thread` and its cursor.
+type ThreadEdge {
+  # The item at the end of the edge
+  node: Thread
+
+  # A cursor for use in pagination
+  cursor: String!
 }
 
 type NotificationConnection {
@@ -287,14 +484,14 @@ type Notification implements Node {
   attributes: JSONString
 }
 
+# Leverages the internal Python implmeentation of UUID (uuid.UUID) to provide native UUID objects
+# in fields, resolvers and input.
+scalar UUID
+
 enum ObjectTypeChoices {
   YAK
   COMMENT
 }
-
-# Leverages the internal Python implmeentation of UUID (uuid.UUID) to provide native UUID objects
-# in fields, resolvers and input.
-scalar UUID
 
 enum NotificationTypeChoices {
   INFORMATIONAL
@@ -314,14 +511,29 @@ type Mutation {
   updateYak(input: UpdateYakInput!): UpdateYakPayload
   removeYak(input: RemoveYakInput!): RemoveYakPayload
   vote(input: VoteInput!): VotePayload
+  requestVideoUpload(input: RequestVideoUploadInput!): RequestVideoUploadPayload
 
   # Blocks the author of instance.
   block(input: BlockInput!): BlockPayload
 
   # Clears all blocks made by user.
   unblockAll(input: UnblockAllInput): UnblockAll
+
+  # Creates a request to delete all user's data.
+  deleteAll(input: DeleteAllInput): DeleteAll
   updateMe(input: UpdateMeInput!): UpdateMePayload
+
+  # Resets the user's emoji, color, and secondary color.
+  resetConversationIcon(
+    input: ResetConversationIconInput
+  ): ResetConversationIcon
   report(input: ReportInput!): ReportPayload
+  createThread(input: CreateThreadInput!): CreateThreadPayload
+  createMessage(input: CreateMessageInput!): CreateMessagePayload
+  disableReplies(input: DisableRepliesInput!): DisableRepliesPayload
+  enableReplies(input: EnableRepliesInput!): EnableRepliesPayload
+  markThreadSeen(input: MarkThreadSeenInput!): MarkThreadSeenPayload
+  updateTypingStatus(input: UpdateTypingStatusInput!): UpdateTypingStatusPayload
   markAllNotificationsAsRead: MarkAllNotificationsAsRead
   createComment(input: CreateCommentInput!): CreateCommentPayload
   removeComment(input: RemoveCommentInput!): RemoveCommentPayload
@@ -329,7 +541,7 @@ type Mutation {
 }
 
 type CreateYakPayload {
-  id: ID
+  id: ID @deprecated(reason: "Replaced by yak object.")
   errors: [ValidationErrorType!]
   yak: Yak
   interestAreas: [String] @deprecated(reason: "Replaced by yak object.")
@@ -340,27 +552,6 @@ type CreateYakPayload {
   point: String @deprecated(reason: "Replaced by yak object.")
   isIncognito: Boolean @deprecated(reason: "Replaced by yak object.")
   clientMutationId: String
-}
-
-# `ValidationErrorType` is a GraphQL object meant to represent
-# user-facing errors, specifically related to data validation. In
-# most cases, these should be avoided through client-side validation.
-#
-# Unlike syntax errors and top-level GraphQL errors, these errors are
-# returned in the payload and must be requested by the client.
-#
-# When `errors` is `None` in a response, it means the request was successful.
-#
-# These errors are based on DRF ValidationErrors.
-type ValidationErrorType {
-  # The field which emitted the error
-  field: String
-
-  # User-facing error message
-  message: String!
-
-  # An internal error code (e.g. `max_length`). The error codes are defined by DRF serializers, but can be extended to include custom codes.
-  code: String
 }
 
 input CreateYakInput {
@@ -379,6 +570,7 @@ input CreateYakInput {
   point: String!
   userColor: String
   userEmoji: String
+  videoId: String
   clientMutationId: String
 }
 
@@ -420,6 +612,17 @@ input VoteInput {
   clientMutationId: String
 }
 
+type RequestVideoUploadPayload {
+  errors: [ValidationErrorType!]
+  videoId: String
+  videoUploadUrl: String
+  clientMutationId: String
+}
+
+input RequestVideoUploadInput {
+  clientMutationId: String
+}
+
 type BlockPayload {
   id: ID
   errors: [ValidationErrorType!]
@@ -442,7 +645,16 @@ input UnblockAllInput {
   clientMutationId: String
 }
 
+type DeleteAll {
+  errors: [ValidationErrorType!]
+}
+
+input DeleteAllInput {
+  clientMutationId: String
+}
+
 type UpdateMePayload {
+  completedTutorial: Boolean
   username: String
   errors: [ValidationErrorType!]
   me: Me!
@@ -450,7 +662,19 @@ type UpdateMePayload {
 }
 
 input UpdateMeInput {
+  completedTutorial: Boolean
   username: String
+  clientMutationId: String
+}
+
+type ResetConversationIcon {
+  emoji: String
+  color: String
+  secondaryColor: String
+  errors: [ValidationErrorType!]
+}
+
+input ResetConversationIconInput {
   clientMutationId: String
 }
 
@@ -467,12 +691,89 @@ enum ReasonChoice {
   EXPLICIT_SEXUAL_CONTENT
   HATE_SPEECH
   REAL_NAMES
+  NEEDS_HUMAN_REVIEW
   OTHER
 }
 
 input ReportInput {
   instance: ID!
   reason: ReasonChoice!
+  clientMutationId: String
+}
+
+type CreateThreadPayload {
+  instance: ID
+  text: String
+  errors: [ValidationErrorType!]
+  id: ID
+  thread: Thread
+  clientMutationId: String
+}
+
+input CreateThreadInput {
+  instance: ID!
+  text: String
+  clientMutationId: String
+}
+
+type CreateMessagePayload {
+  threadId: ID
+  text: String
+  errors: [ValidationErrorType!]
+  id: ID
+  message: Message
+  clientMutationId: String
+}
+
+input CreateMessageInput {
+  threadId: ID!
+  text: String!
+  clientMutationId: String
+}
+
+type DisableRepliesPayload {
+  instance: ID
+  errors: [ValidationErrorType!]
+  clientMutationId: String
+}
+
+input DisableRepliesInput {
+  instance: ID!
+  clientMutationId: String
+}
+
+type EnableRepliesPayload {
+  instance: ID
+  errors: [ValidationErrorType!]
+  clientMutationId: String
+}
+
+input EnableRepliesInput {
+  instance: ID!
+  clientMutationId: String
+}
+
+type MarkThreadSeenPayload {
+  instance: ID
+  errors: [ValidationErrorType!]
+  clientMutationId: String
+}
+
+input MarkThreadSeenInput {
+  instance: ID!
+  clientMutationId: String
+}
+
+type UpdateTypingStatusPayload {
+  threadId: ID
+  typing: Boolean
+  errors: [ValidationErrorType!]
+  clientMutationId: String
+}
+
+input UpdateTypingStatusInput {
+  threadId: ID!
+  typing: Boolean!
   clientMutationId: String
 }
 
@@ -488,22 +789,22 @@ type MarkAllNotificationsAsRead {
 
 type CreateCommentPayload {
   id: ID
-  yakId: ID
+  yakId: ID @deprecated(reason: "Replaced by comment object.")
   interestAreas: [String]
-
-  # String representing a Point geometry in either WKT/EWKT or HEX/HEXEWBKB formats. E.g. `POINT(39 -42)` or `0101000000000000000080434000000000000045C0`
-  point: String
-  secondaryUserColor: String
-  text: String
-  userColor: String
-  userEmoji: String
+  point: String @deprecated(reason: "Replaced by comment object.")
+  secondaryUserColor: String @deprecated(reason: "Replaced by comment object.")
+  text: String @deprecated(reason: "Replaced by comment object.")
+  userColor: String @deprecated(reason: "Replaced by comment object.")
+  userEmoji: String @deprecated(reason: "Replaced by comment object.")
   errors: [ValidationErrorType!]
+  comment: Comment
   clientMutationId: String
 }
 
 input CreateCommentInput {
   yakId: ID!
   interestAreas: [String]
+  isClaimed: Boolean
 
   # String representing a Point geometry in either WKT/EWKT or
   # HEX/HEXEWBKB formats. E.g. `POINT(39 -42)` or
