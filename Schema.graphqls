@@ -482,6 +482,8 @@ type Notification implements Node {
   abbreviatedMessage: String!
   yakarmaValue: Int!
   attributes: JSONString
+  
+  node: Yak! | Comment!
 }
 
 # Leverages the internal Python implmeentation of UUID (uuid.UUID) to provide native UUID objects
