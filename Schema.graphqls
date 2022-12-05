@@ -99,16 +99,9 @@ interface UserInterface {
 }
 
 type User implements Node {
-  #
-  dateJoined: DateTime!
-
-  # The ID of the object.
   id: ID!
-
-  #
+  dateJoined: DateTime!
   username: String!
-
-  #
   yakarmaScore: Int!
 }
 
@@ -235,14 +228,9 @@ enum FeedOrder {
 }
 
 type Me {
-  #
-  dateJoined: DateTime!
   id: ID
-
-  #
+  dateJoined: DateTime!
   username: String!
-
-  #
   yakarmaScore: Int!
   comments(
     offset: Int
@@ -283,10 +271,12 @@ type NotificationEdge {
 }
 
 type Notification implements Node {
+  id: ID!
   createdAt: DateTime!
   modifiedAt: DateTime!
-  id: ID! # The ID of the object.
-  objectType: ObjectTypeChoices # The type of object related to this notification.
+  # The type of object related to this notification.
+  objectType: ObjectTypeChoices
+  # The Yak or parent Yak ID associated to the source of the notification.
   objectId: UUID
   url: String
   message: String!
@@ -297,12 +287,8 @@ type Notification implements Node {
   attributes: JSONString
 }
 
-# An enumeration.
 enum ObjectTypeChoices {
-  # Yak
   YAK
-
-  # Comment
   COMMENT
 }
 
@@ -310,18 +296,10 @@ enum ObjectTypeChoices {
 # in fields, resolvers and input.
 scalar UUID
 
-# An enumeration.
 enum NotificationTypeChoices {
-  # Informational
   INFORMATIONAL
-
-  # Removal
   REMOVAL
-
-  # Also Interacted
   ALSO_INTERACTED
-
-  # Your Yak
   YOUR_YAK
 }
 
@@ -389,12 +367,15 @@ input CreateYakInput {
   isClaimed: Boolean
   interestAreas: [String]
 
-  # When creating a Yak in incognito mode, `user_color`, `secondary_user_color` and `user_emoji` will be ignored.
+  # When creating a Yak in incognito mode, `user_color`,
+  # `secondary_user_color` and `user_emoji` will be ignored.
   isIncognito: Boolean
   secondaryUserColor: String
   text: String!
 
-  # String representing a Point geometry in either WKT/EWKT or HEX/HEXEWBKB formats. E.g. `POINT(39 -42)` or `0101000000000000000080434000000000000045C0`
+  # String representing a Point geometry in either WKT/EWKT or
+  # HEX/HEXEWBKB formats. E.g. `POINT(39 -42)` or
+  # `0101000000000000000080434000000000000045C0`
   point: String!
   userColor: String
   userEmoji: String
@@ -480,24 +461,12 @@ type ReportPayload {
   clientMutationId: String
 }
 
-# An enumeration.
 enum ReasonChoice {
-  # Bullying
   BULLYING
-
-  # Threatening
   THREATENING
-
-  # Explicit Sexual Content
   EXPLICIT_SEXUAL_CONTENT
-
-  # Hate Speech
   HATE_SPEECH
-
-  # Real Names
   REAL_NAMES
-
-  # Other
   OTHER
 }
 
@@ -536,7 +505,9 @@ input CreateCommentInput {
   yakId: ID!
   interestAreas: [String]
 
-  # String representing a Point geometry in either WKT/EWKT or HEX/HEXEWBKB formats. E.g. `POINT(39 -42)` or `0101000000000000000080434000000000000045C0`
+  # String representing a Point geometry in either WKT/EWKT or
+  # HEX/HEXEWBKB formats. E.g. `POINT(39 -42)` or
+  # `0101000000000000000080434000000000000045C0`
   point: String!
   secondaryUserColor: String
   text: String!
