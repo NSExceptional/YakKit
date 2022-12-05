@@ -1,7 +1,6 @@
 type Query {
   # Get yak by ID.
   yak(
-    # The ID of the object
     id: ID!
   ): Yak
 
@@ -15,6 +14,7 @@ type Query {
     isClaimed: Boolean
     user: ID
   ): YakConnection
+  
   feed(
     offset: Int
     before: String
@@ -26,16 +26,17 @@ type Query {
     feedOrder: FeedOrder
     point: FixedPointScalar
   ): YakConnection
+  
   me: Me
+  
   user(
-    # The ID of the object
     id: ID!
   ): User
+  
   usernameAvailability(username: String!): UsernameAvailabilityType
 
   # Get thread by ID.
   thread(
-    # The ID of the object
     id: ID!
   ): Thread
 
@@ -47,6 +48,7 @@ type Query {
     first: Int
     last: Int
   ): ThreadConnection
+  
   notifications(
     offset: Int
     before: String
@@ -54,8 +56,8 @@ type Query {
     first: Int
     last: Int
   ): NotificationConnection
+  
   node(
-    # The ID of the object
     id: ID!
   ): Node
 }
@@ -229,9 +231,6 @@ type Comment implements Node & UserInterface & DistanceInterface {
   yak: Yak
 }
 
-#
-#     Vote choices exposed through the GraphQL API.
-#
 enum VoteChoice {
   UP
   NONE
@@ -255,12 +254,10 @@ type YakEdge {
   cursor: String!
 }
 
-# An enumeration.
 enum FeedNames {
   SPRING_BREAK
 }
 
-# An enumeration.
 enum FeedType {
   LOCAL
   NATIONWIDE
@@ -268,7 +265,6 @@ enum FeedType {
   SELF
 }
 
-# An enumeration.
 enum FeedOrder {
   HOT
   NEW
