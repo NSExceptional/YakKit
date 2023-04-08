@@ -33,10 +33,19 @@ typedef struct CLLocationCoordinate2D CLLocationCoordinate2D;
         @codingKey(score): @"voteCount",
         @codingKey(voteStatus): @"myVote",
         
+        @codingKey(anonymous): @"isIncognito",
         @codingKey(emoji): @"userEmoji",
         @codingKey(colorHex): @"userColor",
         @codingKey(colorSecondaryHex): @"secondaryUserColor",
     }];
+}
+
+- (void)postInit {
+    // [super postInit];
+    
+    if ([self.emoji isEqualToString:@""]) {
+        _emoji = nil;
+    }
 }
 
 - (NSString *)locationName {

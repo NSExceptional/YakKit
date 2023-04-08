@@ -285,7 +285,7 @@ type Me {
   usersBlockedCount: Int!
   
   completedTutorial: Boolean!
-  isMuted: IsMutedType
+  isMuted: IsMutedType # No longer working
   
   comments(
     offset: Int

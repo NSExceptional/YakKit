@@ -8,16 +8,21 @@
 
 #import "YYThing.h"
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface YYUser : YYThing
 
-@property (nonatomic, readonly) NSInteger karma;
-@property (nonatomic, readonly) NSString  *handle;
-@property (nonatomic, readonly) NSDate    *created;
-@property (nonatomic, readonly) BOOL      isVerified;
-@property (nonatomic, readonly) BOOL      isSuspended;
+@property (nonatomic, readonly, nullable) NSString  *handle;
 
-@property (nonatomic, readonly) BOOL forceVerification;
-@property (nonatomic, readonly) NSDictionary *basecamp;
+@property (nonatomic, readonly) NSInteger karma;
+@property (nonatomic, readonly) NSDate    *created;
+
+@property (nonatomic, readonly) NSString *emoji;
+@property (nonatomic, readonly) NSString *color;
+@property (nonatomic, readonly) NSString *secondaryColor;
+@property (nonatomic, readonly) BOOL completedTutorial;
+@property (nonatomic, readonly) NSInteger usersBlockedCount;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -18,8 +18,10 @@
 #pragma mark Getting yak feeds
 
 - (void)getFeed:(NSString *)type order:(NSString *)order
-          limit:(NSInteger)limit after:(NSString *)lastYak
-       callback:(YYArrayBlock)completion {
+          limit:(NSInteger)limit after:(NSString *)lastYakID
+       callback:(YYArrayPageBlock)completion {
+    NSParameterAssert(type); NSParameterAssert(order);
+    
     NSString *query = ({ @" \
         query Feed($feedType: FeedType, $order: FeedOrder, $pageLimit: Int, $cursor: String, $point: FixedPointScalar) { \
             feed( \
@@ -29,19 +31,16 @@
                 after: $cursor \
                 point: $point \
             ) { \
-                __typename \
                 edges { \
-                    __typename \
                     node { \
-                        __typename \
+                        id \
                         commentCount \
                         createdAt \
-                        id \
+                        interestAreas \
                         isClaimed \
                         isIncognito \
                         isMine \
                         myVote \
-                        point \
                         secondaryUserColor \
                         text \
                         userColor \
@@ -51,7 +50,6 @@
                     } \
                 } \
                 pageInfo { \
-                    __typename \
                     endCursor \
                     hasNextPage \
                 } \
@@ -61,31 +59,29 @@
     
     if (!limit) limit = 50;
     
-    CLLocationCoordinate2D location = self.location.coordinate;
-    NSString *point = [NSString stringWithFormat:@"POINT(%@ %@)", @(location.longitude), @(location.latitude)];
     NSDictionary *variables = @{
         @"feedType": type,
         @"order": order,
         @"pageLimit": @(limit),
-        @"cursor": NSNull.null,
-        @"point": point,
+        @"cursor": lastYakID ?: NSNull.null,
+        @"point": self.graphQLLocation,
     };
     
     return [self graphQL:query variables:variables callback:^(TBResponseParser *parser) {
-        [self completeWithClass:[YYYak class] array:@"data.feed.edges" response:parser completion:completion];
+        [self completeWithPaginatedClass:YYYak.self dataPath:@"data.feed" response:parser completion:completion];
     }];
 }
 
-- (void)getLocalYaks:(YYArrayBlock)completion {
-    [self getFeed:@"LOCAL" order:@"NEW" limit:0 after:nil callback:completion];
+- (void)getLocalYaksAfter:(NSString *)lastYak completion:(YYArrayPageBlock)completion {
+    [self getFeed:@"LOCAL" order:@"NEW" limit:0 after:lastYak callback:completion];
 }
 
-- (void)getLocalHotYaks:(YYArrayBlock)completion {
-    [self getFeed:@"LOCAL" order:@"HOT" limit:0 after:nil callback:completion];
+- (void)getLocalHotYaksAfter:(NSString *)lastYak completion:(YYArrayPageBlock)completion {
+    [self getFeed:@"LOCAL" order:@"HOT" limit:0 after:lastYak callback:completion];
 }
 
-- (void)getLocalTopYaks:(YYArrayBlock)completion {
-    [self getFeed:@"LOCAL" order:@"TOP" limit:0 after:nil callback:completion];
+- (void)getLocalTopYaksAfter:(NSString *)lastYak completion:(YYArrayPageBlock)completion {
+    [self getFeed:@"LOCAL" order:@"TOP" limit:0 after:lastYak callback:completion];
 }
 
 #pragma mark Getting info about a yak
@@ -94,16 +90,16 @@
     NSString *query = ({ @" \
         query Yak($id: ID!) { \
             yak(id: $id) { \
-                __typename \
                 id \
                 text \
                 userEmoji \
                 userColor \
                 secondaryUserColor \
-                point \
                 geohash \
                 interestAreas \
                 createdAt \
+                isMine \
+                myVote \
                 commentCount \
                 voteCount \
                 userId \
@@ -113,40 +109,35 @@
     "; });
     
     [self graphQL:query variables:@{@"id": notification.thingIdentifier} callback:^(TBResponseParser *parser) {
-        [self completeWithClass:[YYYak class] object:@"data.yak" response:parser completion:completion];
+        [self completeWithClass:YYYak.self object:@"data.yak" response:parser completion:completion];
     }];
 }
 
-// TODO: Support pagination
-- (void)getCommentsForYak:(YYYak *)yak completion:(YYArrayBlock)completion {
+- (void)getCommentsForYak:(YYYak *)yak after:(NSString *)lastCommentID completion:(YYArrayPageBlock)completion {
     NSString *query = ({ @" \
         query YakComments($id: ID!, $pageLimit: Int, $cursor: String) { \
             yak(id: $id) { \
-                __typename \
                 id \
                 comments(first: $pageLimit, after: $cursor) { \
-                    __typename \
                     edges { \
-                        __typename \
                         node { \
-                            __typename \
                             id \
                             text \
                             userId \
                             userEmoji \
                             userColor \
                             secondaryUserColor \
-                            point \
                             geohash \
                             interestAreas \
                             createdAt \
+                            isMine \
+                            myVote \
                             voteCount \
                             isOp \
                             yak { id } \
                         } \
                     } \
                     pageInfo { \
-                        __typename \
                         endCursor \
                         hasNextPage \
                     } \
@@ -156,12 +147,12 @@
     "; });
     
     [self graphQL:query variables:@{
-        @"cursor": NSNull.null,
+        @"cursor": lastCommentID ?: NSNull.null,
         @"pageLimit": @50,
         @"id": yak.identifier
     } callback:^(TBResponseParser *parser) {
-        NSString *path = @"data.yak.comments.edges";
-        [self completeWithClass:[YYComment class] array:path response:parser completion:completion];
+        NSString *path = @"data.yak.comments";
+        [self completeWithPaginatedClass:YYComment.self dataPath:path response:parser completion:completion];
     }];
 }
 

@@ -9,143 +9,210 @@
 #import "YYClient+Yakking.h"
 #import "YYYak.h"
 #import "YYComment.h"
+#import "YYUser.h"
+@import FirebaseFirestore;
 
+NSString * YYCollectionForVoteStatus(YYVoteStatus vote) {
+    switch (vote) {
+        case YYVoteStatusUpvoted:
+            return @"Upvoters";
+        case YYVoteStatusDownvoted:
+            return @"Downvoters";
+        default:
+            return nil;
+    }
+}
+
+@interface YYVotable (Voting)
+- (NSString *)documentPathForVoteStatus:(YYVoteStatus)vote user:(NSString *)userID;
+@end
+
+@implementation YYYak (Voting)
+- (NSString *)documentPathForVoteStatus:(YYVoteStatus)vote user:(NSString *)userID {
+    NSString *collection = YYCollectionForVoteStatus(vote);
+    return @[@"Yaks", self.identifier, collection, userID];
+}
+@end
+@implementation YYComment (Voting)
+- (NSString *)documentPathForVoteStatus:(YYVoteStatus)vote user:(NSString *)userID {
+    NSString *collection = YYCollectionForVoteStatus(vote);
+    return @[@"Yaks", self.yakIdentifier, @"Comments", self.identifier, collection, userID];
+}
+@end
 
 @implementation YYClient (Yakking)
 
 #pragma mark Posting
 
-- (void)postYak:(NSString *)title useHandle:(BOOL)handle completion:(nullable YYErrorBlock)completion {
-    NSDictionary *body = @{@"hidePin": @"1",
-                           @"lat": @(self.location.coordinate.latitude),
-                           @"long": @(self.location.coordinate.longitude),
-                           @"message": title,
-                           @"useNickname": @((int)handle),
-                           @"userID": self.userIdentifier};
+- (void)postYak:(NSString *)title
+    anonymously:(BOOL)anon
+     completion:(YYResponseBlock)completion {
+    NSParameterAssert(title); NSParameterAssert(completion);
     
-    [self post:^(TBURLRequestBuilder *make) {
-        make.endpoint(kepPostYak).bodyJSONFormString(body);
-    } callback:^(TBResponseParser *parser) {
-        YYRunBlockP(completion, parser.error);
+    NSString *query = ({ @" \
+        mutation CreateYak($input: CreateYakInput!) { \
+            createYak(input: $input) { \
+                errors { \
+                    code \
+                    field \
+                    message \
+                } \
+                yak { \
+                    id \
+                    text \
+                    userEmoji \
+                    userColor \
+                    secondaryUserColor \
+                    interestAreas \
+                    createdAt \
+                    isMine \
+                    userId \
+                    isIncognito \
+                } \
+            } \
+        } \
+    "; });
+    
+    NSDictionary *data = @{
+        @"isIncognito": @(anon),
+        @"interestAreas": @[],
+        @"point": self.graphQLLocation,
+        @"userColor": self.currentUser.color,
+        @"secondaryUserColor": self.currentUser.secondaryColor,
+        @"userEmoji": self.currentUser.emoji,
+        @"text": title,
+        @"videoId": @"",
+    };
+    
+    [self graphQL:query variables:@{ @"input": data } callback:^(TBResponseParser *parser) {
+        NSString *path = @"data.createYak.yak";
+        [self completeWithClass:YYYak.self object:path response:parser completion:completion];
     }];
 }
 
-- (void)postComment:(NSString *)body toYak:(YYYak *)yak useHandle:(BOOL)handle completion:(nullable YYErrorBlock)completion {
-    NSDictionary *bodyForm = @{@"comment": body,
-                               @"herdID": @"0",
-                               @"messageID": yak.identifier,
-                               @"useNickname": @((int)handle),
-                               @"userID": self.userIdentifier};
+- (void)postComment:(NSString *)body toYak:(YYYak *)yak completion:(YYResponseBlock)completion {
+    NSParameterAssert(body); NSParameterAssert(completion);
     
-    [self post:^(TBURLRequestBuilder *make) {
-        make.endpoint(kepPostComment).bodyJSONFormString(bodyForm);
-    } callback:^(TBResponseParser *parser) {
-        YYRunBlockP(completion, parser.error);
+    NSParameterAssert(self.currentUser.color);
+    NSParameterAssert(self.currentUser.secondaryColor);
+    NSParameterAssert(self.currentUser.emoji);
+    NSParameterAssert(self.graphQLLocation);
+    
+    NSString *query = ({ @" \
+        mutation CreateComment($input: CreateCommentInput!) { \
+            createComment(input: $input) { \
+                errors { \
+                    code \
+                    field \
+                    message \
+                } \
+                comment { \
+                    id \
+                    text \
+                    userId \
+                    userEmoji \
+                    userColor \
+                    secondaryUserColor \
+                    geohash \
+                    interestAreas \
+                    createdAt \
+                    isMine \
+                    myVote \
+                    voteCount \
+                    isOp \
+                    yak { id } \
+                } \
+            } \
+        } \
+    "; });
+    
+    NSDictionary *data = @{
+        @"yakId": yak.identifier,
+        @"interestAreas": @[],
+        @"point": self.graphQLLocation,
+        @"userColor": self.currentUser.color,
+        @"secondaryUserColor": self.currentUser.secondaryColor,
+        @"userEmoji": self.currentUser.emoji,
+        @"text": body,
+    };
+    
+    [self graphQL:query variables:@{ @"input": data } callback:^(TBResponseParser *parser) {
+        NSString *path = @"data.createComment.comment";
+        [self completeWithClass:YYComment.self object:path response:parser completion:completion];
     }];
 }
 
 #pragma mark Deleting
 
 // Uses YYComment here on purpose
-- (void)deleteYakOrComment:(YYComment *)thing completion:(nullable YYErrorBlock)completion {
-    NSDictionary *query;
-    NSString *endpoint;
-    if ([thing isKindOfClass:[YYYak class]]) {
-        query = [self generalQuery:@{@"messageID": thing.identifier}];
-        endpoint = kepDeleteYak;
-    } else {
-        query = [self generalQuery:@{@"commentID": thing.identifier,
-                                     @"messageID": thing.yakIdentifier}];
-        endpoint = kepDeleteComment;
-    }
+- (void)deleteYak:(YYYak *)thing completion:(YYErrorBlock)completion {
+    NSString *query = ({ @" \
+        mutation DeleteYak($yakid: ID!) { \
+            removeYak(input: { id: $yakid }) { \
+                errors { \
+                    code \
+                    field \
+                    message \
+                } \
+            } \
+        } \
+    "; });
     
-    [self get:^(TBURLRequestBuilder *make) {
-        make.endpoint(endpoint).queries(query);
-    } callback:^(TBResponseParser *parser) {
-        YYRunBlockP(completion, parser.error);
+    [self graphQL:query variables:@{ @"yakid": thing.identifier } callback:^(TBResponseParser *parser) {
+        [self completeWithResponse:parser completion:completion];
+    }];
+}
+
+- (void)deleteComment:(YYComment *)thing completion:(YYErrorBlock)completion {
+    NSString *query = ({ @" \
+        mutation DeleteComment($commentid: ID!, $yakid: ID!) { \
+            removeComment(input: { id: $commentid, yakId: $yakid }) { \
+                errors { \
+                    code \
+                    field \
+                    message \
+                } \
+            } \
+        } \
+    "; });
+    
+    NSDictionary *data = @{ @"commentid": thing.identifier, @"yakid": thing.yakIdentifier };
+    [self graphQL:query variables:data callback:^(TBResponseParser *parser) {
+        [self completeWithResponse:parser completion:completion];
     }];
 }
 
 #pragma mark Voting
 
-- (void)upvote:(YYVotable *)thing completion:(nullable YYErrorBlock)completion {
-    if (thing.voteStatus == YYVoteStatusUpvoted) { YYRunBlockP(completion, nil); return; }
+- (void)setVote:(NSString *)status on:(YYVotable *)thing completion:(nullable YYErrorBlock)completion {
+    NSString *query = ({ @" \
+        mutation Vote($input: VoteInput!) { \
+            vote(input: $input) { \
+                errors { \
+                    code \
+                    field \
+                    message \
+                } \
+            } \
+        } \
+    "; });
     
-    NSDictionary *query;
-    NSString *endpoint;
-    if ([thing isKindOfClass:[YYYak class]]) {
-        query = [self generalQuery:@{@"messageID": thing.identifier}];
-        endpoint = kepToggleUpvoteYak;
-    } else {
-        query = [self generalQuery:@{@"commentID": thing.identifier}];
-        endpoint = kepToggleUpvoteComment;
-    }
-    
-    [self get:^(TBURLRequestBuilder *make) {
-        make.endpoint(endpoint).queries(query);
-    } callback:^(TBResponseParser *parser) {
-        YYRunBlockP(completion, parser.error);
+    NSDictionary *data = @{ @"vote": status, @"instance": thing.identifier };
+    [self graphQL:query variables:@{ @"input": data } callback:^(TBResponseParser *parser) {
+        [self completeWithResponse:parser completion:completion];
     }];
+}
+
+- (void)upvote:(YYVotable *)thing completion:(nullable YYErrorBlock)completion {
+    [self setVote:@"UP" on:thing completion:completion];
 }
 
 - (void)downvote:(YYVotable *)thing completion:(nullable YYErrorBlock)completion {
-    if (thing.voteStatus == YYVoteStatusDownvoted) { YYRunBlockP(completion, nil); return; }
-    
-    NSDictionary *query;
-    NSString *endpoint;
-    if ([thing isKindOfClass:[YYYak class]]) {
-        query = [self generalQuery:@{@"messageID": thing.identifier}];
-        endpoint = kepToggleDownvoteYak;
-    } else {
-        query = [self generalQuery:@{@"commentID": thing.identifier}];
-        endpoint = kepToggleDownvoteComment;
-    }
-    
-    [self get:^(TBURLRequestBuilder *make) {
-        make.endpoint(endpoint).queries(query);
-    } callback:^(TBResponseParser *parser) {
-        YYRunBlockP(completion, parser.error);
-    }];
+    [self setVote:@"DOWN" on:thing completion:completion];
 }
 
-- (void)removeVote:(YYVotable *)thing completion:(nullable YYErrorBlock)completion {
-    NSString *idName;
-    NSString *endpoint;
-    
-    if ([thing isKindOfClass:[YYYak class]]) {
-        idName = @"messageID";
-    } else {
-        idName = @"commentID";
-    }
-    
-    switch (thing.voteStatus) {
-        case YYVoteStatusDownvoted: {
-            if ([thing isKindOfClass:[YYYak class]]) {
-                endpoint = kepToggleDownvoteYak;
-            } else {
-                endpoint = kepToggleDownvoteComment;
-            }
-            break;
-        }
-        case YYVoteStatusNone: {
-            YYRunBlockP(completion, nil); return;
-            break;
-        }
-        case YYVoteStatusUpvoted: {
-            if ([thing isKindOfClass:[YYYak class]]) {
-                endpoint = kepToggleUpvoteYak;
-            } else {
-                endpoint = kepToggleUpvoteComment;
-            }
-            break;
-        }
-    }
-    
-    [self get:^(TBURLRequestBuilder *make) {
-        make.endpoint(endpoint).queries([self generalQuery:@{idName: thing.identifier}]);
-    } callback:^(TBResponseParser *parser) {
-        YYRunBlockP(completion, parser.error);
-    }];
+- (void)removeVote:(YYVoteStatus)vote from:(YYVotable *)thing completion:(YYErrorBlock)completion {
+    [self setVote:@"NONE" on:thing completion:completion];
 }
 
 @end

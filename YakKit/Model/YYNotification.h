@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly, nullable) NSString *url;
 
-@property (nonatomic, readonly) BOOL read;
+@property (nonatomic) BOOL read;
 @property (nonatomic, readonly) BOOL unread;
 /// The notification subject
 @property (nonatomic, readonly, nonnull ) NSString *subject;

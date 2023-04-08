@@ -16,7 +16,6 @@
 + (NSDictionary *)JSONKeyPathsByPropertyKey { SetCoder(YYYak)
     return [[super JSONKeyPathsByPropertyKey] mtl_dictionaryByAddingEntriesFromDictionary:@{
         @codingKey(replyCount): @"commentCount",
-        @codingKey(anonymous): @"isIncognito",
     }];
 }
 

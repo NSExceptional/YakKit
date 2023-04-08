@@ -45,11 +45,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) CLLocation *location;
 @property (nonatomic, readonly) NSString *geohash;
-@property (nonatomic, readonly) NSString *locationName;
+@property (nonatomic, readonly, nullable) NSString *locationName;
 @property (nonatomic, readonly) NSArray<NSString *> *interestAreas;
 
 @property (nonatomic, readonly) BOOL isClaimed;
 @property (nonatomic, readonly) BOOL isIncognito;
+@property (nonatomic, readonly) BOOL anonymous;
 @property (nonatomic, readonly) BOOL isMine;
 @property (nonatomic, readonly) BOOL isReported;
 

@@ -12,20 +12,17 @@
 @implementation YYUser
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey { SetCoder(YYUser)
-    return @{
+    return [[super JSONKeyPathsByPropertyKey] mtl_dictionaryByAddingEntriesFromDictionary:@{
         @codingKey(identifier): @"id",
-        @codingKey(karma): @"yakarma",
-        @codingKey(created): @"created",
-        @codingKey(isVerified): @"isVerified",
-        @codingKey(isSuspended): @"IsSuspended",
-        @codingKey(forceVerification): @"forceVerification",
-        @codingKey(basecamp): @"basecamp",
-    };
+        @codingKey(handle): @"username",
+        @codingKey(karma): @"yakarmaScore",
+        @codingKey(created): @"dateJoined",
+    }];
 }
 
-- (NSString *)handle {
-    return self.identifier;
-}
+//- (NSString *)handle {
+//    return self.identifier;
+//}
 
 + (NSValueTransformer *)createdJSONTransformer { return [self yy_UTCDateTransformer]; }
 

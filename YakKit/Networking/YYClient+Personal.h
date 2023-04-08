@@ -14,15 +14,18 @@ NS_ASSUME_NONNULL_BEGIN
 @interface YYClient (Personal)
 
 #pragma mark User data
-- (void)getMyRecentYaks:(YYArrayBlock)completion;
-- (void)getMyTopYaks:(YYArrayBlock)completion;
-- (void)getMyRecentReplies:(YYArrayBlock)completion;
+- (void)objc_getMyRecentYaksAfter:(nullable NSString *)lastYak completion:(YYArrayPageBlock)completion;
+- (void)objc_getMyTopYaksAfter:(nullable NSString *)lastYak completion:(YYArrayPageBlock)completion;
+- (void)objc_getMyRecentRepliesAfter:(nullable NSString *)lastComment completion:(YYArrayPageBlock)completion;
 
 #pragma mark Notifications
 /// Will post kYYDidLoadNotificationsNotification on success before calling the completion block.
-- (void)getNotifications:(YYArrayBlock)completion;
-- (void)mark:(YYNotification *)notification read:(BOOL)read completion:(nullable YYErrorBlock)completion;
-- (void)markEach:(NSArray<YYNotification *> *)notifications read:(BOOL)read completion:(nullable YYErrorBlock)completion;
+- (void)getNotificationsAfter:(nullable NSString *)lastNotification
+                   completion:(YYArrayPageBlock)completion NS_SWIFT_NAME(objc_getNotifications(after:completion:));
+
+- (void)clearUnreadNotifications:(YYErrorBlock)completion;
+//- (void)mark:(YYNotification *)notification read:(BOOL)read completion:(nullable YYErrorBlock)completion;
+//- (void)markEach:(NSArray<YYNotification *> *)notifications read:(BOOL)read completion:(nullable YYErrorBlock)completion;
 
 @end
 

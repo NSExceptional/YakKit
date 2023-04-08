@@ -7,23 +7,30 @@
 //
 
 #import "YYClient.h"
-
+#import "YYVotable.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface YYClient (Yakking)
 
 #pragma mark Posting
-- (void)postYak:(NSString *)title useHandle:(BOOL)handle completion:(nullable YYErrorBlock)completion;
-- (void)postComment:(NSString *)body toYak:(YYYak *)yak useHandle:(BOOL)handle completion:(nullable YYErrorBlock)completion;
+- (void)postYak:(NSString *)title
+    anonymously:(BOOL)anon
+     completion:(YYResponseBlock)completion NS_SWIFT_NAME(objc_postYak(_:_:_:));
+
+/// Gives back the posted comment
+- (void)postComment:(NSString *)body
+              toYak:(YYYak *)yak
+         completion:(YYResponseBlock)completion NS_SWIFT_NAME(objc_postComment(_:to:_:));
 
 #pragma mark Deleting
-- (void)deleteYakOrComment:(YYVotable *)thing completion:(nullable YYErrorBlock)completion;
+- (void)deleteYak:(YYYak *)thing completion:(nullable YYErrorBlock)completion;
+- (void)deleteComment:(YYComment *)thing completion:(nullable YYErrorBlock)completion;
 
 #pragma mark Voting
 - (void)upvote:(YYVotable *)yakOrComment completion:(nullable YYErrorBlock)completion;
 - (void)downvote:(YYVotable *)yakOrComment completion:(nullable YYErrorBlock)completion;
-- (void)removeVote:(YYVotable *)yakOrComment completion:(nullable YYErrorBlock)completion;
+- (void)removeVote:(YYVoteStatus)vote from:(YYVotable *)yakOrComment completion:(nullable YYErrorBlock)completion;
 
 @end
 

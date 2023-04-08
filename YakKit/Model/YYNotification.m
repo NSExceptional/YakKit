@@ -63,7 +63,7 @@ NSString * YYStringFromNotificationReason(YYNotificationReason reason) {
         
         static NSCharacterSet *quotes = nil;
         if (!quotes) {
-            quotes = [NSCharacterSet characterSetWithCharactersInString:@"'"];
+            quotes = [NSCharacterSet characterSetWithCharactersInString:@"\""];
         }
         
         switch (self.reason) {
@@ -82,21 +82,24 @@ NSString * YYStringFromNotificationReason(YYNotificationReason reason) {
                 if ([self.subject hasPrefix:@"Our automatic system removed a comment"]) {
                     _subject = @"Comment removed by auto moderation";
                 }
+                break;
             case YYNotificationReasonInteraction:
-                _subject = @"New activity on yak";
+                _subject = @"New replies";
+                break;
             case YYNotificationReasonYourYak: {
                 NSString *newComment = @"New comment on your yak";
                 // Strip comment from subject, add comment to content
                 if ([self.subject hasPrefix:newComment]) {
-                    _content = [_subject substringFromIndex:newComment.length];
+                    _content = [_subject substringFromIndex:newComment.length + 2];
                     _content = [_content stringByTrimmingCharactersInSet:quotes];
-                    _subject = @"New comment";
+                    _subject = newComment;
                 }
                 else if ([self.subject containsString:@"Your yak was upvoted"]) {
                     // Skip the emojis
-                    _subject = [self.subject substringFromIndex:4];
+                    // _subject = [self.subject substringFromIndex:4];
                     _reason = YYNotificationReasonUpvotes;
                 }
+                break;
             }
         }
     }

@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface YYYak : YYVotable
 
 @property (nonatomic, readonly) NSInteger replyCount;
-@property (nonatomic, readonly          ) BOOL anonymous;
 
 #pragma mark Deprecated
 @property (nonatomic, readonly) BOOL      isReadOnly;

@@ -17,6 +17,7 @@ typedef void (^YYDataBlock)(NSData *data, NSError *error);
 typedef void (^YYStringBlock)(NSString *string, NSError *error);
 typedef void (^YYDictionaryBlock)(NSDictionary *dict, NSError *error);
 typedef void (^YYArrayBlock)(NSArray *collection, NSError *error);
+typedef void (^YYArrayPageBlock)(NSArray *collection, NSString *cursor, NSError *error);
 typedef void (^YYCollectionResponseBlock)(NSArray *success, NSArray *failed, NSArray *errors);
 typedef void (^YYResponseBlock)(id object, NSError *error);
 typedef void (^YYMiddleManBlock)(id object, NSError *error, NSURLResponse *response);

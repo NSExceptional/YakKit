@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)fromJSON:(NSDictionary *)json;
 + (NSArray *)arrayOfModelsFromJSONArray:(NSArray *)json;
 
+- (void)postInit;
+
 /// Subclasses may override. Nil by default.
 ///
 /// A key path to use to initialize self from the given JSON. Useful if
@@ -31,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSValueTransformer *)yy_stringToNumberTransformer;
 + (NSValueTransformer *)yy_UTCDateTransformer;
 + (NSValueTransformer *)yy_stringDateTransformer;
+
+@property (nonatomic, readonly, class) NSDateFormatter *dateFormatter;
 
 @property (nonatomic, readonly) NSString *identifier;
 

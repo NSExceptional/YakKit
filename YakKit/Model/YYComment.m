@@ -24,7 +24,6 @@
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey { SetCoder(YYComment)
     return [[super JSONKeyPathsByPropertyKey] mtl_dictionaryByAddingEntriesFromDictionary:@{
-        @codingKey(body): @"text",
         @codingKey(isOP): @"isOp",
         @codingKey(yakIdentifier): @"yak.id",
     }];

@@ -7,7 +7,7 @@
 //
 
 #import "YYClient+Registration.h"
-
+@import AVFoundation;
 
 @implementation YYClient (Registration)
 

@@ -1,0 +1,34 @@
+query Available($username: String!) {
+  threads() {
+    edges {
+      node {
+        id
+        createdAt
+        isDisabled
+        isDraft
+        lastActiveAt
+        instance
+        instanceDisplayType
+        title
+        participants {
+          edges { node {
+              id
+              emoji
+              color
+              secondaryColor
+              isOp
+              isSelf
+          } }
+          pageInfo {
+            endCursor
+            hasNextPage
+          }
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

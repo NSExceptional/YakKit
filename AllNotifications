@@ -1,0 +1,78 @@
+query AllNotifications($pageLimit: Int, $cursor: String) {
+  notifications(first: $pageLimit, after: $cursor) {
+    edges {
+      node {
+        id
+        isRead
+        message
+        objectType
+        createdAt
+        objectId
+        kind
+        node {
+          ... on Yak {
+            id
+            commentCount
+            createdAt
+            geohash
+            distance
+            interestAreas
+            isReported
+            isIncognito
+            isMine
+            isReplyable
+            myVote
+            notificationsEnabled
+            secondaryUserColor
+            text
+            threadId
+            userId
+            userColor
+            userEmoji
+            videoId
+            videoDownloadMp4Url
+            videoPlaybackDashUrl
+            videoPlaybackHlsUrl
+            videoState
+            videoThumbnailUrl
+            voteCount
+          }
+          ... on Comment {
+            id
+            yak {
+              id
+              commentCount
+              createdAt
+              geohash
+              distance
+              interestAreas
+              isReported
+              isIncognito
+              isMine
+              isReplyable
+              myVote
+              notificationsEnabled
+              secondaryUserColor
+              text
+              threadId
+              userId
+              userColor
+              userEmoji
+              videoId
+              videoDownloadMp4Url
+              videoPlaybackDashUrl
+              videoPlaybackHlsUrl
+              videoState
+              videoThumbnailUrl
+              voteCount
+            }
+          }
+        }
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+  }
+}

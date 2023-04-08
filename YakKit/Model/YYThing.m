@@ -11,7 +11,15 @@
 
 @implementation YYThing
 
++ (NSString *)selfJSONKeyPath { return nil; }
+
 - (id)initWithDictionary:(NSDictionary *)json {
+    if ([json isKindOfClass:NSNull.self] || !json) {
+        // Empty object
+        NSLog(@"Empty YYThing object allocated");
+        return self;
+    }
+    
     NSParameterAssert(json.allKeys.count > 0);
     NSError *error = nil;
     
@@ -27,7 +35,13 @@
     
     NSParameterAssert((!error && self) || (error && !self));
     
+    [self postInit];
+    
     return self;
+}
+
+- (void)postInit {
+    
 }
 
 - (BOOL)isEqual:(id)object {
